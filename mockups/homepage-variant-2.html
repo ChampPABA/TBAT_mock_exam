@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Mock Exam - Variant 2: Modern & Vibrant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'thai': ['Prompt', 'sans-serif']
+                    },
+                    colors: {
+                        'tbat-primary': '#10b981',
+                        'tbat-secondary': '#f59e0b',
+                        'tbat-accent': '#8b5cf6'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-thai bg-gradient-to-br from-emerald-50 via-white to-amber-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white/70 backdrop-blur-xl border-b border-emerald-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-2xl flex items-center justify-center shadow-lg">
+                        <span class="text-white font-bold text-xl">T</span>
+                    </div>
+                    <div>
+                        <div class="font-bold text-xl text-gray-900">TBAT</div>
+                        <div class="text-sm text-gray-600 -mt-1">Mock Exam Platform</div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <button class="text-gray-700 hover:text-tbat-primary px-4 py-2 rounded-xl font-medium transition-colors">
+                        หลักสูตร
+                    </button>
+                    <button class="text-gray-700 hover:text-tbat-primary px-4 py-2 rounded-xl font-medium transition-colors">
+                        ผลลัพธ์
+                    </button>
+                    <button class="bg-gradient-to-r from-tbat-primary to-emerald-600 text-white px-8 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
+                        เริ่มต้น
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-tbat-primary rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+            <div class="absolute top-40 right-20 w-72 h-72 bg-tbat-secondary rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div class="text-center space-y-12">
+                <div class="space-y-8">
+                    <div class="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-emerald-200">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-ping mr-3"></span>
+                        <span class="text-sm font-medium text-gray-700">ระบบ AI-Powered Analytics</span>
+                    </div>
+
+                    <h1 class="text-6xl md:text-7xl font-bold leading-tight">
+                        <span class="bg-gradient-to-r from-tbat-primary via-emerald-600 to-tbat-secondary bg-clip-text text-transparent">
+                            สอบ TBAT
+                        </span>
+                        <br>
+                        <span class="text-gray-900">ได้คะแนนเต็ม!</span>
+                    </h1>
+
+                    <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        เปลี่ยนการเรียนของคุณด้วย AI Analytics, Real-time Feedback 
+                        และระบบจำลองสอบที่แม่นยำที่สุด
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <button class="group bg-gradient-to-r from-tbat-primary to-emerald-600 text-white px-12 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all">
+                        <span class="flex items-center justify-center">
+                            เริ่มทำแบบทtest
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </span>
+                    </button>
+
+                    <button class="group bg-white/90 backdrop-blur-sm text-gray-900 px-12 py-4 rounded-2xl font-bold text-lg border-2 border-emerald-200 hover:border-emerald-300 hover:bg-white transition-all">
+                        <span class="flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-2-9h4a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2z"></path>
+                            </svg>
+                            ดูตัวอย่าง
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="bg-white/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/50">
+                        <div class="text-4xl font-bold text-tbat-primary mb-2">2,500+</div>
+                        <div class="text-gray-600 font-medium">นักเรียนที่ไว้วางใจ</div>
+                    </div>
+                    <div class="bg-white/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/50">
+                        <div class="text-4xl font-bold text-tbat-secondary mb-2">95%</div>
+                        <div class="text-gray-600 font-medium">อัตราผ่านการสอบ</div>
+                    </div>
+                    <div class="bg-white/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/50">
+                        <div class="text-4xl font-bold text-tbat-accent mb-2">50k+</div>
+                        <div class="text-gray-600 font-medium">แบบทtest ที่สมบูรณ์</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    <span class="text-gray-900">ฟีเจอร์ที่</span>
+                    <span class="bg-gradient-to-r from-tbat-primary to-tbat-secondary bg-clip-text text-transparent">ครบครัน</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    เครื่องมือเตรียมตัวสอบที่ครบครันที่สุด พร้อม AI Analytics และ Real-time Feedback
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Feature 1 -->
+                <div class="space-y-8">
+                    <div class="space-y-4">
+                        <div class="inline-flex items-center bg-gradient-to-r from-tbat-primary/10 to-emerald-100 rounded-2xl px-6 py-3">
+                            <span class="text-tbat-primary font-semibold">🎯 AI-Powered Analytics</span>
+                        </div>
+                        <h3 class="text-3xl font-bold text-gray-900">วิเคราะห์จุดแข็ง-จุดอ่อน แบบ Real-time</h3>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            ระบบ AI จะวิเคราะห์การทำแบบทtest ของคุณและให้คำแนะนำที่เฉพาะเจาะจง 
+                            พร้อมแผนการเรียนที่ปรับแต่งสำหรับคุณเท่านั้น
+                        </p>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl">
+                            <div class="text-2xl font-bold text-green-700 mb-1">จุดแข็ง</div>
+                            <div class="text-sm text-green-600">ระบุทักษะที่เก่งที่สุด</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-amber-50 to-orange-100 p-6 rounded-2xl">
+                            <div class="text-2xl font-bold text-amber-700 mb-1">จุดอ่อน</div>
+                            <div class="text-sm text-amber-600">หาจุดที่ต้องพัฒนา</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 p-8 rounded-3xl text-white">
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-xl">AI Recommendation</h4>
+                            <div class="w-3 h-3 bg-green-300 rounded-full animate-pulse"></div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                                <div class="font-semibold mb-1">📊 คะแนนโดยรวม: 85%</div>
+                                <div class="text-sm opacity-90">เพิ่มขึ้น 12% จากครั้งที่แล้ว</div>
+                            </div>
+                            <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                                <div class="font-semibold mb-1">🎯 แนะนำ: เน้นชีววิทยา</div>
+                                <div class="text-sm opacity-90">เพื่อเพิ่มคะแนนรวม 8-12%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 bg-gradient-to-br from-gray-900 to-gray-800 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-tbat-primary/20 to-tbat-secondary/20"></div>
+        <div class="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8">
+                พร้อมที่จะ<span class="text-tbat-secondary">เริ่มต้น</span>แล้วหรือยัง?
+            </h2>
+            <p class="text-xl mb-12 opacity-90">
+                เข้าร่วมกับนักเรียนกว่า 2,500+ คน ที่เชื่อใจเราในการเตรียมตัวสอบ TBAT
+            </p>
+            
+            <div class="space-y-6">
+                <button class="group bg-gradient-to-r from-tbat-primary to-emerald-600 text-white px-16 py-5 rounded-3xl font-bold text-xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all">
+                    เริ่มเลยตอนนี้
+                    <svg class="w-6 h-6 ml-2 inline group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </button>
+                <div class="text-sm opacity-70">ฟรีทดลองใช้ 7 วัน • ยกเลิกได้ทุกเมื่อ</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center space-x-4 mb-6">
+                <div class="w-12 h-12 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-2xl flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">T</span>
+                </div>
+                <div>
+                    <div class="font-bold text-xl text-gray-900">TBAT Mock Exam</div>
+                    <div class="text-sm text-gray-500">AI-Powered Learning Platform</div>
+                </div>
+            </div>
+            <p class="text-gray-600">© 2025 TBAT Mock Exam Platform. สงวนสิทธิ์ทุกประการ.</p>
+        </div>
+    </footer>
+</body>
+</html>

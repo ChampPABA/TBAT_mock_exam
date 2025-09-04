@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Mock Exam - Variant 1: Clean & Professional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'thai': ['Prompt', 'sans-serif']
+                    },
+                    colors: {
+                        'tbat-blue': '#2563eb',
+                        'tbat-light': '#eff6ff',
+                        'tbat-accent': '#3b82f6'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-thai bg-gradient-to-br from-tbat-light to-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-tbat-blue rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">T</span>
+                    </div>
+                    <span class="font-semibold text-xl text-gray-900">TBAT Mock Exam</span>
+                </div>
+                <div class="flex space-x-4">
+                    <button class="text-gray-700 hover:text-tbat-blue px-3 py-2 rounded-md font-medium">
+                        เกี่ยวกับเรา
+                    </button>
+                    <button class="text-gray-700 hover:text-tbat-blue px-3 py-2 rounded-md font-medium">
+                        ติดต่อ
+                    </button>
+                    <button class="bg-tbat-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                        เข้าสู่ระบบ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <div>
+                    <h1 class="text-5xl font-bold text-gray-900 leading-tight">
+                        เตรียมตัวสอบ
+                        <span class="text-tbat-blue">TBAT</span>
+                        <br>ด้วยระบบจำลองสอบ
+                    </h1>
+                    <p class="text-xl text-gray-600 mt-6 leading-relaxed">
+                        แพลตฟอร์มจำลองสอบ TBAT ที่ครบครัน พร้อมระบบวิเคราะห์ผลแบบ Real-time 
+                        สำหรับนักเรียนมัธยมที่ต้องการเข้าเรียนแพทยศาสตร์
+                    </p>
+                </div>
+
+                <!-- CTA Cards -->
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <!-- Register Card -->
+                    <div class="bg-white rounded-xl p-6 shadow-lg border hover:shadow-xl transition-all">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2">สมัครสมาชิกใหม่</h3>
+                        <p class="text-gray-600 text-sm mb-4">ใช้รหัส Unique Code จาก Box Set เพื่อเริ่มต้น</p>
+                        <button class="w-full bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                            สมัครเลย
+                        </button>
+                    </div>
+
+                    <!-- Login Card -->
+                    <div class="bg-white rounded-xl p-6 shadow-lg border hover:shadow-xl transition-all">
+                        <div class="w-12 h-12 bg-tbat-light rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-tbat-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2">เข้าสู่ระบบ</h3>
+                        <p class="text-gray-600 text-sm mb-4">สมาชิกเดิม เข้าสู่ระบบเพื่อทำแบบทest</p>
+                        <button class="w-full bg-tbat-blue text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            เข้าสู่ระบบ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Illustration -->
+            <div class="lg:pl-12">
+                <div class="bg-white rounded-2xl p-8 shadow-2xl">
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-lg">แดชบอร์ด TBAT</h3>
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Online</span>
+                        </div>
+                        
+                        <!-- Mock Dashboard Stats -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="text-2xl font-bold text-tbat-blue">85%</div>
+                                <div class="text-sm text-gray-600">คะแนนเฉลี่ย</div>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="text-2xl font-bold text-green-600">12</div>
+                                <div class="text-sm text-gray-600">ครั้งที่ทำแบบทest</div>
+                            </div>
+                        </div>
+
+                        <!-- Mock Progress -->
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-sm">
+                                    <span>ฟิสิกส์</span>
+                                    <span>78%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 78%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm">
+                                    <span>เคมี</span>
+                                    <span>92%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-600 h-2 rounded-full" style="width: 92%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm">
+                                    <span>ชีววิทยา</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">ทำไมต้องเลือกเรา?</h2>
+                <p class="text-xl text-gray-600">ระบบจำลองสอบที่ครบครันที่สุดสำหรับการเตรียmตัวสอบ TBAT</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border">
+                    <div class="w-12 h-12 bg-tbat-blue rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">วิเคราะห์ผล Real-time</h3>
+                    <p class="text-gray-600">ดูผลการทำแบบทест และสถิติการเรียนรู้แบบ Real-time พร้อมคำแนะนำ</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border">
+                    <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">เนื้อหาครอบคลุม</h3>
+                    <p class="text-gray-600">ฟิสิกส์ เคมี ชีววิทยา ครอบคลุมทุกหัวข้อตามหลักสูตร TBAT อย่างสมบูรณ์</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl border">
+                    <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">ระบบ Offline/Online</h3>
+                    <p class="text-gray-600">ทำแบบทestได้ทั้งแบบ Offline และ Online พร้อมซิงค์ข้อมูลอัตโนมัติ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-tbat-blue rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">T</span>
+                    </div>
+                    <span class="font-semibold text-xl">TBAT Mock Exam</span>
+                </div>
+                <p class="text-gray-400">แพลตฟอร์มเตรียมตัวสอบ TBAT สำหรับนักเรียนเชียงใหม่</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

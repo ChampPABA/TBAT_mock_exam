@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Registration - Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'thai': ['Prompt', 'sans-serif']
+                    },
+                    colors: {
+                        'tbat-primary': '#0d7276',
+                        'tbat-light': '#fdfefe', 
+                        'tbat-accent': '#90bfc0',
+                        'tbat-secondary': '#529a94',
+                        'tbat-bg': '#cae0e1'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-thai bg-gradient-to-br from-tbat-bg via-tbat-light to-tbat-accent/30 min-h-screen">
+    <div class="min-h-screen py-8">
+        <div class="max-w-2xl mx-auto px-4">
+            
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-tbat-primary rounded-xl flex items-center justify-center">
+                        <span class="text-white font-bold">T</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-900">สมัครสมาชิก TBAT</h1>
+                </div>
+                <p class="text-gray-600">รหัส TBAT-1234-5678 ได้รับการยืนยันแล้ว ✅</p>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-tbat-primary text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                        <span class="text-sm font-medium text-tbat-primary">ข้อมูลส่วนตัว</span>
+                    </div>
+                    <div class="flex-1 h-1 bg-gray-200 mx-4 rounded-full">
+                        <div id="progressBar" class="h-1 bg-tbat-primary rounded-full transition-all duration-300" style="width: 50%"></div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div id="step2Circle" class="w-8 h-8 bg-gray-200 text-gray-400 rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                        <span class="text-sm text-gray-400">ข้อมูลการศึกษา</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Card -->
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                
+                <!-- Step 1: Personal Information -->
+                <div id="step1" class="space-y-6">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold text-gray-900 mb-2">ข้อมูลส่วนตัว</h2>
+                        <p class="text-gray-600 text-sm">กรุณากรอกข้อมูลให้ครบถ้วน</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- First Name -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700">ชื่อ <span class="text-red-500">*</span></label>
+                            <input 
+                                type="text" 
+                                id="firstName"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent transition-all"
+                                placeholder="กรอกชื่อ"
+                                required
+                            >
+                            <div id="firstNameError" class="hidden text-red-600 text-xs"></div>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700">นามสกุล <span class="text-red-500">*</span></label>
+                            <input 
+                                type="text" 
+                                id="lastName"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent transition-all"
+                                placeholder="กรอกนามสกุล"
+                                required
+                            >
+                            <div id="lastNameError" class="hidden text-red-600 text-xs"></div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">อีเมล <span class="text-red-500">*</span></label>
+                        <input 
+                            type="email" 
+                            id="email"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent transition-all"
+                            placeholder="example@email.com"
+                            required
+                        >
+                        <div id="emailError" class="hidden text-red-600 text-xs"></div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
+                        <input 
+                            type="tel" 
+                            id="phone"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent transition-all"
+                            placeholder="08X-XXX-XXXX"
+                            required
+                        >
+                        <div id="phoneError" class="hidden text-red-600 text-xs"></div>
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">วันเกิด <span class="text-red-500">*</span></label>
+                        <input 
+                            type="date" 
+                            id="birthDate"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent transition-all"
+                            required
+                        >
+                        <div id="birthDateError" class="hidden text-red-600 text-xs"></div>
+                    </div>
+
+                    <!-- Step 1 Actions -->
+                    <div class="flex justify-end pt-6">
+                        <button id="nextBtn" class="bg-gradient-to-r from-tbat-primary to-tbat-secondary text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+                            ถัดไป
+                            <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Academic Information -->
+                <div id="step2" class="space-y-6 hidden">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold text-gray-900 mb-2">ข้อมูลการศึกษา</h2>
+                        <p class="text-gray-600 text-sm">ข้อมูลเหล่านี้จะช่วยในการปรับแต่งแบบทดสอบ</p>
+                    </div>
+
+                    <!-- School -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">โรงเรียน <span class="text-red-500">*</span></label>
+                        <input 
+                            type="text" 
+                            id="school"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent transition-all"
+                            placeholder="ชื่อโรงเรียน"
+                            required
+                        >
+                        <div id="schoolError" class="hidden text-red-600 text-xs"></div>
+                    </div>
+
+                    <!-- Grade -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">ระดับชั้น <span class="text-red-500">*</span></label>
+                        <select 
+                            id="grade"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent transition-all"
+                            required
+                        >
+                            <option value="">เลือกระดับชั้น</option>
+                            <option value="m4">ม.4</option>
+                            <option value="m5">ม.5</option>
+                            <option value="m6">ม.6</option>
+                            <option value="graduate">จบการศึกษาแล้ว</option>
+                        </select>
+                        <div id="gradeError" class="hidden text-red-600 text-xs"></div>
+                    </div>
+
+                    <!-- Program -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">แผนการเรียน</label>
+                        <select 
+                            id="program"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent transition-all"
+                        >
+                            <option value="">เลือกแผนการเรียน</option>
+                            <option value="sci-math">วิทย์-คณิต</option>
+                            <option value="sci-bio">วิทย์-ชีวะ</option>
+                            <option value="other">อื่นๆ</option>
+                        </select>
+                    </div>
+
+                    <!-- Target University -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">มหาวิทยาลัยเป้าหมาย</label>
+                        <input 
+                            type="text" 
+                            id="targetUni"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent transition-all"
+                            placeholder="เช่น มหิดล, จุฬา, เกษตร"
+                        >
+                    </div>
+
+                    <!-- Study Goal -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">เป้าหมายในการเรียน</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" value="improve-score" class="w-4 h-4 text-tbat-primary border-gray-300 rounded focus:ring-tbat-primary">
+                                <span class="text-sm text-gray-700">เพิ่มคะแนนสอบ TBAT</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" value="practice-exam" class="w-4 h-4 text-tbat-primary border-gray-300 rounded focus:ring-tbat-primary">
+                                <span class="text-sm text-gray-700">ฝึกทำข้อสอบ</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" value="weak-subjects" class="w-4 h-4 text-tbat-primary border-gray-300 rounded focus:ring-tbat-primary">
+                                <span class="text-sm text-gray-700">เสริมจุดอ่อน</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" value="time-management" class="w-4 h-4 text-tbat-primary border-gray-300 rounded focus:ring-tbat-primary">
+                                <span class="text-sm text-gray-700">ฝึกจัดการเวลา</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 Actions -->
+                    <div class="flex justify-between pt-6">
+                        <button id="backBtn" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-all">
+                            <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
+                            </svg>
+                            กลับ
+                        </button>
+                        <button id="submitBtn" class="bg-gradient-to-r from-tbat-primary to-tbat-secondary text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+                            <span id="submitText">สมัครสมาชิก</span>
+                            <div id="submitLoading" class="hidden inline-flex items-center">
+                                <div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                                กำลังสมัคร...
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading Skeleton (Hidden by default) -->
+                <div id="loadingSkeleton" class="space-y-6 hidden">
+                    <div class="mb-6">
+                        <div class="h-6 bg-gray-200 rounded-lg animate-pulse w-1/3 mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded-lg animate-pulse w-1/2"></div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="h-4 bg-gray-200 rounded-lg animate-pulse w-1/4"></div>
+                        <div class="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
+                        <div class="h-4 bg-gray-200 rounded-lg animate-pulse w-1/4"></div>
+                        <div class="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
+                        <div class="h-4 bg-gray-200 rounded-lg animate-pulse w-1/4"></div>
+                        <div class="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
+                    </div>
+                    
+                    <div class="flex justify-end pt-6">
+                        <div class="h-12 bg-gray-200 rounded-xl animate-pulse w-32"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto-save Indicator -->
+            <div id="autoSaveIndicator" class="hidden fixed bottom-6 right-6 bg-white shadow-lg rounded-xl px-4 py-2 flex items-center space-x-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-sm text-gray-600">บันทึกอัตโนมัติ</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        
+        // Elements
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const nextBtn = document.getElementById('nextBtn');
+        const backBtn = document.getElementById('backBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const progressBar = document.getElementById('progressBar');
+        const step2Circle = document.getElementById('step2Circle');
+        const loadingSkeleton = document.getElementById('loadingSkeleton');
+        const autoSaveIndicator = document.getElementById('autoSaveIndicator');
+
+        // Mock form data
+        const mockData = {
+            firstName: 'สมชาย',
+            lastName: 'ใจดี',
+            email: 'somchai@email.com',
+            phone: '081-234-5678',
+            birthDate: '2007-05-15',
+            school: 'โรงเรียนสาธิตแห่งมหาวิทยาลัยเกษตรศาสตร์',
+            grade: 'm6',
+            program: 'sci-bio',
+            targetUni: 'มหิดล, จุฬา'
+        };
+
+        // Auto-fill with mock data (for demo)
+        function fillMockData() {
+            Object.entries(mockData).forEach(([key, value]) => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.value = value;
+                }
+            });
+        }
+
+        // Validation
+        function validateStep1() {
+            const fields = ['firstName', 'lastName', 'email', 'phone', 'birthDate'];
+            let isValid = true;
+            
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                const error = document.getElementById(field + 'Error');
+                
+                if (!element.value.trim()) {
+                    error.textContent = 'กรุณากรอกข้อมูลนี้';
+                    error.classList.remove('hidden');
+                    element.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    error.classList.add('hidden');
+                    element.classList.remove('border-red-500');
+                }
+            });
+            
+            return isValid;
+        }
+
+        function validateStep2() {
+            const fields = ['school', 'grade'];
+            let isValid = true;
+            
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                const error = document.getElementById(field + 'Error');
+                
+                if (!element.value.trim()) {
+                    error.textContent = 'กรุณากรอกข้อมูลนี้';
+                    error.classList.remove('hidden');
+                    element.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    error.classList.add('hidden');
+                    element.classList.remove('border-red-500');
+                }
+            });
+            
+            return isValid;
+        }
+
+        // Step navigation
+        function goToStep2() {
+            if (!validateStep1()) return;
+            
+            // Show loading skeleton briefly
+            step1.classList.add('hidden');
+            loadingSkeleton.classList.remove('hidden');
+            
+            setTimeout(() => {
+                loadingSkeleton.classList.add('hidden');
+                step2.classList.remove('hidden');
+                currentStep = 2;
+                updateProgress();
+            }, 800);
+        }
+
+        function goToStep1() {
+            step2.classList.add('hidden');
+            step1.classList.remove('hidden');
+            currentStep = 1;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            if (currentStep === 2) {
+                progressBar.style.width = '100%';
+                step2Circle.classList.remove('bg-gray-200', 'text-gray-400');
+                step2Circle.classList.add('bg-tbat-primary', 'text-white');
+                step2Circle.nextElementSibling.classList.remove('text-gray-400');
+                step2Circle.nextElementSibling.classList.add('text-tbat-primary');
+            } else {
+                progressBar.style.width = '50%';
+                step2Circle.classList.remove('bg-tbat-primary', 'text-white');
+                step2Circle.classList.add('bg-gray-200', 'text-gray-400');
+                step2Circle.nextElementSibling.classList.remove('text-tbat-primary');
+                step2Circle.nextElementSibling.classList.add('text-gray-400');
+            }
+        }
+
+        // Submit form
+        function submitForm() {
+            if (!validateStep2()) return;
+            
+            // Show loading
+            document.getElementById('submitText').classList.add('hidden');
+            document.getElementById('submitLoading').classList.remove('hidden');
+            submitBtn.disabled = true;
+            
+            // Mock API call
+            setTimeout(() => {
+                // Navigate to success page
+                window.location.href = 'registration-complete-mockup.html';
+            }, 2000);
+        }
+
+        // Auto-save functionality
+        function showAutoSave() {
+            autoSaveIndicator.classList.remove('hidden');
+            setTimeout(() => {
+                autoSaveIndicator.classList.add('hidden');
+            }, 2000);
+        }
+
+        // Event listeners
+        nextBtn.addEventListener('click', goToStep2);
+        backBtn.addEventListener('click', goToStep1);
+        submitBtn.addEventListener('click', submitForm);
+
+        // Auto-save on input
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('input', () => {
+                clearTimeout(window.autoSaveTimeout);
+                window.autoSaveTimeout = setTimeout(showAutoSave, 1000);
+            });
+        });
+
+        // Phone formatting
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 3 && value.length <= 5) {
+                value = value.replace(/(\d{3})(\d+)/, '$1-$2');
+            } else if (value.length >= 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d+)/, '$1-$2-$3');
+            }
+            e.target.value = value;
+        });
+
+        // Fill mock data after 1 second (for demo)
+        setTimeout(fillMockData, 1000);
+    </script>
+</body>
+</html>

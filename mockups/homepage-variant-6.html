@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Mock Exam - Variant 6: Medical Teal & Playful Energy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'thai': ['Prompt', 'sans-serif']
+                    },
+                    colors: {
+                        'tbat-primary': '#0d7276',
+                        'tbat-light': '#fdfefe', 
+                        'tbat-accent': '#90bfc0',
+                        'tbat-secondary': '#529a94',
+                        'tbat-bg': '#cae0e1'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-thai bg-gradient-to-br from-tbat-bg via-tbat-light to-tbat-accent/30 min-h-screen">
+    <!-- Navigation (Clean like Variant 2) -->
+    <nav class="bg-tbat-light/70 backdrop-blur-xl border-b border-tbat-accent/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-2xl flex items-center justify-center shadow-lg">
+                        <span class="text-white font-bold text-xl">T</span>
+                    </div>
+                    <div>
+                        <div class="font-bold text-xl text-gray-900">TBAT</div>
+                        <div class="text-sm text-tbat-primary -mt-1">Smart Learning Platform</div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <button class="text-gray-700 hover:text-tbat-primary px-4 py-2 rounded-xl font-medium transition-colors">
+                        หลักสูตร
+                    </button>
+                    <button class="text-gray-700 hover:text-tbat-primary px-4 py-2 rounded-xl font-medium transition-colors">
+                        ผลลัพธ์
+                    </button>
+                    <button class="bg-gradient-to-r from-tbat-primary to-tbat-secondary text-white px-8 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
+                        เริ่มต้น
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Based on Variant 2) -->
+    <section class="relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-tbat-primary rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+            <div class="absolute top-40 right-20 w-72 h-72 bg-tbat-accent rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div class="text-center space-y-12">
+                <div class="space-y-8">
+                    <div class="inline-flex items-center bg-tbat-light/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-tbat-accent/50">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-ping mr-3"></span>
+                        <span class="text-sm font-medium text-gray-700">ระบบ AI-Powered Analytics</span>
+                    </div>
+
+                    <h1 class="text-6xl md:text-7xl font-bold leading-tight">
+                        <span class="bg-gradient-to-r from-tbat-primary via-tbat-secondary to-tbat-accent bg-clip-text text-transparent">
+                            สอบ TBAT
+                        </span>
+                        <br>
+                        <span class="text-gray-900">ได้คะแนนเต็ม!</span>
+                    </h1>
+
+                    <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        เปลี่ยนการเรียนของคุณด้วย AI Analytics, Real-time Feedback 
+                        และระบบจำลองสอบที่แม่นยำที่สุด
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <button class="group bg-gradient-to-r from-tbat-primary to-tbat-secondary text-white px-12 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all">
+                        <span class="flex items-center justify-center">
+                            เริ่มทำแบบทest
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </span>
+                    </button>
+
+                    <button class="group bg-tbat-light/90 backdrop-blur-sm text-gray-900 px-12 py-4 rounded-2xl font-bold text-lg border-2 border-tbat-accent hover:border-tbat-primary hover:bg-tbat-light transition-all">
+                        <span class="flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-2-9h4a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2z"></path>
+                            </svg>
+                            ดูตัวอย่าง
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="bg-tbat-light/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-tbat-accent/50">
+                        <div class="text-4xl font-bold text-tbat-primary mb-2">2,500+</div>
+                        <div class="text-gray-600 font-medium">นักเรียนที่ไว้วางใจ</div>
+                    </div>
+                    <div class="bg-tbat-light/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-tbat-accent/50">
+                        <div class="text-4xl font-bold text-tbat-secondary mb-2">95%</div>
+                        <div class="text-gray-600 font-medium">อัตราผ่านการสอบ</div>
+                    </div>
+                    <div class="bg-tbat-light/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-tbat-accent/50">
+                        <div class="text-4xl font-bold text-tbat-accent mb-2">50k+</div>
+                        <div class="text-gray-600 font-medium">แบบทtest ที่สมบูรณ์</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Playful Features Section (Based on Variant 5) -->
+    <section class="py-24 bg-tbat-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    <span class="text-gray-900">ทำไมต้อง</span>
+                    <span class="bg-gradient-to-r from-tbat-primary to-tbat-accent bg-clip-text text-transparent">เลือกเรา?</span>
+                    <span class="text-4xl ml-4">🤔</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    เพราะเราทำให้การเรียน TBAT เป็นเรื่องสนุกและมีประสิทธิภาพที่สุด!
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Playful Feature 1 -->
+                <div class="relative bg-gradient-to-br from-tbat-bg to-tbat-accent/20 rounded-3xl p-8 border-2 border-tbat-accent/50 hover:border-tbat-primary transition-all transform hover:-translate-y-2 group">
+                    <div class="absolute -top-4 -right-4 text-6xl group-hover:animate-spin">🎯</div>
+                    
+                    <div class="w-20 h-20 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-3xl flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform">
+                        <span class="text-3xl">🎮</span>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">เรียนรู้แบบอัจฉริยะ</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        AI จะปรับแบบทtest ให้เหมาะกับระดับคุณ พร้อมเกมส์การเรียนที่สนุก
+                    </p>
+                    
+                    <!-- Smart Progress -->
+                    <div class="bg-tbat-light/80 backdrop-blur-sm rounded-2xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-700">AI Recommendation</span>
+                            <span class="bg-tbat-primary/20 text-tbat-primary px-3 py-1 rounded-full text-sm font-bold">SMART</span>
+                        </div>
+                        <div class="text-sm text-gray-900">🎯 เน้นเคมีอินทรีย์ (25 นาที)</div>
+                        <div class="text-xs text-gray-600">คาดการณ์: เพิ่มคะแนน 18%</div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-tbat-primary to-tbat-secondary h-3 rounded-full animate-pulse" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Playful Feature 2 -->
+                <div class="relative bg-gradient-to-br from-tbat-accent/20 to-tbat-bg rounded-3xl p-8 border-2 border-tbat-secondary/50 hover:border-tbat-primary transition-all transform hover:-translate-y-2 group">
+                    <div class="absolute -top-4 -right-4 text-6xl group-hover:animate-bounce">🏆</div>
+                    
+                    <div class="w-20 h-20 bg-gradient-to-br from-tbat-secondary to-tbat-accent rounded-3xl flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform">
+                        <span class="text-3xl">👥</span>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">แข่งกับเพื่อน</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        สร้างกลุ่มเรียนกับเพื่อน แข่งขันคะแนน และช่วยเหลือกัน
+                    </p>
+                    
+                    <!-- Leaderboard -->
+                    <div class="bg-tbat-light/80 backdrop-blur-sm rounded-2xl p-4 space-y-2">
+                        <div class="text-sm font-medium text-gray-700 mb-3">🏆 Leaderboard วันนี้</div>
+                        
+                        <div class="flex items-center justify-between p-2 bg-gradient-to-r from-yellow-100 to-amber-100 rounded-lg">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-yellow-600 font-bold">🥇</span>
+                                <span class="text-sm font-medium">น้องบีม</span>
+                            </div>
+                            <span class="text-sm font-bold text-amber-600">2,850 คะแนน</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-2 bg-gradient-to-r from-tbat-bg to-tbat-accent/30 rounded-lg">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-tbat-secondary font-bold">🥈</span>
+                                <span class="text-sm font-medium">น้องปิง</span>
+                            </div>
+                            <span class="text-sm font-bold text-tbat-secondary">2,720 คะแนน</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-2 bg-tbat-primary/10 rounded-lg">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-tbat-primary font-bold">🥉</span>
+                                <span class="text-sm font-medium text-tbat-primary">คุณ</span>
+                            </div>
+                            <span class="text-sm font-bold text-tbat-primary">2,680 คะแนน</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Playful Feature 3 -->
+                <div class="relative bg-gradient-to-br from-tbat-secondary/20 to-tbat-accent/30 rounded-3xl p-8 border-2 border-tbat-accent hover:border-tbat-primary transition-all transform hover:-translate-y-2 group">
+                    <div class="absolute -top-4 -right-4 text-6xl group-hover:animate-pulse">🎁</div>
+                    
+                    <div class="w-20 h-20 bg-gradient-to-br from-tbat-accent to-tbat-primary rounded-3xl flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform">
+                        <span class="text-3xl">💎</span>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">รางวัลจริง!</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        รับคะแนน ไอเท็ม และของรางวัลจริง เมื่อทำคะแนนได้ดี
+                    </p>
+                    
+                    <!-- Rewards -->
+                    <div class="bg-tbat-light/80 backdrop-blur-sm rounded-2xl p-4 space-y-3">
+                        <div class="text-sm font-medium text-gray-700 mb-3">🎁 รางวัลที่ได้รับ</div>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-gradient-to-r from-yellow-100 to-amber-100 p-3 rounded-xl text-center">
+                                <div class="text-2xl mb-1">🪙</div>
+                                <div class="text-xs font-bold text-amber-700">250 คะแนน</div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-tbat-bg to-tbat-accent/50 p-3 rounded-xl text-center">
+                                <div class="text-2xl mb-1">💎</div>
+                                <div class="text-xs font-bold text-tbat-primary">15 เพชร</div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-green-100 to-emerald-100 p-3 rounded-xl text-center">
+                                <div class="text-2xl mb-1">🎫</div>
+                                <div class="text-xs font-bold text-green-700">คูปองมือถือ</div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-tbat-secondary/20 to-tbat-primary/20 p-3 rounded-xl text-center">
+                                <div class="text-2xl mb-1">🍔</div>
+                                <div class="text-xs font-bold text-tbat-secondary">คูปองอาหาร</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fun CTA Section (Playful Style) -->
+    <section class="py-24 bg-gradient-to-r from-tbat-primary via-tbat-secondary to-tbat-accent text-white relative overflow-hidden">
+        <!-- Animated Background -->
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-10 left-10 text-8xl animate-bounce animation-delay-1000">🎉</div>
+            <div class="absolute top-20 right-20 text-6xl animate-pulse animation-delay-2000">🚀</div>
+            <div class="absolute bottom-10 left-20 text-7xl animate-bounce animation-delay-3000">⚡</div>
+            <div class="absolute bottom-20 right-10 text-5xl animate-pulse">🌟</div>
+        </div>
+
+        <div class="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-6xl font-bold mb-8">
+                พร้อมที่จะเป็น
+                <br>
+                <span class="text-tbat-bg">ฮีโร่ TBAT</span>
+                แล้วหรือยัง? 🦸‍♂️
+            </h2>
+            <p class="text-xl md:text-2xl mb-12 opacity-90">
+                เข้าร่วมกับ 2,500+ ฮีโร่ตัวจิงที่กำลังพิชิต TBAT ด้วยความสนุกและเทคโนโลยี AI! 
+            </p>
+            
+            <div class="space-y-6">
+                <button class="group relative bg-tbat-light text-tbat-primary px-16 py-6 rounded-full font-bold text-2xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all overflow-hidden">
+                    <span class="absolute inset-0 bg-tbat-bg opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    <span class="relative flex items-center justify-center">
+                        🚀 เริ่มผจญภัยตอนนี้!
+                        <div class="ml-3 group-hover:animate-spin">✨</div>
+                    </span>
+                </button>
+                
+                <div class="text-lg opacity-80">
+                    <span class="animate-pulse">🔥</span>
+                    ฟรี AI Analysis + Smart Recommendations สำหรับสมาชิกใหม่!
+                    <span class="animate-pulse">🔥</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center space-x-4 mb-6">
+                <div class="w-12 h-12 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-2xl flex items-center justify-center shadow-xl">
+                    <span class="text-white font-bold text-xl">T</span>
+                </div>
+                <div>
+                    <div class="font-bold text-xl text-white">TBAT Smart Platform</div>
+                    <div class="text-sm text-tbat-accent -mt-1">เรียนอัจฉริยะ • สอบผ่าน • ฝันเป็นจริง</div>
+                </div>
+            </div>
+            <p class="text-gray-400">© 2025 TBAT Smart Learning Platform. ผสมผสานเทคโนโลジี AI และความสนุก! 🎉</p>
+            <div class="flex justify-center space-x-4 mt-4 text-2xl">
+                <span class="animate-bounce">🎯</span>
+                <span class="animate-pulse">🏆</span>
+                <span class="animate-bounce animation-delay-1000">🎁</span>
+                <span class="animate-pulse animation-delay-2000">⚡</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

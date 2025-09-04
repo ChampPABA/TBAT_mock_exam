@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Registration - Complete</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'thai': ['Prompt', 'sans-serif']
+                    },
+                    colors: {
+                        'tbat-primary': '#0d7276',
+                        'tbat-light': '#fdfefe', 
+                        'tbat-accent': '#90bfc0',
+                        'tbat-secondary': '#529a94',
+                        'tbat-bg': '#cae0e1'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-thai bg-gradient-to-br from-tbat-bg via-tbat-light to-tbat-accent/30 min-h-screen">
+    <div class="min-h-screen flex items-center justify-center py-8">
+        <div class="max-w-2xl mx-auto px-4 w-full">
+            
+            <!-- Success Card -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8 text-center relative overflow-hidden">
+                
+                <!-- Background Pattern -->
+                <div class="absolute inset-0 opacity-5">
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-tbat-primary to-tbat-accent"></div>
+                </div>
+
+                <!-- Confetti Animation -->
+                <div id="confetti" class="absolute inset-0 pointer-events-none">
+                    <!-- Will be populated with confetti particles -->
+                </div>
+
+                <!-- Success Icon -->
+                <div class="relative z-10 mb-6">
+                    <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto shadow-2xl animate-bounce">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="relative z-10 mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        ยินดีต้อนรับสู่ TBAT! 🎉
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-6">
+                        สมัครสมาชิกสำเร็จแล้ว พร้อมเริ่มต้นการเรียนรู้
+                    </p>
+                </div>
+
+                <!-- User Summary Card -->
+                <div class="relative z-10 bg-gradient-to-r from-tbat-bg to-tbat-accent/30 rounded-2xl p-6 mb-8">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">ข้อมูลสมาชิก</h2>
+                    <div class="grid md:grid-cols-2 gap-4 text-left">
+                        <div>
+                            <div class="text-sm text-gray-600">ชื่อ-นามสกุล</div>
+                            <div class="font-semibold text-gray-900">สมชาย ใจดี</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-600">อีเมล</div>
+                            <div class="font-semibold text-gray-900">somchai@email.com</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-600">โรงเรียน</div>
+                            <div class="font-semibold text-gray-900">โรงเรียนสาธิตฯ</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-600">Box Set</div>
+                            <div class="font-semibold text-tbat-primary">TBAT-1234-5678 ✅</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="relative z-10 mb-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">ขั้นตอนถัดไป</h2>
+                    <div class="space-y-4">
+                        <!-- Step 1 -->
+                        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
+                            <div class="w-8 h-8 bg-tbat-primary text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                            <div class="flex-1 text-left">
+                                <div class="font-semibold text-gray-900">ตรวจสอบอีเมล</div>
+                                <div class="text-sm text-gray-600">เราได้ส่งอีเมลยืนยันไปที่ somchai@email.com แล้ว</div>
+                            </div>
+                            <div class="text-green-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
+                            <div class="w-8 h-8 bg-tbat-secondary text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                            <div class="flex-1 text-left">
+                                <div class="font-semibold text-gray-900">เข้าสู่ Dashboard</div>
+                                <div class="text-sm text-gray-600">เริ่มทำแบบทดสอบและติดตามความก้าวหน้า</div>
+                            </div>
+                            <div class="text-gray-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
+                            <div class="w-8 h-8 bg-tbat-accent text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                            <div class="flex-1 text-left">
+                                <div class="font-semibold text-gray-900">ปรับตั้งโปรไฟล์</div>
+                                <div class="text-sm text-gray-600">ตั้งค่าเป้าหมายการเรียนและความต้องการ</div>
+                            </div>
+                            <div class="text-gray-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Preview -->
+                <div class="relative z-10 mb-8">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">สิ่งที่รอคุณอยู่</h2>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-tbat-primary">50,000+</div>
+                            <div class="text-sm text-gray-600">ข้อสอบ</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-tbat-secondary">15+</div>
+                            <div class="text-sm text-gray-600">Mock Tests</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-tbat-accent">24/7</div>
+                            <div class="text-sm text-gray-600">AI Support</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="relative z-10 space-y-4">
+                    <button id="dashboardBtn" class="w-full bg-gradient-to-r from-tbat-primary to-tbat-secondary text-white py-4 px-8 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                        🚀 เข้าสู่ Dashboard
+                    </button>
+                    
+                    <div class="flex space-x-4">
+                        <button class="flex-1 bg-gray-100 text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-200 transition-all">
+                            📱 ดาวน์โหลดแอพ
+                        </button>
+                        <button class="flex-1 bg-gray-100 text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-200 transition-all">
+                            💬 ติดต่อสนับสนุน
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Auto-redirect Notice -->
+                <div class="relative z-10 mt-8 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                    <div class="flex items-center justify-center space-x-2">
+                        <div class="w-4 h-4 bg-blue-600 rounded-full animate-pulse"></div>
+                        <span class="text-sm text-blue-800">
+                            จะพาคุณเข้า Dashboard อัตโนมัติใน 
+                            <span id="countdown" class="font-bold">10</span> 
+                            วินาที
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info Cards -->
+            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                <!-- Tips Card -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                            <span class="text-xl">💡</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">เทิปการเริ่มต้น</h3>
+                    </div>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-green-600 mt-1">•</span>
+                            <span>ทำ Diagnostic Test เพื่อทราบจุดแข็ง-อ่อน</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-green-600 mt-1">•</span>
+                            <span>ตั้งเป้าหมายคะแนนที่ต้องการ</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-green-600 mt-1">•</span>
+                            <span>สร้างตารางเรียนที่เหมาะสม</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Support Card -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <span class="text-xl">🎯</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">การสนับสนุน</h3>
+                    </div>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-blue-600 mt-1">•</span>
+                            <span>Chat Support ตลอด 24 ชั่วโมง</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-blue-600 mt-1">•</span>
+                            <span>คลิปวิดีโอสอนเทคนิค</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-blue-600 mt-1">•</span>
+                            <span>กลุ่มนักเรียนแลกเปลี่ยน</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Confetti animation
+        function createConfetti() {
+            const confetti = document.getElementById('confetti');
+            const colors = ['#0d7276', '#90bfc0', '#529a94', '#cae0e1', '#fbbf24', '#f59e0b'];
+            
+            for (let i = 0; i < 50; i++) {
+                const piece = document.createElement('div');
+                piece.style.position = 'absolute';
+                piece.style.width = Math.random() * 10 + 5 + 'px';
+                piece.style.height = piece.style.width;
+                piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.top = '-10px';
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                piece.style.opacity = Math.random();
+                piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                confetti.appendChild(piece);
+                
+                // Animate falling
+                const fallDuration = Math.random() * 3000 + 2000;
+                const horizontalDrift = (Math.random() - 0.5) * 200;
+                
+                piece.animate([
+                    { 
+                        transform: `translateY(0px) translateX(0px) rotate(0deg)`,
+                        opacity: piece.style.opacity 
+                    },
+                    { 
+                        transform: `translateY(${window.innerHeight + 20}px) translateX(${horizontalDrift}px) rotate(360deg)`,
+                        opacity: 0 
+                    }
+                ], {
+                    duration: fallDuration,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+                
+                // Remove after animation
+                setTimeout(() => {
+                    if (piece.parentNode) {
+                        piece.parentNode.removeChild(piece);
+                    }
+                }, fallDuration);
+            }
+        }
+
+        // Countdown timer
+        let countdown = 10;
+        const countdownElement = document.getElementById('countdown');
+        
+        const timer = setInterval(() => {
+            countdown--;
+            countdownElement.textContent = countdown;
+            
+            if (countdown <= 0) {
+                clearInterval(timer);
+                // Navigate to dashboard
+                window.location.href = '#dashboard'; // Replace with actual dashboard URL
+            }
+        }, 1000);
+
+        // Dashboard button
+        document.getElementById('dashboardBtn').addEventListener('click', () => {
+            clearInterval(timer);
+            window.location.href = '#dashboard'; // Replace with actual dashboard URL
+        });
+
+        // Trigger confetti on load
+        window.addEventListener('load', () => {
+            setTimeout(createConfetti, 500);
+            
+            // Create more confetti periodically
+            setTimeout(() => createConfetti(), 3000);
+            setTimeout(() => createConfetti(), 6000);
+        });
+
+        // Success sound effect simulation (you can replace with actual audio)
+        function playSuccessSound() {
+            // Create a simple beep using Web Audio API
+            if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+                const audioContext = new (AudioContext || webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.1);
+                gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            }
+        }
+
+        // Play success sound on load
+        setTimeout(playSuccessSound, 1000);
+    </script>
+</body>
+</html>

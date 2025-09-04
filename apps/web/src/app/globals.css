@@ -1,0 +1,206 @@
+/* Google Fonts Prompt for Optimal Thai Typography */
+@import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Variant 6 Design System - TBAT Medical Green Theme */
+    --background: 0 0% 99.2%; /* #fdfefe - TBAT white */
+    --foreground: 180 85% 15%; /* Dark text on TBAT white */
+    --card: 0 0% 99.2%; /* #fdfefe - TBAT white */
+    --card-foreground: 180 85% 15%;
+    --popover: 0 0% 99.2%; /* #fdfefe */
+    --popover-foreground: 180 85% 15%;
+    
+    /* TBAT Primary Brand Colors */
+    --primary: 182 94% 25%; /* #0d7276 - Medical teal */
+    --primary-foreground: 0 0% 99%; /* White text on teal */
+    --secondary: 177 33% 46%; /* #529a94 - Supporting green */
+    --secondary-foreground: 0 0% 99%;
+    
+    /* TBAT Supporting Colors */
+    --muted: 176 20% 85%; /* #cae0e1 - Surface color */
+    --muted-foreground: 180 45% 35%;
+    --accent: 178 28% 65%; /* #90bfc0 - Background tint */
+    --accent-foreground: 180 85% 15%;
+    
+    /* System Colors */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 176 20% 85%; /* #cae0e1 */
+    --input: 176 20% 85%;
+    --ring: 182 94% 25%; /* TBAT primary for focus ring */
+    --radius: 0.75rem; /* Slightly more rounded for medical feel */
+  }
+ 
+  .dark {
+    /* Dark mode with TBAT colors (optional enhancement) */
+    --background: 180 85% 8%;
+    --foreground: 0 0% 95%;
+    --card: 180 85% 8%;
+    --card-foreground: 0 0% 95%;
+    --popover: 180 85% 8%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 177 33% 55%; /* Lighter teal for dark mode */
+    --primary-foreground: 180 85% 8%;
+    --secondary: 178 28% 35%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 180 85% 15%;
+    --muted-foreground: 176 20% 75%;
+    --accent: 180 85% 15%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 180 85% 15%;
+    --input: 180 85% 15%;
+    --ring: 177 33% 55%;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-thai;
+  }
+  
+  /* Thai Text Optimization */
+  .thai-text {
+    @apply font-thai;
+    line-height: 1.7; /* Better line height for Thai text */
+    letter-spacing: 0.01em; /* Slight letter spacing for readability */
+  }
+  
+  /* Responsive typography for Thai text */
+  .thai-text-sm {
+    @apply thai-text text-sm;
+  }
+  
+  .thai-text-base {
+    @apply thai-text text-base;
+  }
+  
+  .thai-text-lg {
+    @apply thai-text text-lg;
+  }
+  
+  .thai-text-xl {
+    @apply thai-text text-xl;
+  }
+  
+  .thai-text-2xl {
+    @apply thai-text text-2xl;
+  }
+  
+  .thai-text-3xl {
+    @apply thai-text text-3xl;
+  }
+  
+  .thai-text-4xl {
+    @apply thai-text text-4xl;
+  }
+}
+
+@layer components {
+  /* TBAT Brand Button Variants */
+  .btn-tbat-primary {
+    @apply bg-tbat-primary text-white hover:bg-tbat-primary/90 focus:ring-tbat-primary/30;
+  }
+  
+  .btn-tbat-secondary {
+    @apply bg-tbat-secondary text-white hover:bg-tbat-secondary/90 focus:ring-tbat-secondary/30;
+  }
+  
+  /* TBAT Input Styling */
+  .input-tbat {
+    @apply border-tbat-surface focus:border-tbat-primary focus:ring-tbat-primary/30;
+  }
+  
+  /* TBAT Card Components */
+  .card-tbat {
+    @apply bg-tbat-white border-tbat-surface shadow-sm;
+  }
+  
+  .card-tbat-surface {
+    @apply bg-tbat-surface border-tbat-surface/50;
+  }
+  
+  /* Animation Classes for Modal and Interactions */
+  .slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
+  
+  .fade-in {
+    animation: fade-in 0.2s ease-out;
+  }
+}
+
+@layer utilities {
+  /* TBAT-specific utility classes */
+  .bg-tbat-gradient {
+    background: linear-gradient(135deg, theme('colors.tbat.primary'), theme('colors.tbat.secondary'));
+  }
+  
+  .text-tbat-gradient {
+    background: linear-gradient(135deg, theme('colors.tbat.primary'), theme('colors.tbat.secondary'));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Touch-friendly sizing for mobile */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* WCAG 2.1 AA compliant focus states */
+  .focus-visible-tbat {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tbat-primary focus-visible:ring-offset-2;
+  }
+}
+
+/* Keyframes for animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive design enhancements for mobile-first approach */
+@media (max-width: 768px) {
+  .thai-text {
+    line-height: 1.6;
+  }
+  
+  /* Mobile modal adjustments */
+  .modal-mobile {
+    @apply slide-up;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop modal adjustments */
+  .modal-desktop {
+    @apply fade-in;
+  }
+}

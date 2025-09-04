@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Registration - Code Verification Modal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'thai': ['Prompt', 'sans-serif']
+                    },
+                    colors: {
+                        'tbat-primary': '#0d7276',
+                        'tbat-light': '#fdfefe', 
+                        'tbat-accent': '#90bfc0',
+                        'tbat-secondary': '#529a94',
+                        'tbat-bg': '#cae0e1'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-thai bg-gradient-to-br from-tbat-bg via-tbat-light to-tbat-accent/30 min-h-screen">
+    <!-- Landing Page Background -->
+    <div class="container mx-auto px-4 py-20">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-gray-900 mb-8">แพลตฟอร์ม TBAT Mock Exam</h1>
+            <p class="text-lg text-gray-600 mb-12">เตรียมตัวสอบ TBAT ด้วยระบบจำลองสอบที่ครบครัน</p>
+            
+            <!-- Main CTA Button -->
+            <button id="openModal" class="bg-gradient-to-r from-tbat-primary to-tbat-secondary text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                🎯 ใส่รหัส Box Set
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div id="modalBackdrop" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300">
+        <!-- Modal Container -->
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div id="modal" class="bg-white rounded-3xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300">
+                
+                <!-- Modal Header -->
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-tbat-primary rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">🔐</span>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-900">ตรวจสอบรหัส Box Set</h2>
+                        </div>
+                        <button id="closeModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6">
+                    <div id="normalState" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                กรอกรหัสจาก Box Set
+                            </label>
+                            <div class="relative">
+                                <input 
+                                    type="text" 
+                                    id="codeInput"
+                                    placeholder="TBAT-XXXX-XXXX" 
+                                    maxlength="13"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-tbat-primary focus:border-transparent text-center text-lg font-mono tracking-wider uppercase transition-all"
+                                >
+                                <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                    <div id="validationIcon" class="hidden">
+                                        <!-- Will show checkmark or error -->
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2 text-center">
+                                รูปแบบ: TBAT-1234-5678
+                            </p>
+                        </div>
+
+                        <!-- Action Button -->
+                        <button id="validateBtn" class="w-full bg-gradient-to-r from-tbat-primary to-tbat-secondary text-white py-3 px-6 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                            ตรวจสอบรหัส
+                        </button>
+                    </div>
+
+                    <!-- Loading State (Hidden by default) -->
+                    <div id="loadingState" class="hidden space-y-6">
+                        <div class="text-center">
+                            <div class="inline-flex items-center space-x-3">
+                                <div class="animate-spin rounded-full h-6 w-6 border-2 border-tbat-primary border-t-transparent"></div>
+                                <span class="text-gray-600 font-medium">กำลังตรวจสอบ...</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Skeleton Loading -->
+                        <div class="space-y-3">
+                            <div class="h-4 bg-gray-200 rounded-lg animate-pulse"></div>
+                            <div class="h-4 bg-gray-200 rounded-lg animate-pulse w-3/4"></div>
+                            <div class="h-10 bg-gray-200 rounded-xl animate-pulse"></div>
+                        </div>
+                    </div>
+
+                    <!-- Success State (Hidden by default) -->
+                    <div id="successState" class="hidden space-y-6">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">รหัสถูกต้อง! ✨</h3>
+                            <p class="text-gray-600">Box Set: TBAT Premium 2025</p>
+                            <p class="text-sm text-gray-500">กำลังพาคุณไปหน้าสมัครสมาชิก...</p>
+                        </div>
+                    </div>
+
+                    <!-- Error States (Hidden by default) -->
+                    <div id="errorState" class="hidden">
+                        <!-- Invalid Code Error -->
+                        <div id="invalidError" class="hidden bg-red-50 border border-red-200 rounded-xl p-4">
+                            <div class="flex">
+                                <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-red-800">รหัสไม่ถูกต้อง</h4>
+                                    <p class="text-sm text-red-600 mt-1">กรุณาตรวจสอบรหัสและลองใหม่อีกครั้ง</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Code Used Error -->
+                        <div id="usedError" class="hidden bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                            <div class="flex">
+                                <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.664-.833-2.464 0L5.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-yellow-800">รหัสถูกใช้แล้ว</h4>
+                                    <p class="text-sm text-yellow-600 mt-1">รหัสนี้ถูกใช้ลงทะเบียนแล้ว</p>
+                                    <div class="mt-3 space-y-2">
+                                        <button class="text-sm bg-yellow-100 text-yellow-800 px-3 py-1 rounded-lg hover:bg-yellow-200 transition-colors">
+                                            📧 ติดต่อ Admin
+                                        </button>
+                                        <button id="tryAnotherCode" class="block text-sm text-yellow-600 hover:text-yellow-800 underline">
+                                            ลองรหัสอื่น
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Format Error -->
+                        <div id="formatError" class="hidden bg-red-50 border border-red-200 rounded-xl p-4">
+                            <div class="flex">
+                                <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                    <span class="text-red-600 font-bold text-sm">!</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-red-800">รูปแบบรหัสไม่ถูกต้อง</h4>
+                                    <p class="text-sm text-red-600 mt-1">กรุณาใส่รหัสในรูปแบบ TBAT-XXXX-XXXX</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="px-6 py-4 bg-gray-50 rounded-b-3xl">
+                    <p class="text-xs text-gray-500 text-center">
+                        ไม่มี Box Set? <a href="#" class="text-tbat-primary hover:underline">สั่งซื้อที่นี่</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const openModalBtn = document.getElementById('openModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const modalBackdrop = document.getElementById('modalBackdrop');
+        const modal = document.getElementById('modal');
+        const codeInput = document.getElementById('codeInput');
+        const validateBtn = document.getElementById('validateBtn');
+
+        // States
+        const normalState = document.getElementById('normalState');
+        const loadingState = document.getElementById('loadingState');
+        const successState = document.getElementById('successState');
+        const errorState = document.getElementById('errorState');
+
+        function openModal() {
+            modalBackdrop.classList.remove('hidden');
+            setTimeout(() => {
+                modalBackdrop.classList.remove('opacity-0');
+                modal.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalBackdrop.classList.add('opacity-0');
+            modal.classList.add('scale-95');
+            setTimeout(() => {
+                modalBackdrop.classList.add('hidden');
+                resetModal();
+            }, 300);
+        }
+
+        function resetModal() {
+            normalState.classList.remove('hidden');
+            loadingState.classList.add('hidden');
+            successState.classList.add('hidden');
+            errorState.classList.add('hidden');
+            codeInput.value = '';
+        }
+
+        function showLoading() {
+            normalState.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+        }
+
+        function showSuccess() {
+            loadingState.classList.add('hidden');
+            successState.classList.remove('hidden');
+            setTimeout(() => {
+                closeModal();
+                // Navigate to registration form
+                window.location.href = 'registration-form-mockup.html';
+            }, 2000);
+        }
+
+        function showError(type) {
+            loadingState.classList.add('hidden');
+            normalState.classList.remove('hidden');
+            errorState.classList.remove('hidden');
+            
+            // Hide all errors first
+            document.querySelectorAll('#errorState > div').forEach(el => el.classList.add('hidden'));
+            
+            // Show specific error
+            document.getElementById(type + 'Error').classList.remove('hidden');
+        }
+
+        // Auto-format code input
+        codeInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            
+            if (value.length <= 4) {
+                value = value;
+            } else if (value.length <= 8) {
+                value = value.slice(0, 4) + '-' + value.slice(4);
+            } else {
+                value = value.slice(0, 4) + '-' + value.slice(4, 8) + '-' + value.slice(8, 12);
+            }
+            
+            if (!value.startsWith('TBAT') && value.length > 0) {
+                value = 'TBAT' + (value.length > 4 ? '-' : '') + value.slice(4);
+            }
+            
+            e.target.value = value;
+        });
+
+        // Mock validation
+        function validateCode() {
+            const code = codeInput.value;
+            
+            showLoading();
+            
+            setTimeout(() => {
+                if (code === 'TBAT-1234-5678') {
+                    showSuccess();
+                } else if (code === 'TBAT-USED-CODE') {
+                    showError('used');
+                } else if (!code.match(/^TBAT-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
+                    showError('format');
+                } else {
+                    showError('invalid');
+                }
+            }, 1500);
+        }
+
+        // Event listeners
+        openModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        modalBackdrop.addEventListener('click', (e) => {
+            if (e.target === modalBackdrop) closeModal();
+        });
+        validateBtn.addEventListener('click', validateCode);
+        codeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') validateCode();
+        });
+        
+        document.getElementById('tryAnotherCode').addEventListener('click', () => {
+            errorState.classList.add('hidden');
+            codeInput.focus();
+        });
+
+        // ESC to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modalBackdrop.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

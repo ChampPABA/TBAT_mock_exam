@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ผลสอบ Advanced Package - TBAT Mock Exam 2568</title>
+    
+    <!-- Google Fonts - Noto Sans Thai -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables - Variant 6 Color Palette */
+        :root {
+            --tbat-primary: #0d7276;
+            --tbat-secondary: #529a94;
+            --tbat-accent: #90bfc0;
+            --tbat-bg: #cae0e1;
+            --tbat-light: #fdfefe;
+            --tbat-text: #2c3e50;
+            --tbat-success: #27ae60;
+            --tbat-warning: #f39c12;
+            --tbat-danger: #e74c3c;
+            --tbat-gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Thai', sans-serif;
+            background: linear-gradient(135deg, var(--tbat-bg) 0%, var(--tbat-light) 100%);
+            min-height: 100vh;
+            color: var(--tbat-text);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--tbat-light);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--tbat-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .vvip-badge {
+            background: linear-gradient(135deg, var(--tbat-gold), #ffed4e);
+            color: var(--tbat-primary);
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            box-shadow: 0 2px 8px rgba(255,215,0,0.3);
+            animation: shimmer 2s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        /* Score Overview Section */
+        .score-overview {
+            background: var(--tbat-light);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .overview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .overview-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--tbat-primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Noto Sans Thai', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--tbat-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--tbat-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13,114,118,0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--tbat-primary);
+            border: 2px solid var(--tbat-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--tbat-primary);
+            color: white;
+        }
+
+        /* Score Summary Cards */
+        .score-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--tbat-bg) 0%, var(--tbat-light) 100%);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card.primary {
+            background: linear-gradient(135deg, var(--tbat-primary), var(--tbat-secondary));
+            color: white;
+        }
+
+        .summary-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-detail {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .percentile-rank {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--tbat-gold);
+            color: var(--tbat-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* Subject Tabs */
+        .subject-tabs {
+            background: var(--tbat-light);
+            border-radius: 16px;
+            padding: 1.5rem 1rem 1rem 1rem; /* More top padding for badges */
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: visible; /* Allow badges to show properly */
+        }
+
+        .tabs-list {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            padding-top: 0.5rem; /* Add top padding for badge space */
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+        
+        /* Center tabs on mobile when they fit */
+        @media (max-width: 768px) {
+            .tabs-list {
+                justify-content: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .tabs-list::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .tabs-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .tabs-list::-webkit-scrollbar-thumb {
+            background: var(--tbat-accent);
+            border-radius: 2px;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            padding-top: 1rem; /* Add more top padding for score badge */
+            background: transparent;
+            border: 2px solid var(--tbat-accent);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-family: 'Noto Sans Thai', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            flex-shrink: 0; /* Prevent tabs from shrinking */
+            margin-top: 10px; /* Add margin to accommodate badge */
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .tab-button.active {
+            background: var(--tbat-primary);
+            color: white;
+            border-color: var(--tbat-primary);
+        }
+
+        .tab-score {
+            position: absolute;
+            top: -10px;
+            right: 8px;
+            background: var(--tbat-success);
+            color: white;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-family: 'Noto Sans Thai', sans-serif;
+            font-weight: 600;
+            z-index: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Detailed Analysis Section */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .analysis-card {
+            background: var(--tbat-light);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--tbat-bg);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--tbat-primary);
+        }
+
+        /* Performance Chart */
+        .chart-container {
+            height: 250px;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .radar-chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Topic Breakdown */
+        .topic-list {
+            space-y: 1rem;
+        }
+
+        .topic-item {
+            padding: 1rem;
+            background: var(--tbat-bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .topic-name {
+            font-weight: 500;
+        }
+
+        .topic-score {
+            font-weight: 600;
+            color: var(--tbat-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--tbat-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--tbat-primary), var(--tbat-secondary));
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        /* Answer Key Section */
+        .answer-key-section {
+            background: var(--tbat-light);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .answer-item {
+            padding: 0.75rem;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-item.correct {
+            background: var(--tbat-success);
+            color: white;
+        }
+
+        .answer-item.incorrect {
+            background: var(--tbat-danger);
+            color: white;
+        }
+
+        .answer-item.skipped {
+            background: var(--tbat-warning);
+            color: white;
+        }
+
+        .answer-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Weak Areas Alert */
+        .weak-areas-alert {
+            background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+            border-left: 4px solid var(--tbat-danger);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: var(--tbat-danger);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .weak-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .weak-topic-tag {
+            background: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            border: 1px solid var(--tbat-danger);
+            color: var(--tbat-danger);
+        }
+
+        /* PDF Download Section */
+        .pdf-download-section {
+            background: var(--tbat-light);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .pdf-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem auto;
+            opacity: 0.8;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .vvip-note {
+            background: var(--tbat-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 2rem;
+            border-left: 4px solid var(--tbat-primary);
+        }
+
+        /* Enhanced Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+                margin: 1rem auto;
+            }
+
+            .header-container {
+                padding: 0 15px;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+            }
+
+            .user-info span:not(.vvip-badge) {
+                display: none;
+            }
+
+            .score-overview {
+                padding: 1.5rem;
+            }
+
+            .overview-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .overview-title {
+                font-size: 1.25rem;
+            }
+
+            .analysis-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .score-summary {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .summary-card {
+                padding: 1rem;
+            }
+
+            .summary-value {
+                font-size: 2rem;
+            }
+
+            .tabs-list {
+                justify-content: flex-start;
+                gap: 0.75rem;
+                padding: 0.5rem;
+            }
+
+            .tab-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.875rem;
+                min-width: 80px;
+            }
+
+            .tab-score {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+                top: -8px;
+                right: 6px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 0.75rem 1rem;
+            }
+
+            .analysis-card {
+                padding: 1rem;
+            }
+
+            .card-title {
+                font-size: 1rem;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+
+            .topic-item {
+                padding: 0.75rem;
+            }
+
+            .weak-areas-alert {
+                padding: 1rem;
+            }
+
+            .answer-key-section {
+                padding: 1.5rem;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .overview-title {
+                font-size: 1.1rem;
+                line-height: 1.3;
+            }
+
+            .summary-card {
+                padding: 0.75rem;
+            }
+
+            .summary-value {
+                font-size: 1.8rem;
+            }
+
+            .percentile-rank {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            .tab-button {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+                min-width: 70px;
+            }
+
+            .analysis-card {
+                padding: 0.75rem;
+            }
+
+            .topic-item {
+                padding: 0.5rem;
+            }
+
+            .topic-header {
+                font-size: 0.875rem;
+            }
+
+            .chart-container {
+                height: 180px;
+            }
+
+            .answer-key-section {
+                padding: 1rem;
+            }
+
+            .weak-areas-alert {
+                padding: 0.75rem;
+            }
+
+            .weak-topics {
+                gap: 0.375rem;
+            }
+
+            .weak-topic-tag {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.5rem;
+            }
+        }
+
+        /* Tablet Responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                padding: 0 30px;
+            }
+
+            .analysis-grid {
+                gap: 1.5rem;
+            }
+
+            .score-summary {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+
+            .tabs-list {
+                gap: 1.25rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            /* DEVELOPER REMARKS FOR PRINT FUNCTIONALITY:
+             * ⚠️ CRITICAL: Only print essential content
+             * Hide all navigation, buttons, and non-essential elements
+             * Focus on: scores, analysis, and recommendations ONLY
+             */
+            
+            body {
+                background: white !important;
+                font-size: 12pt;
+                line-height: 1.4;
+            }
+
+            /* Hide all non-essential elements */
+            .no-print,
+            .header,
+            .action-buttons,
+            .btn,
+            button {
+                display: none !important;
+            }
+
+            /* Ensure proper page breaks */
+            .score-overview {
+                page-break-inside: avoid;
+                margin-bottom: 2rem;
+            }
+
+            .analysis-grid {
+                page-break-inside: avoid;
+                margin-bottom: 2rem;
+            }
+
+            .subject-recommendations {
+                page-break-inside: avoid;
+            }
+
+            /* Print-friendly styling */
+            .summary-card {
+                border: 1px solid #ccc;
+                margin-bottom: 1rem;
+            }
+
+            /* Developer Note: Consider creating a separate print component
+             * that only includes the selected subject's data rather than
+             * all subjects. This would make the print output cleaner. */
+        }
+
+        /* Enhanced Animations and Micro-interactions */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        /* Enhanced Card Animations */
+        .score-overview {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .summary-card {
+            animation: scaleIn 0.6s ease-out;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .summary-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .summary-card:nth-child(1) { animation-delay: 0.1s; }
+        .summary-card:nth-child(2) { animation-delay: 0.2s; }
+        .summary-card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* Tab Animations */
+        .subject-tabs {
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        }
+
+        .tab-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .tab-button:active::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13,114,118,0.2);
+        }
+
+        .tab-score {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        /* Analysis Cards Animations */
+        .analysis-card {
+            animation: slideInLeft 0.6s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .analysis-card:nth-child(1) { animation-delay: 0.1s; }
+        .analysis-card:nth-child(2) { animation-delay: 0.2s; }
+
+        /* Topic Item Animations */
+        .topic-item {
+            animation: slideInLeft 0.4s ease-out;
+            transition: all 0.2s ease;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .topic-item:hover {
+            transform: translateX(8px);
+            box-shadow: 2px 0 8px rgba(13,114,118,0.1);
+        }
+
+        .topic-item:nth-child(1) { animation-delay: 0.1s; }
+        .topic-item:nth-child(2) { animation-delay: 0.2s; }
+        .topic-item:nth-child(3) { animation-delay: 0.3s; }
+        .topic-item:nth-child(4) { animation-delay: 0.4s; }
+        .topic-item:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Progress Bar Animation */
+        .progress-fill {
+            animation: expandWidth 1s ease-out;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+        }
+
+        /* Button Enhancements */
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.4s ease;
+        }
+
+        .btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* VVIP Badge Animation */
+        .vvip-badge {
+            background: linear-gradient(45deg, var(--tbat-gold), #ffed4e, var(--tbat-gold));
+            background-size: 200% 100%;
+            animation: shimmerBadge 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmerBadge {
+            0%, 100% { background-position: 200% 0; }
+            50% { background-position: -200% 0; }
+        }
+
+        /* Weak Areas Alert Animation */
+        .weak-areas-alert {
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .weak-topic-tag {
+            animation: scaleIn 0.3s ease-out;
+            transition: all 0.2s ease;
+        }
+
+        .weak-topic-tag:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(231,76,60,0.3);
+        }
+
+        /* PDF Section Animation */
+        .answer-key-section {
+            animation: fadeIn 0.8s ease-out 0.3s both;
+        }
+
+        /* Chart Animation */
+        .radar-chart polygon {
+            animation: drawPolygon 1.5s ease-out;
+        }
+
+        @keyframes drawPolygon {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Loading States */
+        .loading {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Tooltip Styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--tbat-primary);
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header no-print">
+        <div class="header-container">
+            <a href="../index.html" class="logo">
+                <span>🎓</span>
+                <span>TBAT Mock Exam 2568</span>
+            </a>
+            <div class="user-info">
+                <span class="vvip-badge">✨ Advanced Package</span>
+                <span>สวัสดี, วรพล สมศรี</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Score Overview -->
+        <div class="score-overview">
+            <div class="overview-header">
+                <h1 class="overview-title">ผลสอบ TBAT Mock Exam - 20 กันยายน 2568</h1>
+                <div class="action-buttons no-print">
+                    <button class="btn btn-outline" onclick="printResults()">
+                        🖨️ พิมพ์ผลสอบ
+                    </button>
+                    <button class="btn btn-primary" onclick="downloadResultsPDF()">
+                        📥 ดาวน์โหลด PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Score Summary Cards -->
+            <div class="score-summary">
+                <div class="summary-card primary">
+                    <div class="percentile-rank">P85</div>
+                    <div class="summary-label">คะแนนรวมทั้งหมด</div>
+                    <div class="summary-value">152</div>
+                    <div class="summary-detail">จาก 180 คะแนน (84.4%)</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">อันดับเปอร์เซ็นไทล์</div>
+                    <div class="summary-value">85</div>
+                    <div class="summary-detail">สูงกว่า 85% ของผู้สอบ</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">อันดับในกลุ่ม</div>
+                    <div class="summary-value">42</div>
+                    <div class="summary-detail">จาก 523 คน</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject Tabs -->
+        <div class="subject-tabs">
+            <div class="tabs-list">
+                <button class="tab-button active" data-subject="chemistry">
+                    เคมี
+                    <span class="tab-score">52/60</span>
+                </button>
+                <button class="tab-button" data-subject="biology">
+                    ชีววิทยา
+                    <span class="tab-score">48/60</span>
+                </button>
+                <button class="tab-button" data-subject="physics">
+                    ฟิสิกส์
+                    <span class="tab-score">52/60</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Weak Areas Alert -->
+        <div class="weak-areas-alert">
+            <div class="alert-title">
+                ⚠️ หัวข้อที่ควรทบทวน
+            </div>
+            <div>พบว่าคุณมีคะแนนต่ำกว่า 60% ในหัวข้อต่อไปนี้:</div>
+            <div class="weak-topics">
+                <span class="weak-topic-tag">อินทรีย์เคมี</span>
+                <span class="weak-topic-tag">สมดุลเคมี</span>
+                <span class="weak-topic-tag">ไฟฟ้าเคมี</span>
+            </div>
+        </div>
+
+        <!-- General Analysis (Always Visible) -->
+        <div class="analysis-card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe);">
+            <div class="card-header">
+                <h3 class="card-title">📊 สรุปผลรวม - ทั้ง 3 วิชา</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--tbat-primary);">84.4%</div>
+                    <div style="color: var(--tbat-secondary);">ความแม่นยำโดยรวม</div>
+                </div>
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--tbat-success);">เคมี</div>
+                    <div style="color: var(--tbat-secondary);">วิชาที่ทำได้ดีที่สุด</div>
+                </div>
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--tbat-warning);">ฟิสิกส์</div>
+                    <div style="color: var(--tbat-secondary);">วิชาที่ควรพัฒนา</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject-Specific Analysis -->
+        <div class="analysis-grid">
+            <!-- Performance by Topic -->
+            <div class="analysis-card">
+                <div class="card-header">
+                    <h3 class="card-title" id="topic-breakdown-title">📊 คะแนนแยกตามหัวข้อ - เคมี</h3>
+                </div>
+                <div class="topic-list" id="topic-breakdown-content">
+                    <!-- Content will be updated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="analysis-card">
+                <div class="card-header">
+                    <h3 class="card-title">📈 เปรียบเทียบกับค่าเฉลี่ย</h3>
+                </div>
+                <div class="chart-container" id="performance-chart">
+                    <!-- Content will be updated by JavaScript -->
+                </div>
+                <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 20px; height: 3px; background: var(--tbat-primary);"></div>
+                        <span style="font-size: 0.875rem;">คะแนนของคุณ</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 20px; height: 3px; background: var(--tbat-accent); border: 1px dashed;"></div>
+                        <span style="font-size: 0.875rem;">ค่าเฉลี่ย</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer Key Download Section -->
+        <div class="answer-key-section">
+            <div class="card-header">
+                <h3 class="card-title" id="pdf-section-title">📚 เฉลยละเอียดและคำอธิบาย - เคมี</h3>
+            </div>
+            <div style="padding: 2rem; text-align: center;">
+                <div style="margin-bottom: 2rem;">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 24 24' fill='none' stroke='%230d7276' stroke-width='2'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'%3E%3C/path%3E%3Cpolyline points='14 2 14 8 20 8'%3E%3C/polyline%3E%3Cline x1='16' y1='13' x2='8' y2='13'%3E%3C/line%3E%3Cline x1='16' y1='17' x2='8' y2='17'%3E%3C/line%3E%3Cpolyline points='10 9 9 9 8 9'%3E%3C/polyline%3E%3C/svg%3E" alt="PDF Icon" style="width: 80px; height: 80px; margin: 0 auto;">
+                </div>
+                <h4 style="color: var(--tbat-primary); margin-bottom: 1rem;" id="pdf-download-title">ดาวน์โหลดเฉลย เคมี พร้อมคำอธิบาย</h4>
+                <p style="color: var(--tbat-text); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;" id="pdf-description">
+                    เฉลยละเอียดวิชาเคมี พร้อมคำอธิบายโดยอาจารย์ผู้เชี่ยวชาญ<br>
+                    ไฟล์ PDF ขนาด 8 หน้า รวมเทคนิคการทำข้อสอบและแนวทางการพัฒนา
+                </p>
+                <div style="display: flex; justify-content: center;">
+                    <button class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem; font-family: 'Noto Sans Thai', sans-serif; font-weight: 500;" id="download-subject-pdf">
+                        📥 ดาวน์โหลดเฉลย เคมี (PDF)
+                    </button>
+                </div>
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--tbat-bg); border-radius: 8px;">
+                    <p style="font-size: 0.875rem; color: var(--tbat-secondary); margin: 0;">
+                        <strong>หมายเหตุ:</strong> สิทธิพิเศษสำหรับสมาชิก Advanced Package เท่านั้น<br>
+                        ไฟล์เฉลยจะพร้อมดาวน์โหลดภายใน 24 ชั่วโมงหลังการสอบ
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject-Specific Recommendations -->
+        <div class="analysis-card" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe);" id="subject-recommendations">
+            <div class="card-header">
+                <h3 class="card-title" id="recommendations-title">💡 คำแนะนำการพัฒนา - เคมี</h3>
+            </div>
+            <ul style="list-style: none; padding: 0;" id="recommendations-content">
+                <!-- Content will be updated by JavaScript -->
+            </ul>
+        </div>
+
+        <!-- Study Recommendations -->
+        <div class="analysis-card" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe);">
+            <div class="card-header">
+                <h3 class="card-title">💡 คำแนะนำในการพัฒนา</h3>
+            </div>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 0.75rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                    ✅ <strong>จุดแข็ง:</strong> คุณมีพื้นฐานปริมาณสัมพันธ์และพันธะเคมีที่ดีมาก ควรรักษามาตรฐานนี้ไว้
+                </li>
+                <li style="padding: 0.75rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                    📚 <strong>ควรเน้นทบทวน:</strong> อินทรีย์เคมีและสมดุลเคมี - ใช้เวลาอย่างน้อย 2 ชั่วโมง/วัน
+                </li>
+                <li style="padding: 0.75rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                    🎯 <strong>เป้าหมายครั้งหน้า:</strong> พยายามทำคะแนนให้ได้อย่างน้อย 165/180 (91%)
+                </li>
+                <li style="padding: 0.75rem 0;">
+                    📈 <strong>แนวโน้ม:</strong> หากพัฒนาหัวข้อที่อ่อนแอ คุณมีโอกาสขึ้นไป P90+ ได้
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Developer Remarks -->
+    <div style="display: none;">
+        <!-- 
+        Developer Notes:
+        1. Chart Implementation: Use Chart.js or D3.js for the radar chart
+        2. PDF Export: Use jsPDF with html2canvas for PDF generation
+        3. Answer Details: Store in database with explanation text
+        4. University Prediction: Use historical cutoff scores algorithm
+        5. Topic Analysis: Calculate from individual question categories
+        6. Share Feature: Generate unique URL for result sharing
+        7. Print Optimization: CSS @media print rules already included
+        8. Animation: Add CountUp.js for score animations on load
+        -->
+    </div>
+
+    <script>
+        // Subject data
+        const subjectData = {
+            chemistry: {
+                name: 'เคมี',
+                score: 52,  // Updated score for chemistry
+                topics: [
+                    { name: 'ปริมาณสัมพันธ์', score: '10/10', percentage: 100, color: 'var(--tbat-success)' },
+                    { name: 'พันธะเคมี', score: '9/10', percentage: 90, color: 'var(--tbat-success)' },
+                    { name: 'สมบัติของธาตุ', score: '8/10', percentage: 80, color: 'var(--tbat-secondary)' },
+                    { name: 'อินทรีย์เคมี', score: '5/10', percentage: 50, color: 'var(--tbat-warning)' },
+                    { name: 'สมดุลเคมี', score: '4/10', percentage: 40, color: 'var(--tbat-danger)' }
+                ],
+                recommendations: [
+                    '✅ <strong>จุดแข็ง:</strong> คุณมีพื้นฐานปริมาณสัมพันธ์และพันธะเคมีที่ดีมาก ควรรักษามาตรฐานนี้ไว้',
+                    '📚 <strong>ควรเน้นทบทวน:</strong> อินทรีย์เคมีและสมดุลเคมี - ใช้เวลาอย่างน้อย 2 ชั่วโมง/วัน',
+                    '🎯 <strong>เทคนิคเฉพาะ:</strong> ฝึกจำสูตรโครงสร้างอินทรีย์ และเข้าใจหลักเลอชาเตอลิเย',
+                    '📈 <strong>เป้าหมายครั้งหน้า:</strong> พยายามทำคะแนนให้ได้อย่างน้อย 55/60 (92%)'
+                ],
+                chartPoints: '150,50 230,95 200,180 95,185 70,95',
+                pdfPages: 8
+            },
+            biology: {
+                name: 'ชีววิทยา',
+                score: 48,  // Add total score for biology
+                topics: [
+                    { name: 'เซลล์และโครงสร้าง', score: '9/10', percentage: 90, color: 'var(--tbat-success)' },
+                    { name: 'พันธุกรรม', score: '7/10', percentage: 70, color: 'var(--tbat-secondary)' },
+                    { name: 'วิวัฒนาการ', score: '8/10', percentage: 80, color: 'var(--tbat-secondary)' },
+                    { name: 'ระบบย่อยอาหาร', score: '6/10', percentage: 60, color: 'var(--tbat-warning)' },
+                    { name: 'ระบบประสาท', score: '8/10', percentage: 80, color: 'var(--tbat-secondary)' }
+                ],
+                recommendations: [
+                    '✅ <strong>จุดแข็ง:</strong> เข้าใจโครงสร้างเซลล์และวิวัฒนาการได้ดีมาก',
+                    '📚 <strong>ควรเน้นทบทวน:</strong> ระบบย่อยอาหารและกลไกการทำงาน',
+                    '🎯 <strong>เทคนิคเฉพาะ:</strong> วาดแผนภาพระบบต่างๆ และจำเอนไซม์ที่สำคัญ',
+                    '📈 <strong>เป้าหมายครั้งหน้า:</strong> พยายามทำคะแนนให้ได้อย่างน้อย 52/60 (87%)'
+                ],
+                chartPoints: '150,60 210,85 190,170 110,180 80,90',
+                pdfPages: 10
+            },
+            physics: {
+                name: 'ฟิสิกส์',
+                score: 52,  // Updated score for physics
+                topics: [
+                    { name: 'กลศาสตร์', score: '8/10', percentage: 80, color: 'var(--tbat-secondary)' },
+                    { name: 'คลื่นและเสียง', score: '9/10', percentage: 90, color: 'var(--tbat-success)' },
+                    { name: 'ไฟฟ้าสถิต', score: '5/10', percentage: 50, color: 'var(--tbat-warning)' },
+                    { name: 'แม่เหล็ก', score: '6/10', percentage: 60, color: 'var(--tbat-warning)' },
+                    { name: 'ฟิสิกส์อะตอม', score: '4/10', percentage: 40, color: 'var(--tbat-danger)' }
+                ],
+                recommendations: [
+                    '✅ <strong>จุดแข็ง:</strong> เข้าใจคลื่นและกลศาสตร์ได้ดี มีพื้นฐานฟิสิกส์ที่แข็งแรง',
+                    '📚 <strong>ควรเน้นทบทวน:</strong> ไฟฟ้าสถิตและฟิสิกส์อะตอม - วิชาที่ต้องใช้คณิตศาสตร์',
+                    '🎯 <strong>เทคนิคเฉพาะ:</strong> ฝึกทำโจทย์คำนวณและจำสูตรฟิสิกส์ที่สำคัญ',
+                    '📈 <strong>เป้าหมายครั้งหน้า:</strong> พยายามทำคะแนนให้ได้อย่างน้อย 56/60 (93%)'
+                ],
+                chartPoints: '150,70 190,80 180,190 130,200 90,110',
+                pdfPages: 12
+            }
+        };
+
+        let currentSubject = 'chemistry';
+
+        // Update content based on selected subject
+        function updateSubjectContent(subject) {
+            console.log('updateSubjectContent called with:', subject); // Debug log
+            
+            const data = subjectData[subject];
+            if (!data) {
+                console.error('No data found for subject:', subject);
+                return;
+            }
+            
+            // Update topic breakdown
+            const topicTitle = document.getElementById('topic-breakdown-title');
+            if (topicTitle) {
+                topicTitle.textContent = `📊 คะแนนแยกตามหัวข้อ - ${data.name}`;
+            }
+            
+            const topicContent = document.getElementById('topic-breakdown-content');
+            if (topicContent) {
+                topicContent.innerHTML = '';
+                
+                // Add Box Plot visualization first
+                const boxPlotContainer = document.createElement('div');
+                boxPlotContainer.style.cssText = 'margin-bottom: 2rem; padding: 1.5rem; background: #f9fafb; border-radius: 8px;';
+                boxPlotContainer.innerHTML = `
+                    <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--tbat-primary);">การกระจายคะแนน ${data.name}</h4>
+                    <div style="position: relative; background: white; padding: 1.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-gray);">
+                        <!-- Score Labels -->
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.85rem; color: #666;">
+                            <span>0</span>
+                            <span>15</span>
+                            <span>30</span>
+                            <span>45</span>
+                            <span>60</span>
+                        </div>
+                        
+                        <!-- Box Plot -->
+                        <div style="position: relative; height: 50px; background: white; border-radius: 4px; border: 1px solid #e5e7eb;">
+                            <!-- Min-Max Range Line -->
+                            <div style="position: absolute; left: 15%; right: 10%; top: 50%; height: 2px; background: #6b7280; transform: translateY(-50%);"></div>
+                            
+                            <!-- Min Value -->
+                            <div style="position: absolute; left: 15%; top: 50%; transform: translate(-50%, -50%);">
+                                <div style="width: 2px; height: 20px; background: #6b7280; margin: 0 auto;"></div>
+                                <div style="font-size: 0.75rem; color: #6b7280; text-align: center; margin-top: 22px;">Min: 8</div>
+                            </div>
+                            
+                            <!-- Max Value -->
+                            <div style="position: absolute; left: 90%; top: 50%; transform: translate(-50%, -50%);">
+                                <div style="width: 2px; height: 20px; background: #6b7280; margin: 0 auto;"></div>
+                                <div style="font-size: 0.75rem; color: #6b7280; text-align: center; margin-top: 22px;">Max: 58</div>
+                            </div>
+                            
+                            <!-- Mean Value -->
+                            <div style="position: absolute; left: 65%; top: 50%; transform: translate(-50%, -50%);">
+                                <div style="width: 4px; height: 25px; background: var(--tbat-secondary); margin: 0 auto;"></div>
+                                <div style="font-size: 0.75rem; color: var(--tbat-secondary); text-align: center; margin-top: 25px; font-weight: 600;">Mean: 39</div>
+                            </div>
+                            
+                            <!-- Your Score Indicator -->
+                            <div style="position: absolute; left: ${subject === 'chemistry' ? '93%' : subject === 'biology' ? '80%' : '70%'}; top: -25px; transform: translateX(-50%);">
+                                <div style="background: var(--tbat-primary); color: white; padding: 0.2rem 0.6rem; border-radius: 15px; font-size: 0.8rem; font-weight: 600; white-space: nowrap;">
+                                    คุณ: ${data.score}
+                                </div>
+                                <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid var(--tbat-primary); margin: 0 auto; transform: translateY(-1px);"></div>
+                            </div>
+                            <div style="position: absolute; left: ${subject === 'chemistry' ? '93%' : subject === 'biology' ? '80%' : '70%'}; top: 50%; transform: translate(-50%, -50%);">
+                                <div style="width: 10px; height: 10px; background: var(--tbat-primary); border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                topicContent.appendChild(boxPlotContainer);
+                
+                // Then add topic items
+                data.topics.forEach(topic => {
+                const topicItem = document.createElement('div');
+                topicItem.className = 'topic-item';
+                topicItem.innerHTML = `
+                    <div class="topic-header">
+                        <span class="topic-name">${topic.name}</span>
+                        <span class="topic-score">${topic.score}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%; background: ${topic.color}; transition: width 1s ease;"></div>
+                    </div>
+                `;
+                topicContent.appendChild(topicItem);
+                
+                    // Animate progress bar
+                    setTimeout(() => {
+                        topicItem.querySelector('.progress-fill').style.width = `${topic.percentage}%`;
+                    }, 100);
+                });
+            }
+
+            // Update performance chart
+            const chartContainer = document.getElementById('performance-chart');
+            chartContainer.innerHTML = `
+                <svg class="radar-chart" viewBox="0 0 300 250">
+                    <!-- Radar grid -->
+                    <polygon points="150,40 240,100 210,190 90,190 60,100" 
+                            fill="none" stroke="#e0e0e0" stroke-width="1"/>
+                    <polygon points="150,70 210,100 190,160 110,160 90,100" 
+                            fill="none" stroke="#e0e0e0" stroke-width="1"/>
+                    <polygon points="150,100 180,120 170,150 130,150 120,120" 
+                            fill="none" stroke="#e0e0e0" stroke-width="1"/>
+                    
+                    <!-- Your performance -->
+                    <polygon points="${data.chartPoints}" 
+                            fill="rgba(13,114,118,0.3)" stroke="#0d7276" stroke-width="2"/>
+                    
+                    <!-- Average performance -->
+                    <polygon points="150,80 200,110 180,160 120,160 100,110" 
+                            fill="none" stroke="#90bfc0" stroke-width="2" stroke-dasharray="5,5"/>
+                    
+                    <!-- Labels for ${data.name} -->
+                    ${data.topics.map((topic, index) => {
+                        const positions = [
+                            { x: 150, y: 30, anchor: 'middle' },
+                            { x: 250, y: 100, anchor: 'start' },
+                            { x: 220, y: 200, anchor: 'start' },
+                            { x: 80, y: 200, anchor: 'end' },
+                            { x: 50, y: 100, anchor: 'end' }
+                        ];
+                        const pos = positions[index] || { x: 150, y: 150, anchor: 'middle' };
+                        return `<text x="${pos.x}" y="${pos.y}" text-anchor="${pos.anchor}" font-size="12" fill="#666">${topic.name}</text>`;
+                    }).join('')}
+                </svg>
+            `;
+
+            // Update PDF section
+            document.getElementById('pdf-section-title').textContent = `📚 เฉลยละเอียดและคำอธิบาย - ${data.name}`;
+            document.getElementById('pdf-download-title').textContent = `ดาวน์โหลดเฉลย ${data.name} พร้อมคำอธิบาย`;
+            document.getElementById('pdf-description').innerHTML = `
+                เฉลยละเอียดวิชา${data.name} พร้อมคำอธิบายโดยอาจารย์ผู้เชี่ยวชาญ<br>
+                ไฟล์ PDF ขนาด ${data.pdfPages} หน้า รวมเทคนิคการทำข้อสอบและแนวทางการพัฒนา
+            `;
+            document.getElementById('download-subject-pdf').textContent = `📥 ดาวน์โหลดเฉลย ${data.name} (PDF)`;
+
+            // Update recommendations
+            document.getElementById('recommendations-title').textContent = `💡 คำแนะนำการพัฒนา - ${data.name}`;
+            const recommendationsContent = document.getElementById('recommendations-content');
+            recommendationsContent.innerHTML = '';
+            
+            data.recommendations.forEach(rec => {
+                const li = document.createElement('li');
+                li.style.cssText = 'padding: 0.75rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);';
+                li.innerHTML = rec;
+                recommendationsContent.appendChild(li);
+            });
+            
+            // Update weak topics section
+            const weakTopicsSection = document.querySelector('.weak-topics');
+            if (weakTopicsSection) {
+                weakTopicsSection.innerHTML = '';
+                // Find topics with score < 60%
+                const weakTopics = data.topics.filter(topic => topic.percentage < 60);
+                if (weakTopics.length > 0) {
+                    weakTopics.forEach(topic => {
+                        const tag = document.createElement('span');
+                        tag.className = 'weak-topic-tag';
+                        tag.textContent = topic.name;
+                        weakTopicsSection.appendChild(tag);
+                        
+                        // Re-add click handler for weak topic tags
+                        tag.addEventListener('click', () => {
+                            alert(`💡 คำแนะนำการพัฒนา: ${topic.name}\n\n🎯 แนวทางปรับปรุง:\n• ทบทวนเนื้อหาพื้นฐาน\n• ฝึกทำโจทย์เพิ่มเติม\n• ขอคำแนะนำจากอาจารย์\n\nDeveloper: แสดง detailed study recommendations`);
+                        });
+                    });
+                } else {
+                    // If no weak topics, show congratulations
+                    const successTag = document.createElement('span');
+                    successTag.style.cssText = 'color: var(--tbat-success); font-weight: 500;';
+                    successTag.textContent = '🎉 ยอดเยี่ยม! คุณทำได้ดีในทุกหัวข้อ';
+                    weakTopicsSection.appendChild(successTag);
+                }
+            }
+            
+            // Update tab scores in the subject tabs (with delay for initial load)
+            setTimeout(() => {
+                document.querySelectorAll('.tab-button').forEach(button => {
+                    const tabSubject = button.getAttribute('data-subject');
+                    const scoreSpan = button.querySelector('.tab-score');
+                    if (scoreSpan && subjectData[tabSubject]) {
+                        scoreSpan.textContent = `${subjectData[tabSubject].score}/60`;
+                    }
+                });
+            }, 100);
+            
+            // Update the general analysis best subject display
+            const bestSubjectElement = document.querySelector('.analysis-card div[style*="color: var(--tbat-success)"]');
+            if (bestSubjectElement) {
+                // Find the best subject
+                let bestSubject = null;
+                let bestScore = 0;
+                Object.keys(subjectData).forEach(key => {
+                    if (subjectData[key].score > bestScore) {
+                        bestScore = subjectData[key].score;
+                        bestSubject = subjectData[key];
+                    }
+                });
+                if (bestSubject) {
+                    bestSubjectElement.textContent = bestSubject.name;
+                }
+            }
+        }
+
+        // Setup tab switching functionality
+        function setupTabSwitching() {
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Remove active class from all tabs
+                    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Get subject and update content
+                    const newSubject = this.getAttribute('data-subject');
+                    console.log('Switching to subject:', newSubject); // Debug log
+                    
+                    if (newSubject && newSubject !== currentSubject) {
+                        currentSubject = newSubject;
+                        updateSubjectContent(currentSubject);
+                    }
+                });
+            });
+        }
+
+        // Animate score values on load
+        window.addEventListener('load', () => {
+            // Load initial content
+            updateSubjectContent(currentSubject);
+            
+            // Setup tab switching
+            setupTabSwitching();
+            
+            // Initialize all tab scores
+            document.querySelectorAll('.tab-button').forEach(button => {
+                const tabSubject = button.getAttribute('data-subject');
+                const scoreSpan = button.querySelector('.tab-score');
+                if (scoreSpan && subjectData[tabSubject]) {
+                    scoreSpan.textContent = `${subjectData[tabSubject].score}/60`;
+                }
+            });
+            
+            // Store original values before animation
+            const summaryValues = [];
+            document.querySelectorAll('.summary-value').forEach((value, index) => {
+                summaryValues[index] = value.textContent;
+            });
+            
+            // Animate summary values
+            document.querySelectorAll('.summary-value').forEach((value, index) => {
+                const originalText = summaryValues[index];
+                const finalValue = parseInt(originalText);
+                
+                if (!isNaN(finalValue)) {
+                    let currentValue = 0;
+                    const duration = 1500; // 1.5 seconds
+                    const steps = 60; // 60 frames for smooth animation
+                    const increment = finalValue / steps;
+                    const stepDuration = duration / steps;
+                    
+                    value.textContent = '0'; // Start from 0
+                    
+                    const timer = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= finalValue) {
+                            currentValue = finalValue;
+                            value.textContent = originalText; // Use original text to preserve formatting
+                            clearInterval(timer);
+                        } else {
+                            value.textContent = Math.floor(currentValue);
+                        }
+                    }, stepDuration);
+                } else {
+                    // Keep original text if not a number
+                    value.textContent = originalText;
+                }
+            });
+        });
+
+        // PDF functionality with Admin Panel connection
+        document.getElementById('download-subject-pdf').addEventListener('click', () => {
+            const subject = subjectData[currentSubject];
+            
+            // DEVELOPER NOTE: This connects to Admin Panel PDF uploads
+            // The PDF file paths should match what was uploaded in Admin Panel:
+            // - เคมี: /uploads/pdfs/chemistry_answer_key_2568.pdf
+            // - ชีววิทยา: /uploads/pdfs/biology_answer_key_2568.pdf  
+            // - ฟิสิกส์: /uploads/pdfs/physics_answer_key_2568.pdf
+            
+            const pdfUrls = {
+                chemistry: '/api/download/pdf/chemistry_answer_key_2568.pdf',
+                biology: '/api/download/pdf/biology_answer_key_2568.pdf',
+                physics: '/api/download/pdf/physics_answer_key_2568.pdf'
+            };
+            
+            const downloadUrl = pdfUrls[currentSubject];
+            
+            // Simulate PDF download (replace with actual API call)
+            alert(`🔗 เชื่อมต่อกับ Admin Panel Upload\n\nดาวน์โหลด: ${subject.name}\nไฟล์: ${downloadUrl}\n\nDeveloper Notes:\n✅ เชื่อมกับ Admin Panel ที่อัปโหลดแล้ว\n✅ ตรวจสอบสิทธิ์ Advanced Package ก่อนดาวน์โหลด\n✅ Log การดาวน์โหลดเพื่อ analytics`);
+            
+            // In production, use this:
+            // window.open(downloadUrl, '_blank');
+        });
+
+
+
+
+
+
+
+
+
+
+        // Enhanced Weak Topic Tags interactions
+        document.querySelectorAll('.weak-topic-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                alert(`💡 คำแนะนำการพัฒนา: ${tag.textContent}\n\n🎯 แนวทางปรับปรุง:\n• ทบทวนเนื้อหาพื้นฐาน\n• ฝึกทำโจทย์เพิ่มเติม\n• ขอคำแนะนำจากอาจารย์\n\nDeveloper: แสดง detailed study recommendations`);
+            });
+        });
+
+        // Topic item click for detailed analysis
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.topic-item')) {
+                const topicItem = e.target.closest('.topic-item');
+                const topicNameElement = topicItem.querySelector('.topic-name');
+                const topicScoreElement = topicItem.querySelector('.topic-score');
+                
+                if (topicNameElement && topicScoreElement) {
+                    const topicName = topicNameElement.textContent;
+                    const topicScore = topicScoreElement.textContent;
+                    
+                    alert(`📊 วิเคราะห์ละเอียด: ${topicName}\n\nคะแนน: ${topicScore}\n\n💡 คำแนะนำ:\n• ศึกษาเนื้อหาเพิ่มเติม\n• ฝึกทำโจทย์ที่หลากหลาย\n• ตรวจสอบความเข้าใจพื้นฐาน\n\nDeveloper: Show detailed topic analysis modal`);
+                }
+            }
+        });
+
+        // Download Results PDF function
+        function downloadResultsPDF() {
+            const button = event.currentTarget;
+            const originalText = button.textContent;
+            
+            button.textContent = '⏳ กำลังสร้าง PDF...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+                alert('✅ สร้างไฟล์ PDF สำเร็จ!\n\n📥 ดาวน์โหลดผลสอบทั้งหมด\nรวม 3 วิชา พร้อมการวิเคราะห์โดยละเอียด\n\nDeveloper: ใช้ jsPDF + html2canvas');
+                // In production: Generate and download PDF
+                // window.open('/api/download/results-pdf', '_blank');
+            }, 2000);
+        }
+
+        // Print Results Function
+        function printResults() {
+            const subjectName = subjectData[currentSubject].name;
+            
+            if (confirm(`🖨️ พิมพ์ผลสอบ ${subjectName}?\n\n📋 จะรวมข้อมูล:\n• คะแนนรวม\n• วิเคราะห์ ${subjectName}\n• คำแนะนำการพัฒนา`)) {
+                // Enhanced print implementation
+                const printContent = `
+                    <html>
+                        <head>
+                            <title>TBAT Results - ${subjectName} - Print</title>
+                            <style>
+                                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap');
+                                body { 
+                                    font-family: 'Noto Sans Thai', sans-serif; 
+                                    margin: 20px;
+                                    color: #2c3e50;
+                                }
+                                h1 { 
+                                    color: #0d7276; 
+                                    border-bottom: 2px solid #0d7276; 
+                                    padding-bottom: 10px; 
+                                }
+                                h3 { 
+                                    color: #0d7276;
+                                    margin-top: 20px;
+                                }
+                                .summary-box { 
+                                    border: 1px solid #ccc; 
+                                    padding: 15px; 
+                                    margin: 10px 0;
+                                    background: #f9f9f9;
+                                }
+                                .topic-row { 
+                                    display: flex; 
+                                    justify-content: space-between; 
+                                    padding: 8px 0; 
+                                    border-bottom: 1px solid #eee; 
+                                }
+                                .recommendation {
+                                    margin: 10px 0;
+                                    padding: 10px;
+                                    background: #f0f9ff;
+                                    border-left: 3px solid #0d7276;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>ผลสอบ TBAT Mock Exam - ${subjectName}</h1>
+                            <div class="summary-box">
+                                <h2 style="margin: 0;">คะแนนรวม: 152/180 (84.4%)</h2>
+                                <p>เปอร์เซ็นไทล์: P85 | อันดับ: 42/523</p>
+                                <p>วันที่สอบ: 20 กันยายน 2568</p>
+                                <p style="margin: 0;"><strong>สถานะ:</strong> ✨ Advanced Package</p>
+                            </div>
+                            <h3>คะแนนแยกตามหัวข้อ - ${subjectName}</h3>
+                            ${subjectData[currentSubject].topics.map(topic => 
+                                '<div class="topic-row">' +
+                                    '<span>' + topic.name + '</span>' +
+                                    '<span><strong>' + topic.score + '</strong> (' + topic.percentage + '%)</span>' +
+                                '</div>'
+                            ).join('')}
+                            <h3>คำแนะนำการพัฒนา</h3>
+                            ${subjectData[currentSubject].recommendations.map(rec => 
+                                '<div class="recommendation">' + rec + '</div>'
+                            ).join('')}
+                            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; color: #666;">
+                                <small>พิมพ์จากระบบ TBAT Mock Exam 2568</small>
+                            </div>
+                        </body>
+                    </html>
+                `;
+                
+                const newWindow = window.open('', '_blank');
+                if (newWindow) {
+                    newWindow.document.write(printContent);
+                    newWindow.document.close();
+                    setTimeout(() => {
+                        newWindow.print();
+                    }, 250);
+                }
+            }
+        }
+        
+        // Ensure all event listeners are properly attached on load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page fully loaded and ready');
+        });
+    </script>
+</body>
+</html>

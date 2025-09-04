@@ -1,0 +1,17 @@
+{
+  "name": "@tbat/database",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.4.0"
+  },
+  "devDependencies": {
+    "@tbat/typescript-config": "workspace:*",
+    "prisma": "^5.4.0",
+    "typescript": "^5.2.0"
+  }
+}
