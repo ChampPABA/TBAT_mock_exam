@@ -1,9 +1,0 @@
-{
-  "extends": "@tbat/typescript-config/react-library.json",
-  "compilerOptions": {
-    "declaration": true,
-    "outDir": "dist"
-  },
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules"]
-}
