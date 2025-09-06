@@ -5,6 +5,7 @@ The TBAT Mock Exam Platform is built using a component-based architecture with c
 ### Frontend Components
 
 #### Authentication Components
+
 ```typescript
 // Core authentication interfaces
 interface AuthProvider {
@@ -28,6 +29,7 @@ interface RegistrationForm {
 ```
 
 #### Exam Management Components
+
 ```typescript
 interface ExamRegistration {
   sessionSelection: SessionTime;
@@ -53,6 +55,7 @@ interface ResultsViewer {
 ```
 
 #### PDF Management Components (FR21-FR24)
+
 ```typescript
 interface PDFViewer {
   pdfUrl: string;
@@ -77,10 +80,11 @@ interface UpgradePrompt {
 ```
 
 #### Data Lifecycle Components (FR22)
+
 ```typescript
 interface ExpiryManager {
   expiryStatus: ExpiryStatus[];
-  warningLevel: 'none' | 'notice' | 'urgent';
+  warningLevel: "none" | "notice" | "urgent";
   daysRemaining: number[];
   showExpiryWarning: (level: WarningLevel) => void;
 }
@@ -95,6 +99,7 @@ interface DataAccessControl {
 ### Backend Components
 
 #### API Layer Components
+
 ```typescript
 interface APIRouter {
   authentication: AuthenticationRoutes;
@@ -114,6 +119,7 @@ interface DatabaseConnection {
 ```
 
 #### Business Logic Components
+
 ```typescript
 interface ExamCodeGenerator {
   generateFreeCode: (subject: Subject) => string; // FREE-[8CHAR]-[SUBJECT]
@@ -138,6 +144,7 @@ interface AnalyticsEngine {
 ```
 
 #### PDF Management Components (FR21-FR24)
+
 ```typescript
 interface PDFStorageManager {
   uploadPDF: (file: File, metadata: PDFMetadata) => Promise<PDFSolution>;
@@ -154,6 +161,7 @@ interface NotificationService {
 ```
 
 #### Enhanced Admin Components (FR24)
+
 ```typescript
 interface AdminUserManager {
   searchUsers: (criteria: SearchCriteria) => Promise<User[]>;
@@ -180,6 +188,7 @@ interface AuditLogger {
 ### Data Management Components
 
 #### Database Access Layer
+
 ```typescript
 interface UserRepository {
   create: (userData: CreateUserData) => Promise<User>;
@@ -204,6 +213,7 @@ interface PDFRepository {
 ```
 
 #### Caching Components
+
 ```typescript
 interface CacheManager {
   sessionCapacity: EdgeConfigCache;
@@ -222,9 +232,10 @@ interface SessionCapacityCache {
 ### External Integration Components
 
 #### Stripe Integration
+
 ```typescript
 interface StripeConnector {
-  createPaymentIntent: (amount: number, currency: 'thb') => Promise<PaymentIntent>;
+  createPaymentIntent: (amount: number, currency: "thb") => Promise<PaymentIntent>;
   confirmPayment: (paymentIntentId: string) => Promise<ConfirmationResult>;
   handleWebhook: (signature: string, payload: string) => Promise<StripeEvent>;
   refundPayment: (paymentIntentId: string) => Promise<RefundResult>;
@@ -232,6 +243,7 @@ interface StripeConnector {
 ```
 
 #### Email Service Integration
+
 ```typescript
 interface EmailConnector {
   sendWelcomeEmail: (user: User) => Promise<void>;
@@ -245,16 +257,19 @@ interface EmailConnector {
 ### Component Interaction Patterns
 
 #### Request Flow Pattern
+
 ```
 User Request → API Route → Authentication Middleware → Business Logic → Database Access → Response
 ```
 
 #### Event-Driven Pattern
+
 ```
 Payment Success → Webhook Handler → User Upgrade → Email Notification → Analytics Update
 ```
 
-#### Caching Pattern  
+#### Caching Pattern
+
 ```
 API Request → Cache Check → Database Query (if miss) → Cache Update → Response
 ```
@@ -262,22 +277,24 @@ API Request → Cache Check → Database Query (if miss) → Cache Update → Re
 ### Component Dependencies
 
 **Frontend Dependencies:**
+
 - Authentication components depend on NextAuth.js
 - Payment components depend on Stripe SDK
 - PDF components depend on Vercel Blob Storage APIs
 - All components use shadcn/ui for consistent styling
 
 **Backend Dependencies:**
+
 - All database components depend on Prisma ORM
 - Payment processing depends on Stripe webhooks
 - Email components depend on Resend service
 - Admin components depend on audit logging
 
 **Cross-Cutting Concerns:**
+
 - **Error Handling:** All components implement standardized error interfaces
 - **Logging:** Structured logging with request correlation IDs
 - **Monitoring:** Performance metrics collection at component boundaries
 - **Security:** Authentication and authorization checks at all entry points
 
 This component architecture supports the complete TBAT Mock Exam Platform with clear separation of concerns, type safety, and maintainable interfaces that facilitate both development and testing workflows.
-

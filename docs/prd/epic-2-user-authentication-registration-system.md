@@ -101,4 +101,3 @@ so that users can register and login successfully with proper session management
 **AC5:** PDPA consent integrated with backend logging and user preference storage
 
 **AC6:** Authentication state synchronized across all components with automatic redirect handling
-

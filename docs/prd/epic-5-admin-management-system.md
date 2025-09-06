@@ -80,7 +80,7 @@ so that admin operations work efficiently with proper validation and error handl
 
 **AC5:** PUT /api/admin/capacity/override endpoint for manual session capacity adjustments
 
-**AC6:** CRUD /api/admin/users/* endpoints for comprehensive user management including profile updates and exam code regeneration
+**AC6:** CRUD /api/admin/users/\* endpoints for comprehensive user management including profile updates and exam code regeneration
 
 **AC7:** GET /api/admin/audit/logs endpoint for administrative action tracking and compliance
 
@@ -105,4 +105,3 @@ so that administrators can efficiently manage exam operations with real data.
 **AC5:** Admin audit logs displaying actual administrative actions with proper timestamps and user tracking
 
 **AC6:** Complete admin workflow testing covering score upload, data export, and capacity management operations
-

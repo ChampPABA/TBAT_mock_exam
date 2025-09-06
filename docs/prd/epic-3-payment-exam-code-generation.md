@@ -36,7 +36,7 @@ so that the complete payment experience is functional before live integration.
 
 **AC3:** Printable ticket component with QR code generation using Sharp library
 
-**AC4:** Payment confirmation component displaying exam code and session details prominently  
+**AC4:** Payment confirmation component displaying exam code and session details prominently
 
 **AC5:** Loading states and payment processing animations for mobile user experience
 
@@ -101,4 +101,3 @@ so that users can successfully pay and receive valid exam codes immediately.
 **AC5:** Payment failure handling with clear user messaging and retry options
 
 **AC6:** End-to-end testing covering payment success, code generation, and ticket delivery
-

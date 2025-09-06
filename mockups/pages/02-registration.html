@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="ลงทะเบียนสอบ Mock TBAT - ทดลองสอบฟรี 1 วิชา สำหรับนักเรียนเชียงใหม่"
+    />
+    <title>ลงทะเบียน Mock TBAT - Freemium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            },
+            fontFamily: {
+              thai: ["Noto Sans Thai", "sans-serif"],
+            },
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-out",
+              "slide-up": "slideUp 0.3s ease-out",
+              "slide-down": "slideDown 0.3s ease-out",
+              "pulse-soft": "pulseSoft 2s infinite",
+              shake: "shake 0.5s",
+              "progress-grow": "progressGrow 0.5s ease-out",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(10px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideUp: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideDown: {
+                "0%": { opacity: "0", transform: "translateY(-20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              pulseSoft: {
+                "0%, 100%": { transform: "scale(1)", opacity: "1" },
+                "50%": { transform: "scale(1.05)", opacity: "0.9" },
+              },
+              shake: {
+                "0%, 100%": { transform: "translateX(0)" },
+                "25%": { transform: "translateX(-5px)" },
+                "75%": { transform: "translateX(5px)" },
+              },
+              progressGrow: {
+                "0%": { width: "0%" },
+                "100%": { width: "var(--progress-width)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Noto Sans Thai", sans-serif;
+      }
+
+      /* Smooth transitions for all interactive elements */
+      * {
+        transition-property: color, background-color, border-color,
+          text-decoration-color, fill, stroke, opacity, box-shadow, transform,
+          filter, backdrop-filter;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #90bfc0;
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #529a94;
+      }
+
+      /* Focus styles for accessibility */
+      *:focus {
+        outline: none;
+      }
+
+      *:focus-visible {
+        ring: 2px;
+        ring-color: #0d7276;
+        ring-offset: 2px;
+      }
+
+      /* Skip to content link */
+      .skip-to-content {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #0d7276;
+        color: white;
+        padding: 8px;
+        text-decoration: none;
+        z-index: 100;
+      }
+
+      .skip-to-content:focus {
+        top: 0;
+      }
+
+      /* Form field animations */
+      .form-field {
+        position: relative;
+      }
+
+      .form-field input:focus,
+      .form-field select:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(13, 114, 118, 0.15);
+      }
+
+      /* Radio and checkbox custom styles */
+      input[type="radio"]:checked + .radio-label,
+      input[type="checkbox"]:checked + .checkbox-label {
+        background: linear-gradient(135deg, #0d7276, #529a94);
+        color: white;
+      }
+
+      /* Loading spinner */
+      .spinner {
+        border: 3px solid #cae0e1;
+        border-top: 3px solid #0d7276;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Mobile menu styles */
+      .mobile-menu {
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .mobile-menu.active {
+        transform: translateX(0);
+      }
+
+      /* Stepper connector animation */
+      .step-connector {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .step-connector::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 2px;
+        background: #0d7276;
+        transform: translateY(-50%);
+        transition: width 0.5s ease-out;
+      }
+
+      .step-connector.active::after {
+        width: 100%;
+      }
+
+      /* Reduce motion for accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* Print styles */
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+
+        .print-only {
+          display: block !important;
+        }
+      }
+
+      /* Tooltip styles */
+      .tooltip {
+        position: relative;
+      }
+
+      .tooltip-content {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        margin-bottom: 5px;
+      }
+
+      .tooltip:hover .tooltip-content {
+        opacity: 1;
+      }
+
+      /* Error shake animation */
+      .error-shake {
+        animation: shake 0.5s;
+      }
+
+      /* Success pulse animation */
+      .success-pulse {
+        animation: pulse 0.5s;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-tbat-bg/20 to-white min-h-screen">
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-to-content">ข้ามไปยังเนื้อหาหลัก</a>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-tbat-bg" role="banner">
+      <div class="max-w-6xl mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-lg flex items-center justify-center text-white font-bold transform hover:scale-110 transition-transform"
+              aria-label="Mock TBAT Logo"
+            >
+              T
+            </div>
+            <span class="text-xl font-semibold text-tbat-primary"
+              >Mock TBAT</span
+            >
+          </div>
+
+          <!-- Desktop Navigation -->
+          <nav
+            class="hidden md:flex items-center space-x-6"
+            role="navigation"
+            aria-label="หลัก"
+          >
+            <a
+              href="01-landing.html"
+              class="text-gray-600 hover:text-tbat-primary transition-colors relative group"
+            >
+              หน้าแรก
+              <span
+                class="absolute bottom-0 left-0 w-0 h-0.5 bg-tbat-primary group-hover:w-full transition-all"
+              ></span>
+            </a>
+            <a
+              href="#"
+              class="text-gray-600 hover:text-tbat-primary transition-colors relative group"
+            >
+              เกี่ยวกับ
+              <span
+                class="absolute bottom-0 left-0 w-0 h-0.5 bg-tbat-primary group-hover:w-full transition-all"
+              ></span>
+            </a>
+            <a
+              href="#"
+              class="text-gray-600 hover:text-tbat-primary transition-colors relative group"
+            >
+              ติดต่อ
+              <span
+                class="absolute bottom-0 left-0 w-0 h-0.5 bg-tbat-primary group-hover:w-full transition-all"
+              ></span>
+            </a>
+          </nav>
+
+          <!-- Mobile menu button -->
+          <button
+            id="mobile-menu-btn"
+            class="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            aria-label="เปิดเมนู"
+            aria-expanded="false"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div
+        id="mobile-menu"
+        class="mobile-menu fixed top-0 right-0 w-64 h-full bg-white shadow-lg z-50 md:hidden"
+        role="navigation"
+        aria-label="เมนูมือถือ"
+      >
+        <div class="p-4">
+          <button
+            id="close-menu-btn"
+            class="p-2 rounded-lg hover:bg-gray-100 float-right"
+            aria-label="ปิดเมนู"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <div class="clear-both pt-8 space-y-4">
+            <a
+              href="01-landing.html"
+              class="block py-2 px-4 text-gray-600 hover:text-tbat-primary hover:bg-tbat-bg/20 rounded-lg transition-colors"
+              >หน้าแรก</a
+            >
+            <a
+              href="#"
+              class="block py-2 px-4 text-gray-600 hover:text-tbat-primary hover:bg-tbat-bg/20 rounded-lg transition-colors"
+              >เกี่ยวกับ</a
+            >
+            <a
+              href="#"
+              class="block py-2 px-4 text-gray-600 hover:text-tbat-primary hover:bg-tbat-bg/20 rounded-lg transition-colors"
+              >ติดต่อ</a
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="max-w-4xl mx-auto px-4 py-8" role="main">
+      <!-- Progress Steps -->
+      <div class="mb-8" role="navigation" aria-label="ขั้นตอนการลงทะเบียน">
+        <div class="flex items-center justify-between max-w-2xl mx-auto">
+          <!-- Step 1 -->
+          <div class="flex items-center animate-fade-in">
+            <div
+              id="step1-indicator"
+              class="w-10 h-10 bg-tbat-primary text-white rounded-full flex items-center justify-center font-semibold transform transition-transform hover:scale-110"
+              role="img"
+              aria-label="ขั้นตอนที่ 1"
+            >
+              <span aria-hidden="true">1</span>
+            </div>
+            <span
+              class="ml-3 text-sm font-medium text-tbat-primary hidden sm:block"
+              >ข้อมูลส่วนตัว</span
+            >
+          </div>
+
+          <!-- Connector 1 -->
+          <div
+            class="flex-1 h-1 bg-gray-300 mx-2 sm:mx-4 step-connector"
+            id="connector1"
+          >
+            <div class="h-full bg-gray-300"></div>
+          </div>
+
+          <!-- Step 2 -->
+          <div
+            class="flex items-center animate-fade-in"
+            style="animation-delay: 0.1s"
+          >
+            <div
+              id="step2-indicator"
+              class="w-10 h-10 bg-gray-300 text-gray-500 rounded-full flex items-center justify-center font-semibold transform transition-transform"
+              role="img"
+              aria-label="ขั้นตอนที่ 2"
+            >
+              <span aria-hidden="true">2</span>
+            </div>
+            <span class="ml-3 text-sm font-medium text-gray-500 hidden sm:block"
+              >เลือกวิชา</span
+            >
+          </div>
+
+          <!-- Connector 2 -->
+          <div
+            class="flex-1 h-1 bg-gray-300 mx-2 sm:mx-4 step-connector"
+            id="connector2"
+          >
+            <div class="h-full bg-gray-300"></div>
+          </div>
+
+          <!-- Step 3 -->
+          <div
+            class="flex items-center animate-fade-in"
+            style="animation-delay: 0.2s"
+          >
+            <div
+              id="step3-indicator"
+              class="w-10 h-10 bg-gray-300 text-gray-500 rounded-full flex items-center justify-center font-semibold transform transition-transform"
+              role="img"
+              aria-label="ขั้นตอนที่ 3"
+            >
+              <span aria-hidden="true">3</span>
+            </div>
+            <span class="ml-3 text-sm font-medium text-gray-500 hidden sm:block"
+              >ยืนยันข้อมูล</span
+            >
+          </div>
+        </div>
+
+        <!-- Mobile step labels -->
+        <div class="flex justify-between mt-2 sm:hidden text-xs">
+          <span class="text-tbat-primary font-medium">ข้อมูลส่วนตัว</span>
+          <span class="text-gray-500">เลือกวิชา</span>
+          <span class="text-gray-500">ยืนยันข้อมูล</span>
+        </div>
+      </div>
+
+      <!-- Registration Form -->
+      <div
+        class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 animate-slide-up"
+      >
+        <div class="text-center mb-6 md:mb-8">
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+            ลงทะเบียนสอบ Mock TBAT
+          </h1>
+        </div>
+
+        <!-- Error Message Container -->
+        <div
+          id="error-message"
+          class="hidden mb-4 p-4 bg-red-50 border border-red-200 rounded-lg"
+          role="alert"
+        >
+          <p class="text-red-800 text-sm"></p>
+        </div>
+
+        <!-- Step 1: Personal Information -->
+        <div id="step1" class="step">
+          <h2
+            class="text-lg sm:text-xl font-semibold text-gray-800 mb-6 flex items-center"
+          >
+            <span
+              class="w-8 h-8 bg-tbat-bg text-tbat-primary rounded-full flex items-center justify-center text-sm font-bold mr-3"
+              >1</span
+            >
+            ข้อมูลส่วนตัว
+          </h2>
+
+          <form id="step1-form" class="space-y-6">
+            <!-- Personal Details Section -->
+            <div class="space-y-4">
+              <h3 class="text-base font-medium text-gray-800 border-l-4 border-tbat-primary pl-3">
+                ข้อมูลตัวตน
+              </h3>
+              
+              <!-- Name and Nickname -->
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="form-field">
+                  <label
+                    for="fullname"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    ชื่อ-นามสกุล
+                    <span class="text-red-500" aria-label="จำเป็น">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    required
+                    aria-required="true"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all"
+                    placeholder="เช่น สมชาย ใจดี"
+                  />
+                  <span class="text-xs text-red-500 mt-1 hidden" role="alert"
+                    >กรุณากรอกชื่อ-นามสกุล</span
+                  >
+                </div>
+                <div class="form-field">
+                  <label
+                    for="nickname"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    ชื่อเล่น
+                  </label>
+                  <input
+                    type="text"
+                    id="nickname"
+                    name="nickname"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all"
+                    placeholder="เช่น ชาย"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Information Section -->
+            <div class="space-y-4">
+              <h3 class="text-base font-medium text-gray-800 border-l-4 border-tbat-primary pl-3">
+                ข้อมูลติดต่อ
+              </h3>
+              
+              <!-- Email and Phone -->
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="form-field">
+                  <label
+                    for="email"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    อีเมล <span class="text-red-500" aria-label="จำเป็น">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    aria-required="true"
+                    aria-describedby="email-error"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all"
+                    placeholder="example@email.com"
+                  />
+                  <span
+                    id="email-error"
+                    class="text-xs text-red-500 mt-1 hidden"
+                    role="alert"
+                    >กรุณากรอกอีเมลที่ถูกต้อง</span
+                  >
+                </div>
+                <div class="form-field">
+                  <label
+                    for="phone"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    เบอร์โทรศัพท์
+                    <span class="text-red-500" aria-label="จำเป็น">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    aria-required="true"
+                    pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all"
+                    placeholder="08X-XXX-XXXX"
+                  />
+                  <span class="text-xs text-red-500 mt-1 hidden" role="alert"
+                    >กรุณากรอกเบอร์โทรศัพท์</span
+                  >
+                </div>
+              </div>
+
+              <!-- Line ID -->
+              <div class="form-field">
+                <label
+                  for="lineid"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Line ID
+                  <span class="text-red-500" aria-label="จำเป็น">*</span>
+                  <span class="tooltip ml-1">
+                    <svg
+                      class="inline w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                    <span class="tooltip-content"
+                      >สำหรับรับผลสอบและข่าวสารสำคัญ</span
+                    >
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  id="lineid"
+                  name="lineid"
+                  required
+                  aria-required="true"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all"
+                  placeholder="@lineID"
+                />
+                <span class="text-xs text-red-500 mt-1 hidden" role="alert"
+                  >กรุณากรอก Line ID</span
+                >
+              </div>
+            </div>
+
+            <!-- Education Information Section -->
+            <div class="space-y-4">
+              <h3 class="text-base font-medium text-gray-800 border-l-4 border-tbat-primary pl-3">
+                ข้อมูลการศึกษา
+              </h3>
+              
+              <!-- School -->
+              <div class="form-field">
+                <label
+                  for="school"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  โรงเรียน
+                  <span class="text-red-500" aria-label="จำเป็น">*</span>
+                </label>
+                <select
+                  id="school"
+                  name="school"
+                  required
+                  aria-required="true"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all appearance-none bg-white"
+                >
+                  <option value="">เลือกโรงเรียน</option>
+                  <option value="montfort">มงฟอร์ตวิทยาลัย</option>
+                  <option value="yuparaj">ยุพราชวิทยาลัย</option>
+                  <option value="dara">ดาราวิทยาลัย</option>
+                  <option value="regina">เรยีนาเชลีวิทยาลัย</option>
+                  <option value="prince">ปรินส์รอยแยลส์วิทยาลัย</option>
+                  <option value="wachirawit">วชิรวิทย์</option>
+                  <option value="nawaminda">นวมินทราชูทิศ</option>
+                  <option value="other">อื่นๆ</option>
+                </select>
+                <span class="text-xs text-red-500 mt-1 hidden" role="alert"
+                  >กรุณาเลือกโรงเรียน</span
+                >
+              </div>
+
+              <!-- Grade Selection -->
+              <div class="form-field">
+                <fieldset>
+                  <legend class="block text-sm font-medium text-gray-700 mb-3">
+                    ระดับชั้น
+                    <span class="text-red-500" aria-label="จำเป็น">*</span>
+                  </legend>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <label
+                      class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-tbat-bg/20 transition-all group"
+                    >
+                      <input
+                        type="radio"
+                        name="grade"
+                        value="m4"
+                        class="sr-only"
+                        required
+                        aria-required="true"
+                      />
+                      <span
+                        class="radio-label w-full h-full flex items-center justify-center rounded-lg font-medium"
+                        >ม.4</span
+                      >
+                    </label>
+                    <label
+                      class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-tbat-bg/20 transition-all group"
+                    >
+                      <input
+                        type="radio"
+                        name="grade"
+                        value="m5"
+                        class="sr-only"
+                        required
+                        aria-required="true"
+                      />
+                      <span
+                        class="radio-label w-full h-full flex items-center justify-center rounded-lg font-medium"
+                        >ม.5</span
+                      >
+                    </label>
+                    <label
+                      class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-tbat-bg/20 transition-all group"
+                    >
+                      <input
+                        type="radio"
+                        name="grade"
+                        value="m6"
+                        class="sr-only"
+                        required
+                        aria-required="true"
+                      />
+                      <span
+                        class="radio-label w-full h-full flex items-center justify-center rounded-lg font-medium"
+                        >ม.6</span
+                      >
+                    </label>
+                    <label
+                      class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-tbat-bg/20 transition-all group"
+                    >
+                      <input
+                        type="radio"
+                        name="grade"
+                        value="other"
+                        class="sr-only"
+                        required
+                        aria-required="true"
+                      />
+                      <span
+                        class="radio-label w-full h-full flex items-center justify-center rounded-lg font-medium"
+                        >อื่นๆ</span
+                      >
+                    </label>
+                  </div>
+                </fieldset>
+                <span class="text-xs text-red-500 mt-1 hidden" role="alert"
+                  >กรุณาเลือกระดับชั้น</span
+                >
+              </div>
+            </div>
+
+            <!-- Parent Information (Optional) -->
+            <div class="border-t pt-6">
+              <h3 class="text-lg font-medium text-gray-700 mb-4">
+                ข้อมูลผู้ปกครอง (ไม่บังคับ)
+              </h3>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="form-field">
+                  <label
+                    for="parent-name"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    ชื่อผู้ปกครอง
+                  </label>
+                  <input
+                    type="text"
+                    id="parent-name"
+                    name="parent-name"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all"
+                    placeholder="ชื่อ-นามสกุล"
+                  />
+                </div>
+                <div class="form-field">
+                  <label
+                    for="parent-phone"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    เบอร์ติดต่อผู้ปกครอง
+                  </label>
+                  <input
+                    type="tel"
+                    id="parent-phone"
+                    name="parent-phone"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all"
+                    placeholder="08X-XXX-XXXX"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex flex-col sm:flex-row justify-between gap-3 pt-6">
+              <a
+                href="01-landing.html"
+                class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all text-center"
+              >
+                ย้อนกลับ
+              </a>
+              <button
+                type="submit"
+                class="px-8 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-all flex items-center justify-center group"
+              >
+                ถัดไป
+                <svg
+                  class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Step 2: Subject Selection -->
+        <div id="step2" class="step hidden">
+          <h2
+            class="text-lg sm:text-xl font-semibold text-gray-800 mb-6 flex items-center"
+          >
+            <span
+              class="w-8 h-8 bg-tbat-bg text-tbat-primary rounded-full flex items-center justify-center text-sm font-bold mr-3"
+              >2</span
+            >
+            เลือกวิชาที่ต้องการทดลองสอบ
+          </h2>
+
+          <div
+            class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg animate-pulse-soft"
+          >
+            <p class="text-sm text-blue-800">
+              <strong>สมาชิก FREE:</strong> สามารถเลือกทดลองสอบได้ 1 วิชา |
+              อัพเกรดเป็น Advanced Package เพื่อสอบทั้ง 3 วิชา
+            </p>
+          </div>
+
+          <form id="step2-form" class="space-y-4">
+            <fieldset>
+              <legend class="sr-only">เลือกวิชาที่ต้องการสอบ</legend>
+
+              <!-- Biology -->
+              <label
+                class="block p-4 sm:p-6 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group mb-4"
+              >
+                <div class="flex items-start">
+                  <input
+                    type="radio"
+                    name="subject"
+                    value="biology"
+                    class="sr-only"
+                    required
+                    aria-required="true"
+                  />
+                  <div class="flex-1">
+                    <div
+                      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                    >
+                      <h3
+                        class="text-lg font-semibold text-gray-800 group-hover:text-tbat-primary transition-colors"
+                      >
+                        Biology (ชีววิทยา)
+                      </h3>
+                      <span
+                        class="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full self-start sm:self-auto"
+                        >60 นาที</span
+                      >
+                    </div>
+                    <p class="text-gray-600 mt-2 text-sm sm:text-base">
+                      55 ข้อ | ครอบคลุม 6 หัวข้อหลัก ตามโครงสร้าง TBAT
+                    </p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Biological diversity (2-4 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Cell theory (9-11 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Organ system (23-27 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Disease defense (4-6 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Plants (1-3 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Genetics evolution (9-11 ข้อ)</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </label>
+
+              <!-- Chemistry -->
+              <label
+                class="block p-4 sm:p-6 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group mb-4"
+              >
+                <div class="flex items-start">
+                  <input
+                    type="radio"
+                    name="subject"
+                    value="chemistry"
+                    class="sr-only"
+                    required
+                    aria-required="true"
+                  />
+                  <div class="flex-1">
+                    <div
+                      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                    >
+                      <h3
+                        class="text-lg font-semibold text-gray-800 group-hover:text-tbat-primary transition-colors"
+                      >
+                        Chemistry (เคมี)
+                      </h3>
+                      <span
+                        class="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full self-start sm:self-auto"
+                        >60 นาที</span
+                      >
+                    </div>
+                    <p class="text-gray-600 mt-2 text-sm sm:text-base">
+                      55 ข้อ | ครอบคลุม 14 หัวข้อหลัก ตามโครงสร้าง TBAT
+                    </p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Laboratory safety (3-5 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Atomic structure (7-9 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Bonding (9-11 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Chemical formula (1-3 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Solutions (1-3 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Stoichiometry (2-4 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Gases (3-5 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Organic chemistry (3-5 ข้อ)</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </label>
+
+              <!-- Physics -->
+              <label
+                class="block p-4 sm:p-6 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group mb-4"
+              >
+                <div class="flex items-start">
+                  <input
+                    type="radio"
+                    name="subject"
+                    value="physics"
+                    class="sr-only"
+                    required
+                    aria-required="true"
+                  />
+                  <div class="flex-1">
+                    <div
+                      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                    >
+                      <h3
+                        class="text-lg font-semibold text-gray-800 group-hover:text-tbat-primary transition-colors"
+                      >
+                        Physics (ฟิสิกส์)
+                      </h3>
+                      <span
+                        class="px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full self-start sm:self-auto"
+                        >60 นาที</span
+                      >
+                    </div>
+                    <p class="text-gray-600 mt-2 text-sm sm:text-base">
+                      30 ข้อ | ครอบคลุม 7 หัวข้อหลัก ตามโครงสร้าง TBAT
+                    </p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Kinematics and forces (6-8 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Energy (3-4 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Vibrations and waves (5-6 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Electricity (4-5 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Magnetism (3-5 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Electromagnetic waves (1-2 ข้อ)</span
+                      >
+                      <span
+                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        >Atomic structure (3-4 ข้อ)</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </label>
+            </fieldset>
+
+            <!-- Upgrade Option -->
+            <div
+              class="mt-6 p-4 sm:p-6 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl transform hover:scale-105 transition-transform"
+            >
+              <div
+                class="flex flex-col sm:flex-row items-center justify-between gap-4"
+              >
+                <div class="text-center sm:text-left">
+                  <h3 class="text-lg font-semibold text-gray-800 mb-1">
+                    อยากสอบทั้ง 3 วิชา?
+                  </h3>
+                  <p class="text-gray-600 text-sm">
+                    Advanced Package เพื่อสอบครบทุกวิชา พร้อมวิเคราะห์ผลละเอียด
+                  </p>
+                </div>
+                <a
+                  href="05-payment.html"
+                  class="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-lg hover:shadow-lg transition-all whitespace-nowrap animate-pulse-soft"
+                >
+                  Advanced Package ฿690
+                </a>
+              </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex flex-col sm:flex-row justify-between gap-3 pt-6">
+              <button
+                type="button"
+                onclick="goToStep1()"
+                class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all text-center"
+              >
+                ย้อนกลับ
+              </button>
+              <button
+                type="submit"
+                class="px-8 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-all flex items-center justify-center group"
+              >
+                ถัดไป
+                <svg
+                  class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Step 3: Confirmation -->
+        <div id="step3" class="step hidden">
+          <h2
+            class="text-lg sm:text-xl font-semibold text-gray-800 mb-6 flex items-center"
+          >
+            <span
+              class="w-8 h-8 bg-tbat-bg text-tbat-primary rounded-full flex items-center justify-center text-sm font-bold mr-3"
+              >3</span
+            >
+            ยืนยันข้อมูลการลงทะเบียน
+          </h2>
+
+          <!-- Summary Card -->
+          <div class="bg-gray-50 rounded-xl p-4 sm:p-6 mb-6 animate-fade-in">
+            <h3 class="font-semibold text-gray-800 mb-4">สรุปข้อมูลของคุณ</h3>
+            <div class="space-y-3 text-sm sm:text-base">
+              <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                <span class="text-gray-600">ชื่อ-นามสกุล:</span>
+                <span class="font-medium" id="confirmName">-</span>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                <span class="text-gray-600">อีเมล:</span>
+                <span class="font-medium" id="confirmEmail">-</span>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                <span class="text-gray-600">เบอร์โทร:</span>
+                <span class="font-medium" id="confirmPhone">-</span>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                <span class="text-gray-600">Line ID:</span>
+                <span class="font-medium" id="confirmLine">-</span>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                <span class="text-gray-600">โรงเรียน:</span>
+                <span class="font-medium" id="confirmSchool">-</span>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                <span class="text-gray-600">ระดับชั้น:</span>
+                <span class="font-medium" id="confirmGrade">-</span>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                <span class="text-gray-600">วิชาที่เลือก:</span>
+                <span class="font-medium text-tbat-primary" id="confirmSubject"
+                  >-</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Generated Code Preview -->
+          <div
+            class="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6 mb-6 animate-fade-in"
+            style="animation-delay: 0.2s"
+          >
+            <h3 class="font-semibold text-gray-800 mb-2 text-center">
+              รหัสสอบจะได้รับหลังยืนยันการลงทะเบียน
+            </h3>
+            <div class="text-center py-4">
+              <div class="text-4xl mb-2">📧</div>
+              <p class="text-sm text-gray-600">
+                รหัสสอบจะถูกส่งไปยังอีเมลของคุณทันที
+              </p>
+            </div>
+          </div>
+
+          <!-- Terms and Conditions -->
+          <div class="mb-6">
+            <label class="flex items-start cursor-pointer group">
+              <input
+                type="checkbox"
+                id="terms-checkbox"
+                class="mt-1 mr-3 w-5 h-5 text-tbat-primary rounded cursor-pointer"
+                required
+                aria-required="true"
+              />
+              <span class="text-xs sm:text-sm text-gray-600">
+                ข้าพเจ้ายอมรับ
+                <button
+                  type="button"
+                  onclick="openTermsModal()"
+                  class="text-tbat-primary underline hover:text-tbat-secondary"
+                  >ข้อตกลงและเงื่อนไข</button
+                >
+                การใช้งาน และยินยอมให้ Mock TBAT
+                เก็บข้อมูลเพื่อการวิเคราะห์ผลสอบ
+              </span>
+            </label>
+          </div>
+
+          <!-- Terms and Conditions Modal -->
+          <div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+              <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-xl font-semibold text-gray-800">ข้อตกลงและเงื่อนไขการใช้งาน</h3>
+                  <button
+                    type="button"
+                    onclick="closeTermsModal()"
+                    class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="p-6 overflow-y-auto max-h-[60vh]">
+                <div class="space-y-4 text-sm text-gray-700">
+                  <section>
+                    <h4 class="font-semibold text-tbat-primary mb-2">1. การยอมรับข้อตกลง</h4>
+                    <p>การใช้งานระบบ Mock TBAT ถือว่าคุณได้ยอมรับข้อตกลงและเงื่อนไขทั้งหมดแล้ว</p>
+                  </section>
+
+                  <section>
+                    <h4 class="font-semibold text-tbat-primary mb-2">2. การเก็บรักษาข้อมูล</h4>
+                    <p>เราจะเก็บรักษาข้อมูลส่วนบุคคลของคุณอย่างปลอดภัย และใช้เฉพาะเพื่อการจัดสอบและวิเคราะห์ผลสอบเท่านั้น ข้อมูลจะไม่ถูกเผยแพร่ให้บุคคลที่สามโดยไม่ได้รับอนุญาต</p>
+                  </section>
+
+                  <section>
+                    <h4 class="font-semibold text-tbat-primary mb-2">3. การใช้งานระบบ</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                      <li>ผู้ใช้ต้องให้ข้อมูลที่ถูกต้องและครบถ้วน</li>
+                      <li>ห้ามใช้ระบบเพื่อการทุจริตหรือผิดกฎหมาย</li>
+                      <li>ห้ามขัดขวางการทำงานของระบบ</li>
+                    </ul>
+                  </section>
+
+                  <section>
+                    <h4 class="font-semibold text-tbat-primary mb-2">4. การสอบและผลการสอบ</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                      <li>วันเวลาสอบ: 20 กันยายน 2568</li>
+                      <li>สถานที่: หอประชุมมหาวิทยาลัยเชียงใหม่</li>
+                      <li>ผู้สอบต้องมารายงานตัวตามเวลาที่กำหนด</li>
+                      <li>ผลการสอบจะประกาศภายใน 7 วันหลังสอบ</li>
+                    </ul>
+                  </section>
+
+                  <section>
+                    <h4 class="font-semibold text-tbat-primary mb-2">5. การชำระเงิน</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                      <li>Advanced Package: 690 บาท</li>
+                      <li>การชำระเงินจะไม่สามารถขอคืนได้</li>
+                      <li>การอัพเกรดหลังสอบ: 290 บาท (ภายใน 7 วัน)</li>
+                    </ul>
+                  </section>
+
+                  <section>
+                    <h4 class="font-semibold text-tbat-primary mb-2">6. ความรับผิดชอบ</h4>
+                    <p>Mock TBAT จะไม่รับผิดชอบต่อความเสียหายที่เกิดจากการใช้งานระบบ หรือข้อมูลที่ผู้ใช้ให้ไว้ไม่ถูกต้อง</p>
+                  </section>
+
+                  <section>
+                    <h4 class="font-semibold text-tbat-primary mb-2">7. การติดต่อ</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                      <li>Line Official: @mocktbat</li>
+                      <li>Email: support@mocktbat.com</li>
+                      <li>โทร: 052-XXX-XXX</li>
+                    </ul>
+                  </section>
+                </div>
+              </div>
+              <div class="p-6 border-t border-gray-200 bg-gray-50">
+                <div class="flex flex-col sm:flex-row justify-end gap-3">
+                  <button
+                    type="button"
+                    onclick="closeTermsModal()"
+                    class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    ปิด
+                  </button>
+                  <button
+                    type="button"
+                    onclick="acceptTerms()"
+                    class="px-6 py-2 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors"
+                  >
+                    ยอมรับข้อตกลง
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <div class="flex flex-col sm:flex-row justify-between gap-3 pt-6">
+            <button
+              type="button"
+              onclick="goToStep2()"
+              class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all text-center"
+            >
+              ย้อนกลับ
+            </button>
+            <button
+              type="button"
+              onclick="submitRegistration()"
+              id="submit-btn"
+              class="px-8 py-3 bg-gradient-to-r from-tbat-primary to-tbat-secondary text-white rounded-lg hover:shadow-lg transition-all flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span class="submit-text">ยืนยันการลงทะเบียน</span>
+              <span class="spinner hidden ml-2"></span>
+              <svg
+                class="w-5 h-5 ml-2 group-hover:scale-110 transition-transform submit-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Success Message -->
+        <div
+          id="successMessage"
+          class="hidden text-center py-8 sm:py-12 animate-fade-in"
+        >
+          <div
+            class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-soft"
+          >
+            <svg
+              class="w-10 h-10 text-green-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
+            ลงทะเบียนสำเร็จ!
+          </h2>
+          <p class="text-sm sm:text-base text-gray-600 mb-6">
+            รหัสสอบของคุณคือ
+          </p>
+          <div
+            id="finalCode"
+            class="text-2xl sm:text-3xl font-mono font-bold text-tbat-primary mb-6 animate-pulse"
+          >
+            FREE-A7B9-BIO
+          </div>
+          <p class="text-xs sm:text-sm text-gray-600 mb-8 px-4">
+            เราได้ส่งรหัสสอบและรายละเอียดไปยังอีเมลของคุณ<br />
+            กรุณาเก็บรหัสนี้ไว้สำหรับเข้าสอบในวันที่ 20 กันยายน 2568
+          </p>
+          
+          <!-- LINE Official Account -->
+          <div class="bg-green-50 border border-green-200 rounded-xl p-6 mb-8">
+            <div class="text-center">
+              <h3 class="text-lg font-semibold text-gray-800 mb-2">📢 ขั้นตอนสำคัญ!</h3>
+              <p class="text-sm text-gray-700 mb-4">
+                <strong>บังคับ Add Line Official Account</strong><br/>
+                เพื่อรับข่าวสารและการแจ้งเตือนที่รวดเร็ว
+              </p>
+              <div class="flex justify-center mb-4">
+                <img 
+                  src="../assets/images/line_QR.jpg" 
+                  alt="LINE Official Account QR Code" 
+                  class="w-48 h-48 border-2 border-gray-200 rounded-lg shadow-sm"
+                />
+              </div>
+              <p class="text-xs text-gray-600 mb-3">
+                Scan QR Code หรือ <a href="https://shorturl.at/e0VKP" target="_blank" class="text-tbat-primary underline hover:text-tbat-secondary font-medium">Click</a>
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row justify-center gap-3">
+            <a
+              href="03-dashboard-free.html"
+              class="px-6 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-all"
+            >
+              ไปยัง Dashboard
+            </a>
+            <button
+              onclick="window.print()"
+              class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all no-print"
+            >
+              พิมพ์บัตรสอบ
+            </button>
+          </div>
+
+          <!-- Printable exam ticket (hidden on screen) -->
+          <div class="hidden print-only mt-8 p-8 border-2 border-gray-800">
+            <h1 class="text-2xl font-bold mb-4">บัตรสอบ Mock TBAT</h1>
+            <div class="space-y-2">
+              <p>
+                <strong>รหัสสอบ:</strong>
+                <span id="printCode">FREE-A7B9-BIO</span>
+              </p>
+              <p><strong>ชื่อ-นามสกุล:</strong> <span id="printName"></span></p>
+              <p><strong>วิชา:</strong> <span id="printSubject"></span></p>
+              <p><strong>วันสอบ:</strong> 20 กันยายน 2568</p>
+              <p><strong>สถานที่:</strong> มหาวิทยาลัยเชียงใหม่</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Info -->
+      <div class="mt-8 text-center text-xs sm:text-sm text-gray-600">
+        <p>
+          หากมีปัญหาในการลงทะเบียน ติดต่อ Line: @mocktbat | โทร: 052-XXX-XXX
+        </p>
+      </div>
+    </main>
+
+    <script>
+      // Form data storage
+      let formData = {
+        personal: {},
+        subject: "",
+        terms: false,
+      };
+
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+      const closeMenuBtn = document.getElementById("close-menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      mobileMenuBtn?.addEventListener("click", () => {
+        mobileMenu.classList.add("active");
+        mobileMenuBtn.setAttribute("aria-expanded", "true");
+        document.body.style.overflow = "hidden";
+      });
+
+      closeMenuBtn?.addEventListener("click", () => {
+        mobileMenu.classList.remove("active");
+        mobileMenuBtn.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (
+          mobileMenu.classList.contains("active") &&
+          !mobileMenu.contains(e.target) &&
+          !mobileMenuBtn.contains(e.target)
+        ) {
+          mobileMenu.classList.remove("active");
+          mobileMenuBtn.setAttribute("aria-expanded", "false");
+          document.body.style.overflow = "";
+        }
+      });
+
+      // Form validation functions
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
+      function validatePhone(phone) {
+        // Remove dashes and spaces first
+        const cleanPhone = phone.replace(/[- ]/g, "");
+        // Check if it's exactly 10 digits
+        const re = /^[0-9]{10}$/;
+        return re.test(cleanPhone);
+      }
+
+      function showError(field, message) {
+        const errorSpan = field.nextElementSibling;
+        if (errorSpan && errorSpan.classList.contains("text-red-500")) {
+          errorSpan.textContent = message;
+          errorSpan.classList.remove("hidden");
+        }
+        field.classList.add("border-red-500");
+        field.parentElement.classList.add("error-shake");
+        setTimeout(() => {
+          field.parentElement.classList.remove("error-shake");
+        }, 500);
+      }
+
+      function clearError(field) {
+        const errorSpan = field.nextElementSibling;
+        if (errorSpan && errorSpan.classList.contains("text-red-500")) {
+          errorSpan.classList.add("hidden");
+        }
+        field.classList.remove("border-red-500");
+      }
+
+      // Step 1 form validation
+      document
+        .getElementById("step1-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let isValid = true;
+          const fields = {
+            fullname: document.getElementById("fullname"),
+            email: document.getElementById("email"),
+            phone: document.getElementById("phone"),
+            lineid: document.getElementById("lineid"),
+            school: document.getElementById("school"),
+            grade: document.querySelector('input[name="grade"]:checked'),
+          };
+
+          // Validate fullname
+          if (!fields.fullname.value.trim()) {
+            showError(fields.fullname, "กรุณากรอกชื่อ-นามสกุล");
+            isValid = false;
+          } else {
+            clearError(fields.fullname);
+          }
+
+          // Validate email
+          if (!validateEmail(fields.email.value)) {
+            showError(fields.email, "กรุณากรอกอีเมลที่ถูกต้อง");
+            isValid = false;
+          } else {
+            clearError(fields.email);
+          }
+
+          // Validate phone
+          if (!validatePhone(fields.phone.value)) {
+            showError(fields.phone, "กรุณากรอกเบอร์โทรศัพท์ 10 หลัก");
+            isValid = false;
+          } else {
+            clearError(fields.phone);
+          }
+
+          // Validate Line ID
+          if (!fields.lineid.value.trim()) {
+            showError(fields.lineid, "กรุณากรอก Line ID");
+            isValid = false;
+          } else {
+            clearError(fields.lineid);
+          }
+
+          // Validate school
+          if (!fields.school.value) {
+            showError(fields.school, "กรุณาเลือกโรงเรียน");
+            isValid = false;
+          } else {
+            clearError(fields.school);
+          }
+
+          // Validate grade
+          if (!fields.grade) {
+            const gradeContainer = document.querySelector("fieldset");
+            const errorSpan = gradeContainer.nextElementSibling;
+            if (errorSpan) {
+              errorSpan.classList.remove("hidden");
+            }
+            isValid = false;
+          }
+
+          // Study plan validation removed - TBAT students are all science-math track
+
+          if (isValid) {
+            // Store form data
+            formData.personal = {
+              fullname: fields.fullname.value,
+              nickname: document.getElementById("nickname").value,
+              email: fields.email.value,
+              phone: fields.phone.value,
+              lineid: fields.lineid.value,
+              school: fields.school.options[fields.school.selectedIndex].text,
+              grade:
+                fields.grade.value === "other"
+                  ? "อื่นๆ"
+                  : fields.grade.value.toUpperCase().replace("M", "ม."),
+              studyplan: "วิทย์-คณิต", // Auto-set for TBAT students
+              parentName: document.getElementById("parent-name").value,
+              parentPhone: document.getElementById("parent-phone").value,
+            };
+            goToStep2();
+          }
+        });
+
+      // Step 2 form validation
+      document
+        .getElementById("step2-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const selectedSubject = document.querySelector(
+            'input[name="subject"]:checked'
+          );
+          if (!selectedSubject) {
+            const errorDiv = document.getElementById("error-message");
+            errorDiv.querySelector("p").textContent =
+              "กรุณาเลือกวิชาที่ต้องการสอบ";
+            errorDiv.classList.remove("hidden");
+            errorDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            return;
+          }
+
+          formData.subject = selectedSubject.value;
+          goToStep3();
+        });
+
+      // Radio button styling
+      document
+        .querySelectorAll('input[type="radio"][name="grade"]')
+        .forEach((radio) => {
+          radio.addEventListener("change", function () {
+            // Clear all selections
+            document.querySelectorAll('input[name="grade"]').forEach((r) => {
+              r.nextElementSibling.classList.remove(
+                "bg-tbat-primary",
+                "text-white"
+              );
+            });
+            // Apply to selected
+            if (this.checked) {
+              this.nextElementSibling.classList.add(
+                "bg-tbat-primary",
+                "text-white"
+              );
+            }
+          });
+        });
+
+      // Subject selection styling
+      document.querySelectorAll('input[name="subject"]').forEach((radio) => {
+        radio.addEventListener("change", function () {
+          // Clear all selections
+          document
+            .querySelectorAll('label:has(input[name="subject"])')
+            .forEach((label) => {
+              label.classList.remove("border-tbat-primary", "bg-tbat-bg/10");
+            });
+          // Apply to selected
+          if (this.checked) {
+            this.closest("label").classList.add(
+              "border-tbat-primary",
+              "bg-tbat-bg/10"
+            );
+          }
+        });
+      });
+
+      // Step navigation functions
+      function updateProgressBar(step) {
+        // Update step indicators
+        for (let i = 1; i <= 3; i++) {
+          const indicator = document.getElementById(`step${i}-indicator`);
+          const connector = document.getElementById(`connector${i}`);
+
+          if (i < step) {
+            // Completed step
+            indicator.classList.add("bg-green-500", "text-white");
+            indicator.classList.remove(
+              "bg-tbat-primary",
+              "bg-gray-300",
+              "text-gray-500"
+            );
+            if (connector) connector.classList.add("active");
+          } else if (i === step) {
+            // Current step
+            indicator.classList.add(
+              "bg-tbat-primary",
+              "text-white",
+              "scale-110"
+            );
+            indicator.classList.remove(
+              "bg-gray-300",
+              "text-gray-500",
+              "bg-green-500"
+            );
+          } else {
+            // Future step
+            indicator.classList.add("bg-gray-300", "text-gray-500");
+            indicator.classList.remove(
+              "bg-tbat-primary",
+              "text-white",
+              "bg-green-500",
+              "scale-110"
+            );
+            if (connector) connector.classList.remove("active");
+          }
+        }
+      }
+
+      function goToStep1() {
+        document.getElementById("step1").classList.remove("hidden");
+        document.getElementById("step2").classList.add("hidden");
+        document.getElementById("step3").classList.add("hidden");
+        updateProgressBar(1);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function goToStep2() {
+        document.getElementById("step1").classList.add("hidden");
+        document.getElementById("step2").classList.remove("hidden");
+        document.getElementById("step3").classList.add("hidden");
+        updateProgressBar(2);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // Clear any error messages
+        document.getElementById("error-message").classList.add("hidden");
+      }
+
+      function goToStep3() {
+        document.getElementById("step1").classList.add("hidden");
+        document.getElementById("step2").classList.add("hidden");
+        document.getElementById("step3").classList.remove("hidden");
+        updateProgressBar(3);
+        updateConfirmationData();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function updateConfirmationData() {
+        // Update confirmation display
+        document.getElementById("confirmName").textContent =
+          formData.personal.fullname;
+        document.getElementById("confirmEmail").textContent =
+          formData.personal.email;
+        document.getElementById("confirmPhone").textContent =
+          formData.personal.phone;
+        document.getElementById("confirmLine").textContent =
+          formData.personal.lineid;
+        document.getElementById("confirmSchool").textContent =
+          formData.personal.school;
+        document.getElementById("confirmGrade").textContent =
+          formData.personal.grade;
+
+        // Subject mapping
+        const subjectNames = {
+          biology: "Biology (ชีววิทยา)",
+          chemistry: "Chemistry (เคมี)",
+          physics: "Physics (ฟิสิกส์)",
+        };
+        document.getElementById("confirmSubject").textContent =
+          subjectNames[formData.subject];
+
+        // Generate preview code
+        const subjectCodes = {
+          biology: "BIO",
+          chemistry: "CHE",
+          physics: "PHY",
+        };
+        const randomCode = Math.random()
+          .toString(36)
+          .substring(2, 6)
+          .toUpperCase();
+        const previewCode = `FREE-${randomCode}-${
+          subjectCodes[formData.subject]
+        }`;
+        document.getElementById("previewCode").textContent = previewCode;
+      }
+
+      function submitRegistration() {
+        const termsCheckbox = document.getElementById("terms-checkbox");
+        if (!termsCheckbox.checked) {
+          termsCheckbox.classList.add("error-shake");
+          setTimeout(() => {
+            termsCheckbox.classList.remove("error-shake");
+          }, 500);
+          return;
+        }
+
+        // Show loading state
+        const submitBtn = document.getElementById("submit-btn");
+        submitBtn.disabled = true;
+        submitBtn.querySelector(".submit-text").textContent =
+          "กำลังลงทะเบียน...";
+        submitBtn.querySelector(".spinner").classList.remove("hidden");
+        submitBtn.querySelector(".submit-icon").classList.add("hidden");
+
+        // Simulate API call
+        setTimeout(() => {
+          // Generate final code
+          const subjectCodes = {
+            biology: "BIO",
+            chemistry: "CHE",
+            physics: "PHY",
+          };
+          const randomCode = Math.random()
+            .toString(36)
+            .substring(2, 6)
+            .toUpperCase();
+          const finalCode = `FREE-${randomCode}-${
+            subjectCodes[formData.subject]
+          }`;
+
+          // Update success message
+          document.getElementById("finalCode").textContent = finalCode;
+          document.getElementById("printCode").textContent = finalCode;
+          document.getElementById("printName").textContent =
+            formData.personal.fullname;
+          document.getElementById("printSubject").textContent =
+            document.getElementById("confirmSubject").textContent;
+
+          // Show success message
+          document.getElementById("step3").classList.add("hidden");
+          document.getElementById("successMessage").classList.remove("hidden");
+
+          // Update progress bar to show completion
+          updateProgressBar(4);
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }, 1500);
+      }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          const activeElement = document.activeElement;
+          if (
+            activeElement.tagName === "INPUT" ||
+            activeElement.tagName === "SELECT"
+          ) {
+            const form = activeElement.closest("form");
+            if (form) {
+              const submitBtn = form.querySelector('button[type="submit"]');
+              if (submitBtn) {
+                e.preventDefault();
+                submitBtn.click();
+              }
+            }
+          }
+        }
+      });
+
+      // Auto-format phone number
+      document.getElementById("phone").addEventListener("input", function (e) {
+        let value = e.target.value.replace(/[^\d]/g, "");
+        if (value.length >= 6) {
+          value =
+            value.slice(0, 3) +
+            "-" +
+            value.slice(3, 6) +
+            "-" +
+            value.slice(6, 10);
+        } else if (value.length >= 3) {
+          value = value.slice(0, 3) + "-" + value.slice(3);
+        }
+        e.target.value = value;
+      });
+
+      // Parent phone auto-format
+      document
+        .getElementById("parent-phone")
+        .addEventListener("input", function (e) {
+          let value = e.target.value.replace(/[^\d]/g, "");
+          if (value.length >= 6) {
+            value =
+              value.slice(0, 3) +
+              "-" +
+              value.slice(3, 6) +
+              "-" +
+              value.slice(6, 10);
+          } else if (value.length >= 3) {
+            value = value.slice(0, 3) + "-" + value.slice(3);
+          }
+          e.target.value = value;
+        });
+
+      // Terms Modal Functions
+      function openTermsModal() {
+        document.getElementById("terms-modal").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeTermsModal() {
+        document.getElementById("terms-modal").classList.add("hidden");
+        document.body.style.overflow = "";
+      }
+
+      function acceptTerms() {
+        document.getElementById("terms-checkbox").checked = true;
+        closeTermsModal();
+      }
+
+      // LINE confirmation removed - users will add LINE externally
+
+      // Close modal when clicking outside
+      document.addEventListener("click", (e) => {
+        const modal = document.getElementById("terms-modal");
+        if (e.target === modal) {
+          closeTermsModal();
+        }
+      });
+
+      // Initialize on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        updateProgressBar(1);
+
+        // Add animation to form fields on focus
+        document
+          .querySelectorAll("input, select, textarea")
+          .forEach((field) => {
+            field.addEventListener("focus", function () {
+              this.parentElement.classList.add("animate-slide-up");
+            });
+          });
+      });
+    </script>
+  </body>
+</html>

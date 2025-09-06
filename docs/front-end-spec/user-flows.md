@@ -31,6 +31,7 @@ graph TD
 ```
 
 **Edge Cases & Error Handling:**
+
 - Duplicate email registration: "อีเมลนี้ถูกใช้แล้ว กรุณาใช้อีเมลอื่น หรือเข้าสู่ระบบ"
 - Free quota full: Redirect to Advanced payment, show "Free Package เต็มแล้ว"
 - Network timeout during submission: Retry mechanism with clear feedback
@@ -53,27 +54,28 @@ graph TD
     B -->|Registration| C[Upsell during subject selection]
     B -->|Dashboard| D[Upgrade CTA button]
     B -->|Quota| E[Free full redirect]
-    
+
     C --> F[Advanced Package Info]
     D --> F
     E --> F
-    
+
     F --> G[Click อัปเกรด 690 บาท]
     G --> H[Redirect to Stripe Checkout]
     H --> I{Payment Result}
     I -->|Success| J[Payment Success Page]
     I -->|Failed| K[Payment Failed Page]
-    
+
     J --> L[Update User Status]
     L --> M[Advanced Dashboard Access]
     L --> N[Email Confirmation]
-    
+
     K --> O[Retry Payment Option]
     O --> H
     K --> P[Contact Support]
 ```
 
 **Edge Cases & Error Handling:**
+
 - Payment timeout: Clear retry mechanism with preserved cart
 - Card declined: Helpful error messages in Thai
 - Network issues during payment: Payment status verification system
@@ -97,22 +99,22 @@ graph TD
     C -->|No| D[Show login error]
     D --> B
     C -->|Yes| E{User Package Type}
-    
+
     E -->|Free| F[Basic Results Display]
     E -->|Advanced| G[Detailed Analytics]
-    
+
     F --> H[Score Overview]
     H --> I[Percentile Ranking]
     I --> J[Premium Preview (Blurred)]
     J --> K[Post-Exam Upgrade CTA]
     K --> L[Stripe Checkout 290 บาท]
-    
+
     G --> M[Full Analytics Dashboard]
     M --> N[Subject Breakdowns]
     N --> O[Box Plot Comparisons]
     O --> P[Study Recommendations]
     P --> Q[PDF Solution Download]
-    
+
     J --> R[PDF Preview (Free Users)]
     R --> S[290 THB Upgrade CTA]
     S --> T[Stripe Checkout]
@@ -120,6 +122,7 @@ graph TD
 ```
 
 **Edge Cases & Error Handling:**
+
 - Results not ready: "ผลสอบจะประกาศภายใน 7 วัน"
 - Login after exam period: Normal login flow, no exam codes
 - Forgotten login credentials: Password reset via email/LINE
@@ -141,21 +144,22 @@ graph TD
     B --> C{Within 7 Days?}
     C -->|No| D[Show expired message]
     C -->|Yes| E[Stripe Checkout 290 บาท]
-    
+
     E --> F{Payment Success?}
     F -->|Yes| G[Immediate Analytics Access]
     F -->|No| H[Payment Error Handling]
-    
+
     G --> I[Remove Blur Effects]
     I --> J[Full Dashboard Access]
     J --> K[Email Confirmation]
-    
+
     H --> L[Retry Payment]
     L --> E
     H --> M[Contact Support]
 ```
 
 **Edge Cases & Error Handling:**
+
 - Expired upgrade window: Clear messaging about timeframe
 - Already upgraded user: Skip payment, direct to analytics
 - Payment processing delays: Status checking mechanism
@@ -175,20 +179,21 @@ graph TD
     C -->|Normal| D[Monitoring Mode]
     C -->|Near Limit| E[Alert Mode]
     C -->|At Limit| F[Management Mode]
-    
+
     E --> G[Promote Advanced Package]
     F --> H[Restrict Free Registration]
     H --> I[Advanced Only Mode]
-    
+
     D --> J[Status Reports]
     G --> J
     I --> J
-    
+
     J --> K[Enrollment Analytics]
     K --> L[Revenue Optimization]
 ```
 
 **Edge Cases & Error Handling:**
+
 - System overload during peak registration: Queue management system
 - Real-time sync failures: Manual override controls available
 - Revenue optimization vs enrollment balancing: Configurable alert thresholds
@@ -209,17 +214,18 @@ graph TD
     B -->|No| C[Show login error + shake animation]
     C --> A
     B -->|Yes| D{User Role Check}
-    
+
     D -->|Student + Free| E[Free Dashboard]
     D -->|Student + Advanced| F[Advanced Dashboard]
     D -->|Admin| G[Admin Panel]
-    
+
     E --> H[Basic Features]
     F --> I[Full Features]
     G --> J[Management Tools]
 ```
 
 **Edge Cases & Error Handling:**
+
 - Role change during session: Force re-login
 - Concurrent admin sessions: Session management
 - Password reset: Email/LINE verification
@@ -239,11 +245,11 @@ graph TD
     A[PDF Access Request] --> B{User Package Type}
     B -->|Advanced| C[Direct PDF Download]
     B -->|Free| D[PDF Preview Modal]
-    
+
     C --> E[Download Progress]
     E --> F[Success Confirmation]
     E --> G[Download Failed - Retry]
-    
+
     D --> H[Show First Page]
     H --> I[Blur Remaining Content]
     I --> J[290 THB Upgrade CTA]
@@ -255,6 +261,7 @@ graph TD
 ```
 
 **Edge Cases & Error Handling:**
+
 - PDF corruption: Fallback download with admin notification
 - Mobile PDF viewing: Progressive loading with scroll optimization
 - Download interruption: Resume capability with progress persistence
@@ -277,21 +284,22 @@ graph TD
     B -->|< 5 months| C[Normal Access + Countdown]
     B -->|5-6 months| D[Warning Phase]
     B -->|> 6 months| E[Expired Access]
-    
+
     C --> F[Subtle Expiry Indicator]
     F --> G[Normal Dashboard Experience]
-    
+
     D --> H[Prominent Warning Banner]
     H --> I[Data Export Options]
     I --> J[Screenshot/Save Prompts]
     J --> K[Contact Information]
-    
+
     E --> L[Graceful Expiry Message]
     L --> M[Historical Data Notice]
     M --> N[Support Contact CTA]
 ```
 
 **Edge Cases & Error Handling:**
+
 - Timezone considerations: Server-side expiry calculation
 - Grace period requests: Admin manual extension capability
 - Data export failures: Multiple format options (PDF, Excel, images)
@@ -313,27 +321,27 @@ graph TD
     B -->|PDF Management| C[PDF Upload Center]
     B -->|User Issues| D[User Management]
     B -->|Emergency| E[Crisis Tools]
-    
+
     C --> F[Drag-Drop Upload]
     F --> G[Metadata Form]
     G --> H[Bulk User Notification]
     H --> I[Upload Confirmation]
-    
+
     D --> J[User Search/Filter]
     J --> K[Profile Edit Interface]
     K --> L[Exam Code Regeneration]
     L --> M[Audit Log Entry]
-    
+
     E --> N[Quick Code Regen]
     E --> O[Bulk Status Updates]
     E --> P[Emergency Communications]
 ```
 
 **Edge Cases & Error Handling:**
+
 - PDF upload failures: Chunked upload with resume capability
 - Concurrent admin sessions: Lock management for user edits
 - Bulk operation failures: Partial success handling with rollback
 - Exam day crisis: Mobile-optimized emergency tools
 
 **Notes:** All admin actions logged for compliance and debugging
-

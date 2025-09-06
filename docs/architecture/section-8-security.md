@@ -5,44 +5,48 @@ The TBAT Mock Exam Platform implements comprehensive security measures to protec
 ### Authentication & Authorization
 
 #### Authentication Strategy
+
 ```typescript
 // NextAuth.js Configuration for Thai Market
 const authConfig = {
   providers: [
     CredentialsProvider({
-      name: 'email-password',
+      name: "email-password",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' }
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
         // Password requirements: 8+ chars, letters + numbers
         const user = await validateUserCredentials(credentials);
-        return user ? { 
-          id: user.id, 
-          email: user.email, 
-          thai_name: user.thai_name,
-          package_type: user.package_type 
-        } : null;
-      }
-    })
+        return user
+          ? {
+              id: user.id,
+              email: user.email,
+              thai_name: user.thai_name,
+              package_type: user.package_type,
+            }
+          : null;
+      },
+    }),
   ],
   session: {
-    strategy: 'jwt', // Serverless-friendly
+    strategy: "jwt", // Serverless-friendly
     maxAge: 7 * 24 * 60 * 60, // 7 days
   },
   jwt: {
     maxAge: 7 * 24 * 60 * 60, // 7 days
   },
   pages: {
-    signIn: '/auth/signin',
-    signUp: '/auth/signup',
-    error: '/auth/error'
-  }
+    signIn: "/auth/signin",
+    signUp: "/auth/signup",
+    error: "/auth/error",
+  },
 };
 ```
 
 #### Password Security
+
 ```typescript
 interface PasswordPolicy {
   minLength: 8;
@@ -61,53 +65,55 @@ async function hashPassword(password: string): Promise<string> {
 ```
 
 #### Role-Based Access Control
+
 ```typescript
 enum UserRole {
-  STUDENT = 'STUDENT',
-  ADMIN = 'ADMIN',
-  SUPER_ADMIN = 'SUPER_ADMIN'
+  STUDENT = "STUDENT",
+  ADMIN = "ADMIN",
+  SUPER_ADMIN = "SUPER_ADMIN",
 }
 
 interface AccessControl {
   STUDENT: {
-    routes: ['/dashboard', '/results', '/profile', '/pdf/preview'];
-    api: ['/api/user/*', '/api/results/user', '/api/pdf/preview/*'];
-    restrictions: ['no_admin_routes', 'package_based_pdf_access'];
+    routes: ["/dashboard", "/results", "/profile", "/pdf/preview"];
+    api: ["/api/user/*", "/api/results/user", "/api/pdf/preview/*"];
+    restrictions: ["no_admin_routes", "package_based_pdf_access"];
   };
   ADMIN: {
-    routes: ['/admin/dashboard', '/admin/users', '/admin/pdf-upload'];
-    api: ['/api/admin/*', '/api/users/*', '/api/pdf/upload'];
-    restrictions: ['no_super_admin_functions'];
+    routes: ["/admin/dashboard", "/admin/users", "/admin/pdf-upload"];
+    api: ["/api/admin/*", "/api/users/*", "/api/pdf/upload"];
+    restrictions: ["no_super_admin_functions"];
   };
   SUPER_ADMIN: {
-    routes: ['/*']; // Full access
-    api: ['/api/*'];
+    routes: ["/*"]; // Full access
+    api: ["/api/*"];
     restrictions: [];
   };
 }
 ```
 
 #### API Route Protection
+
 ```typescript
 // Middleware for API authentication
 export async function authMiddleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  
+
   if (!token) {
     return NextResponse.json(
-      { error: 'UNAUTHORIZED', message: 'กรุณาเข้าสู่ระบบ' }, 
+      { error: "UNAUTHORIZED", message: "กรุณาเข้าสู่ระบบ" },
       { status: 401 }
     );
   }
-  
+
   // Add user context to request
   req.user = {
     id: token.sub,
     email: token.email,
     role: token.role,
-    package_type: token.package_type
+    package_type: token.package_type,
   };
-  
+
   return NextResponse.next();
 }
 
@@ -115,7 +121,7 @@ export async function authMiddleware(req: NextRequest) {
 export function requireRole(allowedRoles: UserRole[]) {
   return (req: AuthenticatedRequest) => {
     if (!allowedRoles.includes(req.user.role)) {
-      throw new UnauthorizedError('ไม่มีสิทธิ์เข้าถึงส่วนนี้');
+      throw new UnauthorizedError("ไม่มีสิทธิ์เข้าถึงส่วนนี้");
     }
   };
 }
@@ -124,6 +130,7 @@ export function requireRole(allowedRoles: UserRole[]) {
 ### Data Protection & Privacy
 
 #### PDPA Compliance (Thai Personal Data Protection Act)
+
 ```typescript
 interface PDPACompliance {
   consentManagement: {
@@ -135,7 +142,7 @@ interface PDPACompliance {
   dataMinimization: {
     collectOnlyNecessary: true;
     purposeLimitation: true;
-    storageMinimization: '6_months_max';
+    storageMinimization: "6_months_max";
   };
   userRights: {
     dataAccess: true; // ขอดูข้อมูลส่วนบุคคล
@@ -147,26 +154,27 @@ interface PDPACompliance {
 ```
 
 #### Personal Data Handling
+
 ```typescript
 // Data classification for PDPA compliance
 interface PersonalDataClass {
   SENSITIVE: {
-    data: ['payment_details', 'exam_scores'];
-    protection: 'MAXIMUM';
-    retention: '6_months';
-    access: 'USER_ONLY';
+    data: ["payment_details", "exam_scores"];
+    protection: "MAXIMUM";
+    retention: "6_months";
+    access: "USER_ONLY";
   };
   PERSONAL: {
-    data: ['thai_name', 'email', 'phone', 'school'];
-    protection: 'HIGH';
-    retention: '6_months';
-    access: 'USER_AND_ADMIN';
+    data: ["thai_name", "email", "phone", "school"];
+    protection: "HIGH";
+    retention: "6_months";
+    access: "USER_AND_ADMIN";
   };
   OPERATIONAL: {
-    data: ['exam_codes', 'session_times'];
-    protection: 'STANDARD';
-    retention: '6_months';
-    access: 'SYSTEM_ADMIN';
+    data: ["exam_codes", "session_times"];
+    protection: "STANDARD";
+    retention: "6_months";
+    access: "SYSTEM_ADMIN";
   };
 }
 
@@ -176,30 +184,31 @@ async function anonymizeUserData(userId: string): Promise<void> {
     where: { id: userId },
     data: {
       email: `anonymous_${generateHash(userId)}@deleted.local`,
-      thai_name: 'ข้อมูลถูกลบ',
-      phone: 'DELETED',
-      school: 'DELETED',
-      line_id: null
-    }
+      thai_name: "ข้อมูลถูกลบ",
+      phone: "DELETED",
+      school: "DELETED",
+      line_id: null,
+    },
   });
 }
 ```
 
 #### Data Encryption
+
 ```typescript
 // Encryption for sensitive data at rest
 interface EncryptionStrategy {
   database: {
-    encryption: 'AES-256';
-    keyRotation: 'quarterly';
+    encryption: "AES-256";
+    keyRotation: "quarterly";
     backupEncryption: true;
   };
   files: {
-    pdfStorage: 'Vercel Blob with encryption';
-    keyManagement: 'Vercel KMS';
+    pdfStorage: "Vercel Blob with encryption";
+    keyManagement: "Vercel KMS";
   };
   transit: {
-    tls: '1.3_minimum';
+    tls: "1.3_minimum";
     hsts: true;
     certificatePinning: true;
   };
@@ -220,105 +229,114 @@ async function decryptExamCode(encryptedCode: string): Promise<string> {
 ### Input Validation & Sanitization
 
 #### Form Input Security
+
 ```typescript
 // Zod schemas for type-safe validation
 const RegistrationSchema = z.object({
-  email: z.string().email('รูปแบบอีเมลไม่ถูกต้อง'),
-  password: z.string()
-    .min(8, 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร')
-    .regex(/[A-Za-z]/, 'รหัสผ่านต้องมีตัวอักษร')
-    .regex(/[0-9]/, 'รหัสผ่านต้องมีตัวเลข'),
-  thai_name: z.string()
-    .min(2, 'ชื่อต้องมีอย่างน้อย 2 ตัวอักษร')
-    .max(100, 'ชื่อต้องไม่เกิน 100 ตัวอักษร'),
-  phone: z.string().regex(/^[0-9]{10}$/, 'เบอร์โทรต้องเป็นตัวเลข 10 หลัก'),
-  school: z.string().min(2, 'ชื่อโรงเรียนต้องมีอย่างน้อย 2 ตัวอักษร'),
+  email: z.string().email("รูปแบบอีเมลไม่ถูกต้อง"),
+  password: z
+    .string()
+    .min(8, "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร")
+    .regex(/[A-Za-z]/, "รหัสผ่านต้องมีตัวอักษร")
+    .regex(/[0-9]/, "รหัสผ่านต้องมีตัวเลข"),
+  thai_name: z
+    .string()
+    .min(2, "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร")
+    .max(100, "ชื่อต้องไม่เกิน 100 ตัวอักษร"),
+  phone: z.string().regex(/^[0-9]{10}$/, "เบอร์โทรต้องเป็นตัวเลข 10 หลัก"),
+  school: z.string().min(2, "ชื่อโรงเรียนต้องมีอย่างน้อย 2 ตัวอักษร"),
   line_id: z.string().optional(),
-  pdpa_consent: z.boolean().refine(val => val === true, 'ต้องยอมรับเงื่อนไข PDPA')
+  pdpa_consent: z.boolean().refine((val) => val === true, "ต้องยอมรับเงื่อนไข PDPA"),
 });
 
 // SQL injection prevention (automatic with Prisma)
 // XSS prevention
 function sanitizeUserInput(input: string): string {
-  return DOMPurify.sanitize(input, { 
+  return DOMPurify.sanitize(input, {
     ALLOWED_TAGS: [], // No HTML allowed
-    ALLOWED_ATTR: [] 
+    ALLOWED_ATTR: [],
   });
 }
 ```
 
 #### API Input Validation
+
 ```typescript
 // Rate limiting for API endpoints
 const rateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
-  message: 'คำขอเกินกำหนด กรุณาลองใหม่ในภายหลัง',
+  message: "คำขอเกินกำหนด กรุณาลองใหม่ในภายหลัง",
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 // File upload security (PDF solutions)
 const fileUploadValidation = {
-  allowedTypes: ['application/pdf'],
+  allowedTypes: ["application/pdf"],
   maxFileSize: 10 * 1024 * 1024, // 10MB
   virusScanning: true, // Vercel Blob built-in
-  sanitizeFilename: true
+  sanitizeFilename: true,
 };
 ```
 
 ### Security Monitoring & Incident Response
 
 #### Security Event Logging
+
 ```typescript
 interface SecurityEvent {
   AUTHENTICATION_FAILURE: {
-    event: 'auth_failed';
-    metadata: { email: string, ip: string, timestamp: Date };
-    severity: 'MEDIUM';
-    action: 'log_and_monitor';
+    event: "auth_failed";
+    metadata: { email: string; ip: string; timestamp: Date };
+    severity: "MEDIUM";
+    action: "log_and_monitor";
   };
   MULTIPLE_LOGIN_ATTEMPTS: {
-    event: 'brute_force_detected';
-    metadata: { email: string, attempts: number, timeWindow: string };
-    severity: 'HIGH';
-    action: 'account_lockout';
+    event: "brute_force_detected";
+    metadata: { email: string; attempts: number; timeWindow: string };
+    severity: "HIGH";
+    action: "account_lockout";
   };
   ADMIN_DATA_ACCESS: {
-    event: 'admin_user_access';
-    metadata: { admin_id: string, target_user: string, action: string };
-    severity: 'INFO';
-    action: 'audit_log';
+    event: "admin_user_access";
+    metadata: { admin_id: string; target_user: string; action: string };
+    severity: "INFO";
+    action: "audit_log";
   };
   PDF_UNAUTHORIZED_ACCESS: {
-    event: 'pdf_access_denied';
-    metadata: { user_id: string, pdf_id: string, package_type: string };
-    severity: 'MEDIUM';
-    action: 'log_and_alert';
+    event: "pdf_access_denied";
+    metadata: { user_id: string; pdf_id: string; package_type: string };
+    severity: "MEDIUM";
+    action: "log_and_alert";
   };
 }
 ```
 
 #### Incident Response Plan
+
 ```typescript
 interface IncidentResponse {
-  SEVERITY_1: { // Data breach, payment system down
-    responseTime: '30_minutes';
-    escalation: ['technical_lead', 'project_manager', 'legal_team'];
-    communication: 'immediate_user_notification';
-    actions: ['system_lockdown', 'forensic_analysis', 'pdpa_notification'];
+  SEVERITY_1: {
+    // Data breach, payment system down
+    responseTime: "30_minutes";
+    escalation: ["technical_lead", "project_manager", "legal_team"];
+    communication: "immediate_user_notification";
+    actions: ["system_lockdown", "forensic_analysis", "pdpa_notification"];
   };
-  SEVERITY_2: { // Account compromised, PDF leak
-    responseTime: '2_hours';
-    escalation: ['technical_lead', 'project_manager'];
-    communication: 'affected_user_notification';
-    actions: ['password_reset', 'audit_investigation', 'security_patch'];
+  SEVERITY_2: {
+    // Account compromised, PDF leak
+    responseTime: "2_hours";
+    escalation: ["technical_lead", "project_manager"];
+    communication: "affected_user_notification";
+    actions: ["password_reset", "audit_investigation", "security_patch"];
   };
-  SEVERITY_3: { // Failed login attempts, minor data exposure
-    responseTime: '24_hours';
-    escalation: ['technical_lead'];
-    communication: 'internal_monitoring';
-    actions: ['log_analysis', 'security_review'];
+  SEVERITY_3: {
+    // Failed login attempts, minor data exposure
+    responseTime: "24_hours";
+    escalation: ["technical_lead"];
+    communication: "internal_monitoring";
+    actions: ["log_analysis", "security_review"];
   };
 }
 ```
@@ -326,11 +344,12 @@ interface IncidentResponse {
 ### Exam Integrity Security
 
 #### Anti-Cheating Measures
+
 ```typescript
 interface ExamIntegrity {
   codeUniqueness: {
-    algorithm: 'cryptographically_secure_random';
-    pattern: 'FREE-[8CHAR]-[SUBJECT] | ADV-[8CHAR]';
+    algorithm: "cryptographically_secure_random";
+    pattern: "FREE-[8CHAR]-[SUBJECT] | ADV-[8CHAR]";
     collision_check: true;
     audit_trail: true;
   };
@@ -348,30 +367,28 @@ interface ExamIntegrity {
 
 // Exam code generation with integrity checks
 async function generateSecureExamCode(
-  packageType: PackageType, 
+  packageType: PackageType,
   subject?: Subject
 ): Promise<string> {
   let code: string;
   let isUnique = false;
-  
+
   do {
     const randomPart = generateCryptoSecureRandom(8);
-    code = packageType === 'FREE' 
-      ? `FREE-${randomPart}-${subject}`
-      : `ADV-${randomPart}`;
-    
+    code = packageType === "FREE" ? `FREE-${randomPart}-${subject}` : `ADV-${randomPart}`;
+
     isUnique = await checkCodeUniqueness(code);
   } while (!isUnique);
-  
+
   // Log code generation for audit
   await auditLogger.logCodeGeneration({
     code,
     packageType,
     subject,
     generatedAt: new Date(),
-    userId: getCurrentUser().id
+    userId: getCurrentUser().id,
   });
-  
+
   return code;
 }
 ```
@@ -379,14 +396,15 @@ async function generateSecureExamCode(
 ### Compliance & Audit
 
 #### Audit Trail Requirements
+
 ```typescript
 interface AuditTrail {
   userDataChanges: {
-    who: 'admin_id | system';
-    what: 'field_changes_json';
-    when: 'timestamp';
-    why: 'reason_string';
-    where: 'ip_address';
+    who: "admin_id | system";
+    what: "field_changes_json";
+    when: "timestamp";
+    why: "reason_string";
+    where: "ip_address";
   };
   paymentTransactions: {
     user_id: string;
@@ -398,13 +416,13 @@ interface AuditTrail {
   pdfAccess: {
     user_id: string;
     pdf_id: string;
-    action: 'view' | 'download' | 'denied';
+    action: "view" | "download" | "denied";
     timestamp: Date;
     package_type: PackageType;
   };
   adminActions: {
     admin_id: string;
-    target_entity: 'user' | 'pdf' | 'system';
+    target_entity: "user" | "pdf" | "system";
     action: string;
     justification: string;
     approval_required: boolean;
@@ -413,6 +431,7 @@ interface AuditTrail {
 ```
 
 #### Compliance Reporting
+
 ```typescript
 // Automated compliance reporting for PDPA
 async function generatePDPAComplianceReport(): Promise<ComplianceReport> {
@@ -424,7 +443,7 @@ async function generatePDPAComplianceReport(): Promise<ComplianceReport> {
     breaches: await getSecurityIncidents(),
     dataTransfers: await getExternalDataSharing(),
     generatedAt: new Date(),
-    period: 'monthly'
+    period: "monthly",
   };
 }
 ```
@@ -432,17 +451,17 @@ async function generatePDPAComplianceReport(): Promise<ComplianceReport> {
 ### Security Development Lifecycle
 
 #### Secure Coding Practices
+
 ```typescript
 // Security checklist for development
 interface SecurityChecklist {
-  authentication: ['✓ NextAuth.js implementation', '✓ Session management', '✓ Password policy'];
-  authorization: ['✓ Role-based access', '✓ API route protection', '✓ Resource ownership'];
-  dataProtection: ['✓ PDPA compliance', '✓ Encryption at rest', '✓ Secure transit'];
-  inputValidation: ['✓ Zod schemas', '✓ SQL injection prevention', '✓ XSS protection'];
-  monitoring: ['✓ Security logging', '✓ Incident response', '✓ Audit trails'];
-  compliance: ['✓ Thai regulations', '✓ Educational standards', '✓ Exam integrity'];
+  authentication: ["✓ NextAuth.js implementation", "✓ Session management", "✓ Password policy"];
+  authorization: ["✓ Role-based access", "✓ API route protection", "✓ Resource ownership"];
+  dataProtection: ["✓ PDPA compliance", "✓ Encryption at rest", "✓ Secure transit"];
+  inputValidation: ["✓ Zod schemas", "✓ SQL injection prevention", "✓ XSS protection"];
+  monitoring: ["✓ Security logging", "✓ Incident response", "✓ Audit trails"];
+  compliance: ["✓ Thai regulations", "✓ Educational standards", "✓ Exam integrity"];
 }
 ```
 
 This comprehensive security framework ensures the TBAT Mock Exam Platform meets the highest standards for protecting student data, maintaining exam integrity, and complying with Thai data protection regulations while supporting the educational mission of the platform.
-

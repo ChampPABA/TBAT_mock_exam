@@ -20,7 +20,7 @@ Body: { email, password, thai_name, phone, school, line_id?, pdpa_consent }
 Response: { user_id, session_token }
 
 # User Login
-POST /api/auth/login  
+POST /api/auth/login
 Body: { email, password }
 Response: { user_id, session_token, package_type }
 
@@ -118,10 +118,10 @@ Response: { notifications_sent: number, failed: number }
 ```yaml
 # Check Data Expiry Status
 GET /api/user/expiry-status
-Response: { 
+Response: {
   results: [{ id, expires_at, days_remaining, is_accessible }],
   urgent_expiry: boolean,
-  warning_level: "none" | "notice" | "urgent" 
+  warning_level: "none" | "notice" | "urgent"
 }
 
 # Extend Data Access (Future Enhancement)
@@ -154,32 +154,35 @@ Response: { ticket_id, resolution_status }
 
 # Admin Dashboard Analytics
 GET /api/admin/dashboard
-Response: { 
-  user_stats, registration_trends, payment_metrics, 
-  pdf_download_stats, upcoming_expirations, system_alerts 
+Response: {
+  user_stats, registration_trends, payment_metrics,
+  pdf_download_stats, upcoming_expirations, system_alerts
 }
 ```
 
 ### API Security & Performance
 
 #### Authentication Flow
+
 1. NextAuth.js session management with 7-day expiry
 2. API route middleware validates session tokens
 3. Role-based access control (user, admin)
 4. Rate limiting: 100 requests/minute per user
 
 #### Error Response Format
+
 ```typescript
 interface ApiError {
-  error: string;           // Error code (EN)
-  message: string;         // User message (TH)
-  details?: any;           // Debug info (dev only)
+  error: string; // Error code (EN)
+  message: string; // User message (TH)
+  details?: any; // Debug info (dev only)
   timestamp: string;
   request_id: string;
 }
 ```
 
 #### Performance Optimizations
+
 - **Caching:** Vercel Edge Config for session capacity
 - **CDN:** Vercel Edge Network for PDF delivery
 - **Database:** Connection pooling with Prisma
@@ -192,4 +195,3 @@ interface ApiError {
 **Deprecation:** 6-month notice for version sunset
 
 This API specification supports the complete TBAT Mock Exam Platform functionality with enhanced PDF management, data lifecycle controls, and comprehensive admin capabilities while maintaining high performance for 20 concurrent users during peak periods.
-

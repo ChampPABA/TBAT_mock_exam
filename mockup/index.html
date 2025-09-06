@@ -1,184 +1,1331 @@
 <!DOCTYPE html>
 <html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TBAT Mock Exam - ทดสอบ TBAT ที่เชียงใหม่</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="TBAT Mock Exam สนามสอบจำลองที่เชียงใหม่ ทดลองสอบฟรี 1 วิชา จำกัด 300 คน วันที่ 27 กันยายน 2568" />
+    <meta name="keywords" content="TBAT, Mock Exam, ข้อสอบ TBAT, สอบเข้าแพทย์, เชียงใหม่" />
+    <title>TBAT Mock Exam - ทดลองสอบฟรี | สนามสอบจำลองที่เชียงใหม่</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-in',
+              'fade-in-up': 'fadeInUp 0.6s ease-out',
+              'scale-in': 'scaleIn 0.3s ease-out',
+              'slide-in-right': 'slideInRight 0.4s ease-out',
+              'bounce-gentle': 'bounceGentle 2s infinite',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              scaleIn: {
+                '0%': { transform: 'scale(0.9)', opacity: '0' },
+                '100%': { transform: 'scale(1)', opacity: '1' },
+              },
+              slideInRight: {
+                '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' },
+              },
+              bounceGentle: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        scroll-behavior: smooth;
+      }
+      
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+      
+      .hero-gradient {
+        background: linear-gradient(135deg, #cae0e1 0%, #ffffff 100%);
+      }
+      
+      .feature-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      
+      .pulse-animation {
+        animation: pulse 2s infinite;
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+      
+      .float-animation {
+        animation: float 3s ease-in-out infinite;
+      }
+      
+      .btn-hover-effect {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-hover-effect::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transition: width 0.6s, height 0.6s;
+        transform: translate(-50%, -50%);
+      }
+      
+      .btn-hover-effect:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+      
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      
+      .mobile-menu {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+      
+      .mobile-menu.hidden {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      
+      .card-glow:hover {
+        box-shadow: 0 0 30px rgba(13, 114, 118, 0.15);
+      }
+      
+      @media (max-width: 640px) {
+        .hero-title {
+          font-size: 1.875rem;
+        }
+      }
+      
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* Intersection Observer Animation Classes */
+      .observe-fade-in {
+        opacity: 0;
+        transition: opacity 0.6s ease-in-out;
+      }
+      
+      .observe-fade-in.animate {
+        opacity: 1;
+      }
+      
+      .observe-slide-up {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      
+      .observe-slide-up.animate {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  
+  <body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50" role="navigation" aria-label="หลัก">
+      <div class="max-w-6xl mx-auto px-4 py-3 md:py-4">
+        <div class="flex justify-between items-center">
+          <a href="/" class="flex items-center group" aria-label="TBAT Mock Exam หน้าหลัก">
+            <div class="flex items-center">
+              <span class="text-2xl md:text-3xl font-bold text-tbat-primary group-hover:text-tbat-secondary transition-colors duration-200">TBAT</span>
+            </div>
+            <span class="text-xl md:text-2xl font-light text-gray-600 ml-2">Mock Exam</span>
+          </a>
+          
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center gap-4 lg:gap-6">
+            <a
+              href="#details"
+              class="nav-link text-gray-700 hover:text-tbat-primary font-medium transition-colors duration-200"
+              onclick="scrollToSection('details')"
+            >
+              รายละเอียด
+            </a>
+            <a
+              href="#features"
+              class="nav-link text-gray-700 hover:text-tbat-primary font-medium transition-colors duration-200"
+              onclick="scrollToSection('features')"
+            >
+              คุณสมบัติ
+            </a>
+            <a
+              href="#pricing"
+              class="nav-link text-gray-700 hover:text-tbat-primary font-medium transition-colors duration-200"
+              onclick="scrollToSection('pricing')"
+            >
+              แพ็กเกจ
+            </a>
+            <a
+              href="#faq"
+              class="nav-link text-gray-700 hover:text-tbat-primary font-medium transition-colors duration-200"
+              onclick="scrollToSection('faq')"
+            >
+              คำถามที่พบบ่อย
+            </a>
+            <button 
+              class="px-3 py-2 text-tbat-primary border border-tbat-primary rounded-lg hover:bg-tbat-primary hover:text-white transition-colors duration-200 font-medium text-sm"
+              onclick="handleLogin()"
+            >
+              เข้าสู่ระบบ
+            </button>
+            <button 
+              class="px-4 py-2 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-medium text-sm btn-hover-effect"
+              onclick="handleRegisterClick()"
+            >
+              สมัครสมาชิก
+            </button>
+          </div>
+          
+          <!-- Mobile menu button -->
+          <button 
+            id="mobile-menu-button"
+            class="md:hidden p-2 rounded-md text-gray-600 hover:text-tbat-primary hover:bg-gray-100 transition-colors duration-200"
+            aria-label="เปิดเมนู"
+            aria-expanded="false"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div 
+          id="mobile-menu" 
+          class="mobile-menu hidden fixed inset-0 bg-white top-16 px-4 py-6 md:hidden overflow-y-auto"
+          role="navigation"
+          aria-label="เมนูมือถือ"
+        >
+          <div class="flex flex-col space-y-4">
+            <a
+              href="#details"
+              class="block px-3 py-2 text-gray-700 hover:text-tbat-primary hover:bg-gray-50 rounded-md transition-colors duration-200"
+              onclick="scrollToSection('details'); closeMobileMenu()"
+            >
+              รายละเอียด
+            </a>
+            <a
+              href="#features"
+              class="block px-3 py-2 text-gray-700 hover:text-tbat-primary hover:bg-gray-50 rounded-md transition-colors duration-200"
+              onclick="scrollToSection('features'); closeMobileMenu()"
+            >
+              คุณสมบัติ
+            </a>
+            <a
+              href="#pricing"
+              class="block px-3 py-2 text-gray-700 hover:text-tbat-primary hover:bg-gray-50 rounded-md transition-colors duration-200"
+              onclick="scrollToSection('pricing'); closeMobileMenu()"
+            >
+              แพ็กเกจ
+            </a>
+            <a
+              href="#faq"
+              class="block px-3 py-2 text-gray-700 hover:text-tbat-primary hover:bg-gray-50 rounded-md transition-colors duration-200"
+              onclick="scrollToSection('faq'); closeMobileMenu()"
+            >
+              คำถามที่พบบ่อย
+            </a>
+            <div class="pt-4 border-t border-gray-200 flex flex-col space-y-2">
+              <button 
+                class="w-full px-3 py-2 text-tbat-primary border border-tbat-primary rounded-lg hover:bg-tbat-primary hover:text-white transition-colors duration-200 font-medium"
+                onclick="handleLogin(); closeMobileMenu()"
+              >
+                เข้าสู่ระบบ
+              </button>
+              <button 
+                class="w-full px-4 py-2 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-medium btn-hover-effect"
+                onclick="handleRegisterClick(); closeMobileMenu()"
+              >
+                สมัครสมาชิก
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="hero-gradient py-12 md:py-20 border-2 border-red-500 relative" aria-labelledby="hero-title">
+      <div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs font-bold rounded">HERO SECTION</div>
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center">
+          <!-- Badge -->
+          <span
+            class="inline-block bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4 animate-fade-in-up"
+          >
+            สำหรับนักเรียนเชียงใหม่โดยเฉพาะ
+          </span>
+
+          <h1 id="hero-title" class="hero-title text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4 animate-fade-in">
+            สนามสอบ TBAT จำลองที่เชียงใหม่
+            <br />
+            <span class="text-tbat-primary">สมัครฟรี 1 วิชา</span>
+          </h1>
+          <p class="text-lg md:text-xl text-gray-600 mb-6 animate-fade-in-up px-4 md:px-0" style="animation-delay: 0.1s">
+            <strong>Mock Exam จัดโดย ASPECT</strong> • <strong>TBAT จริงจัดโดยจุฬาลงกรณ์มหาวิทยาลัย</strong>
+            <br class="hidden sm:block" />
+            ใช้ยื่นเข้าคณะสายวิทยาศาสตร์สุขภาพ
+          </p>
+
+          <!-- Event Details Card -->
+          <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 max-w-2xl mx-auto mb-8 animate-scale-in card-glow" style="animation-delay: 0.2s">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+              <div class="flex items-start">
+                <span class="text-2xl mr-3" aria-hidden="true">🗓️</span>
+                <div>
+                  <h3 class="font-semibold text-gray-800">วัน-เวลา</h3>
+                  <p class="text-gray-600 text-sm sm:text-base">วันศุกร์ที่ 27 กันยายน 2568</p>
+                  <div class="mt-1 space-y-1">
+                    <p class="text-gray-600 text-sm sm:text-base">รอบเช้า: 09:00 - 12:00 น.</p>
+                    <p class="text-gray-600 text-sm sm:text-base">รอบบ่าย: 13:00 - 16:00 น.</p>
+                  </div>
+                  <p class="text-xs sm:text-sm text-orange-600 mt-1">
+                    (โปรดมาก่อนเวลา 30 นาที)
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <span class="text-2xl mr-3" aria-hidden="true">📍</span>
+                <div>
+                  <h3 class="font-semibold text-gray-800">สถานที่</h3>
+                  <p class="text-gray-600 text-sm sm:text-base">หอประชุมมหาวิทยาลัยเชียงใหม่</p>
+                  <p class="text-gray-500 text-xs sm:text-sm">239 ถ.ห้วยแก้ว ต.สุเทพ อ.เมือง จ.เชียงใหม่ 50200</p>
+                  <span
+                    class="inline-block bg-red-100 text-red-700 text-xs px-2 py-1 rounded mt-1 pulse-animation"
+                    role="status"
+                    aria-live="polite"
+                  >จำกัด 600 คน (300 คน/รอบ)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6 animate-slide-in-right" style="animation-delay: 0.3s">
+            <button 
+              class="px-8 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-semibold text-lg btn-hover-effect"
+              onclick="handleRegisterClick()"
+            >
+              สมัครฟรีเลย
+            </button>
+            <button 
+              class="px-8 py-3 border-2 border-tbat-primary text-tbat-primary rounded-lg hover:bg-tbat-primary hover:text-white transition-colors duration-200 font-semibold text-lg"
+              onclick="scrollToSection('pricing')"
+            >
+              ดูแพ็กเกจ
+            </button>
+          </div>
+
+          <!-- Countdown Timer -->
+          <div class="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto mb-6 animate-scale-in" style="animation-delay: 0.4s">
+            <div class="text-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-800 mb-2">⏰ เหลือเวลาสมัคร</h3>
+              <div class="grid grid-cols-3 gap-4 text-center">
+                <div class="bg-tbat-primary text-white rounded-lg p-4">
+                  <div id="days" class="text-2xl font-bold">--</div>
+                  <div class="text-sm">วัน</div>
+                </div>
+                <div class="bg-tbat-primary text-white rounded-lg p-4">
+                  <div id="hours" class="text-2xl font-bold">--</div>
+                  <div class="text-sm">ชั่วโมง</div>
+                </div>
+                <div class="bg-tbat-primary text-white rounded-lg p-4">
+                  <div id="minutes" class="text-2xl font-bold">--</div>
+                  <div class="text-sm">นาที</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exam Date Clarification -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto animate-fade-in-up" style="animation-delay: 0.5s">
+            <!-- Mock Exam -->
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+              <h4 class="font-bold text-green-800 mb-1">📝 TBAT Mock Exam</h4>
+              <p class="text-green-700 text-sm md:text-base">
+                <strong>วันศุกร์ที่ 27 กันยายน 2568</strong>
+              </p>
+              <p class="text-green-600 text-xs">สนามสอบจำลองที่เชียงใหม่</p>
+            </div>
+            
+            <!-- Real TBAT -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+              <h4 class="font-bold text-blue-800 mb-1">🏛️ TBAT จริง</h4>
+              <p class="text-blue-700 text-sm md:text-base">
+                <strong>วันเสาร์ที่ 5 ตุลาคม 2568</strong>
+              </p>
+              <p class="text-blue-600 text-xs">สอบที่กรุงเทพมหานครและจังหวัดอื่นๆ</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CREDIBILITY SECTION ==================== -->
+    <section class="bg-gray-50 py-12 md:py-16 observe-fade-in border-2 border-red-500 relative">
+      <div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs font-bold rounded">CREDIBILITY</div>
+      <div class="max-w-6xl mx-auto px-4 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">
+          ได้รับการสนับสนุนจาก
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <div class="w-16 h-16 bg-tbat-bg rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <span class="text-tbat-primary font-bold text-lg">STeP</span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">Science and Technology Park</h3>
+            <p class="text-gray-600 text-sm">นวัตกรรมและเทคโนโลยี</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <div class="w-16 h-16 bg-tbat-bg rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <span class="text-tbat-primary font-bold text-lg">Deepa</span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">Innovation Hub</h3>
+            <p class="text-gray-600 text-sm">ศูนย์กลางนวัตกรรม</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <div class="w-16 h-16 bg-tbat-bg rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <span class="text-tbat-primary font-bold text-sm text-center">Startup<br>Thailand</span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">Government Support</h3>
+            <p class="text-gray-600 text-sm">สนับสนุนจากภาครัฐ</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl p-8 shadow-lg max-w-2xl mx-auto">
+          <h3 class="text-3xl font-bold text-tbat-primary mb-2">ASPECT</h3>
+          <p class="text-lg text-gray-700 mb-2">ผู้จัด Dentorium Camp และสนามสอบ Mock Exam</p>
+          <p class="text-gray-600">มากกว่า 5 ปีในการจัดสอบจำลองสำหรับนักเรียนไทย</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DETAILS SECTION ==================== -->
+    <section class="bg-white py-12 md:py-16 observe-fade-in border-2 border-red-500 relative" id="details">
+      <div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs font-bold rounded">DETAILS</div>
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
+          รายละเอียดการสอบ
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="text-center">
+            <div class="w-20 h-20 bg-tbat-primary rounded-full mx-auto mb-4 flex items-center justify-center">
+              <span class="text-3xl text-white">📋</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">วิชาที่สอบ</h3>
+            <ul class="text-gray-600 space-y-1 text-sm">
+              <li>ชีววิทยา (Biology)</li>
+              <li>เคมี (Chemistry)</li>
+              <li>ฟิสิกส์ (Physics)</li>
+              <li>คণิตศาสตร์ (Mathematics)</li>
+            </ul>
+            <p class="text-xs text-orange-600 mt-2">Free: 1 วิชา | Advanced: 4 วิชา</p>
+          </div>
+          <div class="text-center">
+            <div class="w-20 h-20 bg-tbat-primary rounded-full mx-auto mb-4 flex items-center justify-center">
+              <span class="text-3xl text-white">⏱️</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">เวลาสอบ</h3>
+            <div class="text-gray-600 space-y-1 text-sm">
+              <p><strong>รอบเช้า</strong><br>09:00 - 12:00 น.</p>
+              <p><strong>รอบบ่าย</strong><br>13:00 - 16:00 น.</p>
+            </div>
+            <p class="text-xs text-red-600 mt-2">300 คน/รอบ</p>
+          </div>
+          <div class="text-center">
+            <div class="w-20 h-20 bg-tbat-primary rounded-full mx-auto mb-4 flex items-center justify-center">
+              <span class="text-3xl text-white">📍</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">สถานที่</h3>
+            <div class="text-gray-600 text-sm">
+              <p class="font-medium">หอประชุมมหาวิทยาลัยเชียงใหม่</p>
+              <p class="text-xs mt-1">239 ถ.ห้วยแก้ว ต.สุเทพ อ.เมือง จ.เชียงใหม่</p>
+              <div class="mt-2 space-y-1">
+                <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-1 rounded">🚗 ที่จอดรถฟรี</span>
+                <span class="inline-block bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">🚌 รถประจำทาง</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="w-20 h-20 bg-tbat-primary rounded-full mx-auto mb-4 flex items-center justify-center">
+              <span class="text-3xl text-white">📄</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">สิ่งที่ต้องเตรียม</h3>
+            <ul class="text-gray-600 space-y-1 text-sm text-left">
+              <li>• บัตรประชาชน/นักเรียน</li>
+              <li>• ดินสอ 2B และยางลบ</li>
+              <li>• เครื่องคิดเลข</li>
+              <li>• น้ำดื่ม อาหารว่าง</li>
+            </ul>
+            <p class="text-xs text-red-600 mt-2">⚠️ ห้ามใช้มือถือ</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FEATURES SECTION ==================== -->
+    <section class="bg-gray-50 py-12 md:py-16 observe-fade-in border-2 border-red-500 relative" id="features">
+      <div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs font-bold rounded">FEATURES</div>
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
+          ทำไมต้องเลือกเรา?
+        </h2>
+        <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          สนามสอบจำลองที่ครบครันที่สุด พร้อมระบบวิเคราะห์ผลการสอบ
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">🎯</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">แบบสอบตรงมาตรฐาน TBAT</h3>
+            <p class="text-gray-600">ข้อสอบจัดทำโดยผู้เชี่ยวชาญ ตรงตามมาตรฐานการสอบจริง รูปแบบและระดับความยากเหมือนสอบจริง 100%</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">📊</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">ระบบวิเคราะห์ผลการสอบ</h3>
+            <p class="text-gray-600">ระบบวิเคราะห์ผลแสดงจุดแข็ง-อ่อน เปรียบเทียบกับสถิติ พร้อมคำแนะนำการปรับปรุงแบบละเอียด</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">💰</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">ประหยัดค่าใช้จ่าย</h3>
+            <p class="text-gray-600">ไม่ต้องเดินทางไปกรุงเทพ ประหยัดค่าใช้จ่ายมากกว่า 5,000+ บาท นอนที่บ้าน สบายใจ</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">⚡</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">ผลสอบภายใน 48 ชั่วโมง</h3>
+            <p class="text-gray-600">รับผลสอบและการวิเคราะห์ภายใน 48 ชั่วโมงหลังสอบเสร็จ แจ้งผ่าน Email ให้คุณทราบ</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">📚</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">PDF เฉลยคำอธิบาย</h3>
+            <p class="text-gray-600">ดาวน์โหลดเฉลยพร้อมคำอธิบายละเอียด (Advanced Package) เรียนรู้จากข้อผิดพลาดได้อย่างมีประสิทธิภาพ</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">🏆</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">ประสบการณ์จริง</h3>
+            <p class="text-gray-600">สภาพแวดล้อมการสอบจำลองสถานการณ์จริง 100% ช่วยลดความเครียดในวันสอบจริง</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PRICING SECTION ==================== -->
+    <section class="py-12 md:py-16 bg-white observe-fade-in border-2 border-red-500 relative" id="pricing">
+      <div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs font-bold rounded">PRICING</div>
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            เลือกแพ็กเกจที่เหมาะกับคุณ
+          </h2>
+          <p class="text-lg text-gray-600">
+            เริ่มต้นฟรี หรือปลดล็อกความสามารถเต็มรูปแบบ
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <!-- Free Package -->
+          <div class="bg-white border-2 border-gray-200 rounded-2xl p-8 relative">
+            <!-- Status Indicator -->
+            <div class="absolute top-4 right-4 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+              เปิดรับสมัคร
+            </div>
+            
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-gray-800 mb-2">Free Package</h3>
+              <div class="text-4xl font-bold text-gray-800 mb-1">฿0</div>
+              <p class="text-gray-600">ทดลองฟรี</p>
+            </div>
+            
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center text-gray-700">
+                <span class="w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm mr-3">✓</span>
+                เลือกสอบได้ 1 วิชา
+              </li>
+              <li class="flex items-center text-gray-700">
+                <span class="w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm mr-3">✓</span>
+                ผลสอบพื้นฐาน
+              </li>
+              <li class="flex items-center text-gray-700">
+                <span class="w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm mr-3">✓</span>
+                คะแนนรวมและเปรียบเทียบ
+              </li>
+              <li class="flex items-center text-gray-400">
+                <span class="w-5 h-5 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-sm mr-3">–</span>
+                การวิเคราะห์แบบจำกัด
+              </li>
+              <li class="flex items-center text-gray-400">
+                <span class="w-5 h-5 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-sm mr-3">–</span>
+                PDF เฉลยและคำอธิบาย
+              </li>
+              <li class="flex items-center text-gray-400">
+                <span class="w-5 h-5 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-sm mr-3">–</span>
+                รายงานการวิเคราะห์ละเอียด
+              </li>
+              <li class="flex items-center text-gray-400">
+                <span class="w-5 h-5 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-sm mr-3">–</span>
+                เอาข้อสอบกลับบ้านไม่ได้
+              </li>
+            </ul>
+            
+            <button class="w-full py-3 px-6 border-2 border-tbat-primary text-tbat-primary rounded-xl font-semibold hover:bg-tbat-primary hover:text-white transition-colors duration-200">
+              เลือกแพ็กเกจฟรี
+            </button>
+            
+            <p class="text-xs text-gray-500 text-center mt-4">
+              เหมาะสำหรับผู้ที่ต้องการทดลองสอบเบื้องต้น
+            </p>
+          </div>
+
+          <!-- Advanced Package -->
+          <div class="bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-2xl p-8 text-white relative overflow-hidden">
+            <div class="absolute top-4 right-4 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-semibold">
+              แนะนำ
+            </div>
+            
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold mb-2">Advanced Package</h3>
+              <div class="text-4xl font-bold mb-1">฿690</div>
+              <p class="text-tbat-light">ครั้งเดียว</p>
+            </div>
+            
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                ครบทั้ง 4 วิชา (ชีวะ เคมี ฟิสิกส์ คณิต)
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                รายงานการวิเคราะห์แบบละเอียด
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                ดาวน์โหลด PDF เฉลยและคำอธิบาย
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                เปรียบเทียบกับสถิติโรงเรียนดัง
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                แนะนำจุดที่ต้องปรับปรุง
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                การวิเคราะห์ผลการสอบ
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                เอาข้อสอบกลับบ้านได้
+              </li>
+            </ul>
+            
+            <button class="w-full py-3 px-6 bg-white text-tbat-primary rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200 btn-hover-effect">
+              อัพเกรดเลย ฿690
+            </button>
+            
+            <p class="text-xs text-tbat-light text-center mt-4">
+              เหมาะสำหรับผู้ที่ต้องการเตรียมตัวอย่างจริงจัง
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cost Savings Section -->
+    <section class="py-12 md:py-16 bg-gray-50 observe-fade-in">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            ประหยัดค่าใช้จ่าย 5,000+ บาท
+          </h2>
+        </div>
+        
+        <div class="bg-white rounded-2xl p-8 shadow-lg">
+          <div class="prose prose-lg max-w-none">
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+              การเดินทางไปสอบ TBAT ที่กรุงเทพมหานครจะมีค่าใช้จ่ายสูงมาก เริ่มจากค่าเดินทาง (ไป-กลับ) ประมาณ 3,000 บาท 
+              ค่าที่พักอย่างน้อย 2,500 บาท ค่าอาหารและเบ็ดเตล็ด 800 บาท รวมกับค่าเดินทางในกรุงเทพอีก 300 บาท
+            </p>
+            
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+              แต่เมื่อสอบที่เชียงใหม่ คุณจะประหยัดได้ทั้งหมดเหล่านี้ นอนที่บ้าน กินอาหารที่คุ้นเคย สอบในสภาพแวดล้อมที่สุขสบาย
+              ไม่ต้องกังวลเรื่องการเดินทางหรือที่พักแปลกใหม่
+            </p>
+            
+            <div class="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+              <h3 class="text-2xl font-bold text-green-800 mb-2">💰 ประหยัดรวมมากกว่า 5,000+ บาท</h3>
+              <p class="text-green-700">เงินที่ประหยัดได้นำไปลงทุนซื้อหรือปรับปรุงการเรียนแทน</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery/Testimonials Section -->
+    <section class="py-12 md:py-16 bg-white observe-fade-in">
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
+          เสียงจากผู้เคยเข้าร่วม Dentorium Camp
+        </h2>
+        <p class="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+          อดีตนักเรียน Dentorium Camp ที่ ASPECT จัด เรียกร้องให้จัด Mock Exam ที่เชียงใหม่
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-gray-50 rounded-2xl p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-tbat-primary rounded-full flex items-center justify-center text-white font-bold">
+                ส
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-800">น.ส. สิรินทิพย์ จ.</h4>
+                <p class="text-sm text-gray-600">โรงเรียนมงฟอร์ตวิทยาลัย</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "หลังจากเข้า Dentorium Camp ที่กรุงเทพ รู้สึกว่าถ้ามี Mock Exam ที่เชียงใหม่จะดีมาก ไม่ต้องเดินทางไกล"
+            </p>
+            <div class="flex mt-4">
+              <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-2xl p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-tbat-secondary rounded-full flex items-center justify-center text-white font-bold">
+                ธ
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-800">นาย ธนกร ส.</h4>
+                <p class="text-sm text-gray-600">โรงเรียนสารสาสน์วิเทศ</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "เคยเข้า Dentorium Camp มาแล้ว อยากให้จัด Mock Exam ที่เชียงใหม่บ้าง จะได้ไม่ต้องเดินทางไกลอีก"
+            </p>
+            <div class="flex mt-4">
+              <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-2xl p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-tbat-accent rounded-full flex items-center justify-center text-white font-bold">
+                ว
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-800">น.ส. วิภาดา ป.</h4>
+                <p class="text-sm text-gray-600">โรงเรียนยุพราชวิทยาลัย</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "ขอบคุณที่จัด Mock Exam ให้ครับ หลังจากเข้า Dentorium Camp แล้วรู้สึกว่าควรมีสนามทดสอบที่เชียงใหม่ด้วย"
+            </p>
+            <div class="flex mt-4">
+              <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-12 md:py-16 bg-gray-50 observe-fade-in" id="faq">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
+          คำถามที่พบบ่อย
+        </h2>
+        
+        <div class="space-y-4">
+          <div class="faq-item bg-white rounded-lg shadow-sm">
+            <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleFAQ(this)">
+              <span class="font-semibold text-gray-800">📅 การสอบจัดขึ้นวันไหน?</span>
+              <span class="faq-icon text-2xl text-tbat-primary transition-transform duration-200">+</span>
+            </button>
+            <div class="faq-answer hidden px-6 pb-6">
+              <p class="text-gray-600">การสอบจัดขึ้นในวันศุกร์ที่ 27 กันยายน 2568 มี 2 รอบ คือ รอบเช้า 09:00-12:00 น. และรอบบ่าย 13:00-16:00 น. ที่หอประชุมมหาวิทยาลัยเชียงใหม่</p>
+            </div>
+          </div>
+          
+          <div class="faq-item bg-white rounded-lg shadow-sm">
+            <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleFAQ(this)">
+              <span class="font-semibold text-gray-800">💰 ค่าใช้จ่ายเท่าไหร่?</span>
+              <span class="faq-icon text-2xl text-tbat-primary transition-transform duration-200">+</span>
+            </button>
+            <div class="faq-answer hidden px-6 pb-6">
+              <p class="text-gray-600">Free Package: ฟรี (เลือกสอบ 1 วิชา)<br>Advanced Package: ฿690 (ครบ 4 วิชา + การวิเคราะห์แบบละเอียด + PDF เฉลย)</p>
+            </div>
+          </div>
+          
+          <div class="faq-item bg-white rounded-lg shadow-sm">
+            <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleFAQ(this)">
+              <span class="font-semibold text-gray-800">📚 สอบกี่วิชา?</span>
+              <span class="faq-icon text-2xl text-tbat-primary transition-transform duration-200">+</span>
+            </button>
+            <div class="faq-answer hidden px-6 pb-6">
+              <p class="text-gray-600">สอบทั้งหมด 4 วิชา ได้แก่ ชีววิทยา เคมี ฟิสิกส์ และคณิตศาสตร์<br>Free Package: เลือกได้ 1 วิชา<br>Advanced Package: ครบทั้ง 4 วิชา</p>
+            </div>
+          </div>
+          
+          <div class="faq-item bg-white rounded-lg shadow-sm">
+            <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleFAQ(this)">
+              <span class="font-semibold text-gray-800">🎯 จำนวนที่นั่งมีกี่คน?</span>
+              <span class="faq-icon text-2xl text-tbat-primary transition-transform duration-200">+</span>
+            </button>
+            <div class="faq-answer hidden px-6 pb-6">
+              <p class="text-gray-600">จำกัด 600 คน แบ่งเป็น 2 รอบ (รอบละ 300 คน)<br>รีบสมัครเพราะที่นั่งมีจำกัด!</p>
+            </div>
+          </div>
+          
+          <div class="faq-item bg-white rounded-lg shadow-sm">
+            <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleFAQ(this)">
+              <span class="font-semibold text-gray-800">📊 จะได้ผลสอบเมื่อไหร่?</span>
+              <span class="faq-icon text-2xl text-tbat-primary transition-transform duration-200">+</span>
+            </button>
+            <div class="faq-answer hidden px-6 pb-6">
+              <p class="text-gray-600">ได้ผลสอบทันทีหลังจากสอบเสร็จ Advanced Package จะได้การวิเคราะห์แบบละเอียดและ PDF เฉลยพร้อมกัน</p>
+            </div>
+          </div>
+          
+          <div class="faq-item bg-white rounded-lg shadow-sm">
+            <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleFAQ(this)">
+              <span class="font-semibold text-gray-800">🚗 มีที่จอดรถหรือไม่?</span>
+              <span class="faq-icon text-2xl text-tbat-primary transition-transform duration-200">+</span>
+            </button>
+            <div class="faq-answer hidden px-6 pb-6">
+              <p class="text-gray-600">มีที่จอดรถฟรีที่มหาวิทยาลัยเชียงใหม่ หรือสามารถเดินทางด้วยรถประจำทาง สาย 1, 4 หรือ Grab</p>
+            </div>
+          </div>
+          
+          <div class="faq-item bg-white rounded-lg shadow-sm">
+            <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleFAQ(this)">
+              <span class="font-semibold text-gray-800">📱 สามารถยกเลิกการสมัครได้หรือไม่?</span>
+              <span class="faq-icon text-2xl text-tbat-primary transition-transform duration-200">+</span>
+            </button>
+            <div class="faq-answer hidden px-6 pb-6">
+              <p class="text-gray-600">Free Package: ยกเลิกได้ตลอดเวลา<br>Advanced Package: สามารถยกเลิกและขอคืนเงินได้ก่อนวันสอบ 7 วัน</p>
+            </div>
+          </div>
+          
+          <div class="faq-item bg-white rounded-lg shadow-sm">
+            <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleFAQ(this)">
+              <span class="font-semibold text-gray-800">🎓 ใครสามารถสมัครได้บ้าง?</span>
+              <span class="faq-icon text-2xl text-tbat-primary transition-transform duration-200">+</span>
+            </button>
+            <div class="faq-answer hidden px-6 pb-6">
+              <p class="text-gray-600">นักเรียนชั้น ม.6 หรือผู้ที่ต้องการสอบเข้าคณะสายวิทยาศาสตร์สุขภาพ โดยเฉพาะนักเรียนในเชียงใหม่และจังหวัดใกล้เคียง</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="py-16 md:py-20 bg-gradient-to-r from-tbat-primary to-tbat-secondary">
+      <div class="max-w-4xl mx-auto px-4 text-center text-white">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">
+          พร้อมทดสอบความสามารถของคุณแล้วหรือยัง?
+        </h2>
+        <p class="text-xl md:text-2xl mb-8 text-tbat-light">
+          สมัครเลยวันนี้ ที่นั่งจำกัด เพียง 600 คน!
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <button class="px-8 py-4 bg-white text-tbat-primary rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors duration-200 btn-hover-effect">
+            สมัครฟรี - Free Package
+          </button>
+          <button class="px-8 py-4 border-2 border-white text-white rounded-xl font-bold text-lg hover:bg-white hover:text-tbat-primary transition-colors duration-200">
+            อัพเกรด - Advanced Package ฿690
+          </button>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 text-tbat-light">
+          <div class="flex items-center">
+            <span class="text-2xl mr-2">⏰</span>
+            <span>เหลือเวลาสมัคร: <span id="countdown-footer-days" class="font-bold text-white">--</span> วัน</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-2xl mr-2">🪑</span>
+            <span>จำกัด: <span class="font-bold text-white">600 คน</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-2xl font-bold text-tbat-accent mb-4">TBAT Mock Exam</h3>
+            <p class="text-gray-400 mb-4">สนามสอบจำลอง TBAT ที่เชียงใหม่<br>จัดโดย ASPECT</p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-tbat-accent transition-colors duration-200">📧</a>
+              <a href="#" class="text-gray-400 hover:text-tbat-accent transition-colors duration-200">📱</a>
+              <a href="#" class="text-gray-400 hover:text-tbat-accent transition-colors duration-200">📘</a>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold mb-4">ข้อมูลการติดต่อ</h4>
+            <div class="space-y-2 text-gray-400">
+              <p>📧 info@tbat-mockexam.com</p>
+              <p>📱 Line: @tbat-mockexam</p>
+              <p>📞 โทร: 053-XXX-XXX</p>
+              <p>📍 หอประชุมมหาวิทยาลัยเชียงใหม่</p>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold mb-4">ลิงก์สำคัญ</h4>
+            <div class="space-y-2">
+              <a href="#details" class="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">รายละเอียดการสอบ</a>
+              <a href="#pricing" class="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">แพ็กเกจ</a>
+              <a href="#faq" class="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">คำถามที่พบบ่อย</a>
+              <a href="#" class="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">นโยบายความเป็นส่วนตัว</a>
+              <a href="#" class="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">เงื่อนไขการใช้งาน</a>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold mb-4">ข้อมูลสำคัญ</h4>
+            <div class="space-y-2 text-gray-400">
+              <p>🗓️ วันสอบ: 27 กันยายน 2568</p>
+              <p>⏰ เวลา: 09:00-12:00 / 13:00-16:00</p>
+              <p>🎯 จำกัด: 600 คน</p>
+              <p>💰 ราคา: ฟรี หรือ ฿690</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+          <p>&copy; 2568 TBAT Mock Exam by ASPECT. All rights reserved.</p>
+          <p class="mt-2">จัดโดย ASPECT - ผู้จัด Dentorium Camp และสนามสอบ Mock Exam</p>
+        </div>
+      </div>
+    </footer>
     
-    <!-- Prompt Font for Thai language support -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Meta tags for SEO -->
-    <meta name="description" content="ทดสอบ TBAT ที่เชียงใหม่ ไม่ต้องเดินทางไปกรุงเทพ ประหยัดค่าใช้จ่าย 5,000+ บาท">
-    <meta name="keywords" content="TBAT, Mock Exam, เชียงใหม่, Chiang Mai, Medical Exam">
-</head>
-<body>
-    <!-- Hero Section -->
-    <section id="hero" class="hero-section">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">ทดสอบ TBAT ที่เชียงใหม่<br>ไม่ต้องเดินทางไปกรุงเทพ</h1>
-                <div class="countdown-container">
-                    <div class="countdown-label">เหลือเวลาอีก</div>
-                    <div id="countdown" class="countdown-timer">
-                        <div class="time-unit">
-                            <span id="days">0</span>
-                            <span>วัน</span>
-                        </div>
-                        <div class="time-unit">
-                            <span id="hours">0</span>
-                            <span>ชั่วโมง</span>
-                        </div>
-                        <div class="time-unit">
-                            <span id="minutes">0</span>
-                            <span>นาที</span>
-                        </div>
-                    </div>
-                </div>
-                <button class="cta-button" onclick="scrollToPackages()">
-                    เลือกแพ็กเกจเลย
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Credibility Section -->
-    <section id="credibility" class="credibility-section">
-        <div class="container">
-            <h2 class="section-title">ได้รับการสนับสนุนจาก</h2>
-            <div class="logos-grid">
-                <div class="logo-item">
-                    <div class="logo-placeholder">STeP</div>
-                </div>
-                <div class="logo-item">
-                    <div class="logo-placeholder">Deepa</div>
-                </div>
-                <div class="logo-item">
-                    <div class="logo-placeholder">Startup<br>Thailand</div>
-                </div>
-            </div>
-            <div class="brand-section">
-                <h3 class="brand-title">ASPECT</h3>
-                <p class="brand-subtitle">ผู้จัด Dentorium Camp</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Package Comparison Section -->
-    <section id="packages" class="packages-section">
-        <div class="container">
-            <h2 class="section-title">เลือกแพ็กเกจของคุณ</h2>
-            <div class="packages-grid">
-                <!-- Free Package -->
-                <div class="package-card free-package">
-                    <div class="package-header">
-                        <h3 class="package-title">Free Package</h3>
-                        <div class="package-price">฿0</div>
-                        <div class="package-status available">เปิดรับสมัคร</div>
-                    </div>
-                    <ul class="package-features">
-                        <li>เลือกวิชาได้ 1 วิชา</li>
-                        <li>ผลลพธ์พื้นฐาน</li>
-                        <li>การเข้าถึงแบบจำกัด</li>
-                    </ul>
-                    <button class="package-button free-button">
-                        เลือกแพ็กเกจฟรี
-                    </button>
-                </div>
-
-                <!-- Advanced Package -->
-                <div class="package-card advanced-package featured">
-                    <div class="package-badge">แนะนำ</div>
-                    <div class="package-header">
-                        <h3 class="package-title">Advanced Package</h3>
-                        <div class="package-price">฿690</div>
-                        <div class="package-status available">พร้อมใช้งาน</div>
-                    </div>
-                    <ul class="package-features">
-                        <li>ครบทั้ง 3 วิชา (ชีววิทยา เคมี ฟิสิกส์)</li>
-                        <li>การวิเคราะห์แบบละเอียด</li>
-                        <li>ดาวน์โหลด PDF เฉลย</li>
-                        <li>ข้อมูลเชิงลึกและการวิเคราะห์</li>
-                    </ul>
-                    <button class="package-button advanced-button">
-                        อัพเกรดตั้งแต่ตอนนี้
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Cost Comparison Section -->
-    <section id="cost-comparison" class="cost-comparison-section">
-        <div class="container">
-            <h2 class="section-title">ประหยัดค่าใช้จ่าย 5,000+ บาท</h2>
-            <div class="comparison-grid">
-                <div class="comparison-item bangkok">
-                    <h3 class="comparison-title">กรุงเทพฯ</h3>
-                    <div class="cost-breakdown">
-                        <div class="cost-item">
-                            <span>ค่าสอบ</span>
-                            <span>฿690</span>
-                        </div>
-                        <div class="cost-item">
-                            <span>ค่าเดินทาง</span>
-                            <span>฿3,000</span>
-                        </div>
-                        <div class="cost-item">
-                            <span>ค่าพัก</span>
-                            <span>฿2,500</span>
-                        </div>
-                        <div class="cost-item">
-                            <span>ค่าอาหาร</span>
-                            <span>฿800</span>
-                        </div>
-                        <div class="cost-total">
-                            <span>รวม</span>
-                            <span>฿6,990</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="comparison-vs">VS</div>
-                
-                <div class="comparison-item chiangmai highlighted">
-                    <h3 class="comparison-title">เชียงใหม่</h3>
-                    <div class="cost-breakdown">
-                        <div class="cost-item">
-                            <span>ค่าสอบ</span>
-                            <span>฿690</span>
-                        </div>
-                        <div class="cost-item free">
-                            <span>ค่าเดินทาง</span>
-                            <span>฿0</span>
-                        </div>
-                        <div class="cost-item free">
-                            <span>ค่าพัก</span>
-                            <span>฿0</span>
-                        </div>
-                        <div class="cost-item free">
-                            <span>ค่าอาหาร</span>
-                            <span>฿0</span>
-                        </div>
-                        <div class="cost-total savings">
-                            <span>รวม</span>
-                            <span>฿690</span>
-                        </div>
-                    </div>
-                    <div class="savings-highlight">
-                        ประหยัด ฿6,300
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </main>
 
     <!-- JavaScript -->
-    <script src="script.js"></script>
-</body>
+    <script>
+      // TBAT Mock Exam Landing Page JavaScript
+      // Countdown Timer and Interactive Functionality
+
+      document.addEventListener('DOMContentLoaded', function() {
+          // Initialize countdown timer
+          initializeCountdown();
+          
+          // Initialize smooth scrolling
+          initializeSmoothScrolling();
+          
+          // Initialize package selection
+          initializePackageSelection();
+      });
+
+      /**
+       * Initialize countdown timer to 27 กันยายน 2568 (September 27, 2025)
+       */
+      function initializeCountdown() {
+          // TODO: PENDING - รอวันที่ปิดรับสมัครจากคุณ (ตอนนี้ใช้วันสอบชั่วคราว)
+          // Target date: September 27, 2025 (27 กันยายน 2568) - ชั่วคราว
+          const targetDate = new Date('2025-09-27T00:00:00').getTime();
+          
+          const daysElement = document.getElementById('days');
+          const hoursElement = document.getElementById('hours');
+          const minutesElement = document.getElementById('minutes');
+          const footerDaysElement = document.getElementById('countdown-footer-days');
+          
+          // Update countdown every minute
+          function updateCountdown() {
+              const now = new Date().getTime();
+              const timeLeft = targetDate - now;
+              
+              if (timeLeft > 0) {
+                  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                  
+                  if (daysElement) daysElement.textContent = days;
+                  if (hoursElement) hoursElement.textContent = hours;
+                  if (minutesElement) minutesElement.textContent = minutes;
+                  if (footerDaysElement) footerDaysElement.textContent = days;
+              } else {
+                  // Exam date has passed
+                  if (daysElement) daysElement.textContent = '0';
+                  if (hoursElement) hoursElement.textContent = '0';
+                  if (minutesElement) minutesElement.textContent = '0';
+                  if (footerDaysElement) footerDaysElement.textContent = '0';
+              }
+          }
+          
+          // Initial update
+          updateCountdown();
+          
+          // Update every minute
+          setInterval(updateCountdown, 60000);
+      }
+
+      /**
+       * Initialize smooth scrolling for navigation
+       */
+      function initializeSmoothScrolling() {
+          // Smooth scroll to packages section
+          window.scrollToPackages = function() {
+              const packagesSection = document.getElementById('pricing');
+              if (packagesSection) {
+                  packagesSection.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'start'
+                  });
+              }
+          };
+      }
+
+      /**
+       * Initialize package selection functionality
+       */
+      function initializePackageSelection() {
+          const packageButtons = document.querySelectorAll('.package-button, button[onclick*="Package"]');
+          
+          packageButtons.forEach(button => {
+              button.addEventListener('click', function() {
+                  const packageCard = this.closest('.package-card') || this.closest('[class*="package"]');
+                  let packageTitle = 'Package';
+                  
+                  if (packageCard) {
+                      const titleElement = packageCard.querySelector('h3') || packageCard.querySelector('.package-title');
+                      if (titleElement) {
+                          packageTitle = titleElement.textContent;
+                      }
+                  }
+                  
+                  // Handle package selection
+                  handlePackageSelection(packageTitle, this);
+              });
+          });
+      }
+
+      /**
+       * Handle package selection with visual feedback
+       */
+      function handlePackageSelection(packageName, buttonElement) {
+          // Add visual feedback
+          const originalText = buttonElement.textContent;
+          buttonElement.textContent = 'กำลังดำเนินการ...';
+          buttonElement.style.opacity = '0.7';
+          buttonElement.disabled = true;
+          
+          // Simulate processing time
+          setTimeout(() => {
+              // Reset button
+              buttonElement.textContent = originalText;
+              buttonElement.style.opacity = '1';
+              buttonElement.disabled = false;
+              
+              // Show success message (in a real app, this would redirect to registration)
+              showNotification(`เลือก ${packageName} เรียบร้อยแล้ว!`, 'success');
+          }, 1500);
+          
+          // Analytics tracking (placeholder for real implementation)
+          trackPackageSelection(packageName);
+      }
+
+      /**
+       * Show notification message
+       */
+      function showNotification(message, type = 'info') {
+          // Create notification element
+          const notification = document.createElement('div');
+          notification.className = `notification notification-${type}`;
+          notification.textContent = message;
+          
+          // Style the notification
+          Object.assign(notification.style, {
+              position: 'fixed',
+              top: '20px',
+              right: '20px',
+              background: type === 'success' ? '#48bb78' : '#0d7276',
+              color: 'white',
+              padding: '16px 24px',
+              borderRadius: '8px',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+              zIndex: '1000',
+              fontFamily: 'Prompt, sans-serif',
+              fontWeight: '500',
+              opacity: '0',
+              transform: 'translateX(100%)',
+              transition: 'all 0.3s ease'
+          });
+          
+          // Add to page
+          document.body.appendChild(notification);
+          
+          // Animate in
+          setTimeout(() => {
+              notification.style.opacity = '1';
+              notification.style.transform = 'translateX(0)';
+          }, 100);
+          
+          // Remove after delay
+          setTimeout(() => {
+              notification.style.opacity = '0';
+              notification.style.transform = 'translateX(100%)';
+              setTimeout(() => {
+                  if (notification.parentNode) {
+                      notification.parentNode.removeChild(notification);
+                  }
+              }, 300);
+          }, 3000);
+      }
+
+      /**
+       * Track package selection for analytics (placeholder)
+       */
+      function trackPackageSelection(packageName) {
+          // In a real implementation, this would send data to analytics service
+          console.log(`Package selected: ${packageName}`, {
+              timestamp: new Date().toISOString(),
+              userAgent: navigator.userAgent,
+              referrer: document.referrer
+          });
+      }
+
+      /**
+       * Handle responsive behavior for mobile devices
+       */
+      function handleMobileResponsive() {
+          const isMobile = window.innerWidth <= 767;
+          
+          if (isMobile) {
+              // Mobile-specific adjustments can be added here
+          }
+      }
+
+      // Handle window resize
+      window.addEventListener('resize', handleMobileResponsive);
+
+      /**
+       * Accessibility improvements
+       */
+      function initializeAccessibility() {
+          // Add keyboard navigation for package buttons
+          const packageButtons = document.querySelectorAll('button');
+          
+          packageButtons.forEach(button => {
+              button.addEventListener('keydown', function(e) {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      this.click();
+                  }
+              });
+          });
+      }
+
+      // Initialize accessibility features
+      document.addEventListener('DOMContentLoaded', initializeAccessibility);
+
+      /**
+       * Performance optimizations
+       */
+      function initializePerformance() {
+          // Optimize animations for reduced motion preference
+          if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              // Disable animations for users who prefer reduced motion
+              const style = document.createElement('style');
+              style.textContent = `
+                  *, *::before, *::after {
+                      animation-duration: 0.01ms !important;
+                      animation-iteration-count: 1 !important;
+                      transition-duration: 0.01ms !important;
+                      scroll-behavior: auto !important;
+                  }
+              `;
+              document.head.appendChild(style);
+          }
+      }
+
+      // Initialize performance optimizations
+      document.addEventListener('DOMContentLoaded', initializePerformance);
+    </script>
+    <script>
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const button = document.getElementById('mobile-menu-button');
+        
+        if (mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.remove('hidden');
+          button.setAttribute('aria-expanded', 'true');
+        } else {
+          mobileMenu.classList.add('hidden');
+          button.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      function closeMobileMenu() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const button = document.getElementById('mobile-menu-button');
+        mobileMenu.classList.add('hidden');
+        button.setAttribute('aria-expanded', 'false');
+      }
+
+      // Smooth scroll to section
+      function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+
+      // FAQ toggle
+      function toggleFAQ(button) {
+        const answer = button.nextElementSibling;
+        const icon = button.querySelector('.faq-icon');
+        
+        if (answer.classList.contains('hidden')) {
+          answer.classList.remove('hidden');
+          icon.textContent = '−';
+          icon.style.transform = 'rotate(180deg)';
+        } else {
+          answer.classList.add('hidden');
+          icon.textContent = '+';
+          icon.style.transform = 'rotate(0deg)';
+        }
+      }
+
+      // Handle button clicks
+      function handleRegisterClick() {
+        // Navigate to registration page
+        window.location.href = './02-registration.html';
+      }
+
+      function handleLogin() {
+        // Show login modal or navigate to login page
+        alert('Login functionality coming soon!');
+      }
+
+      function handlePayment() {
+        // Navigate to payment page
+        window.location.href = './05-payment.html';
+      }
+
+      // Intersection Observer for scroll animations
+      document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('animate');
+            }
+          });
+        }, observerOptions);
+
+        document.querySelectorAll('.observe-fade-in, .observe-slide-up').forEach(function(el) {
+          observer.observe(el);
+        });
+
+        // Mobile menu button event listener
+        document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+          const mobileMenu = document.getElementById('mobile-menu');
+          const button = document.getElementById('mobile-menu-button');
+          
+          if (!mobileMenu.contains(e.target) && !button.contains(e.target)) {
+            closeMobileMenu();
+          }
+        });
+      });
+
+      // Add keyboard navigation for FAQ
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeMobileMenu();
+        }
+      });
+    </script>
+  </body>
 </html>

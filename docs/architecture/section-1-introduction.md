@@ -9,11 +9,13 @@ This platform delivers a unique value proposition combining **physical exam expe
 ### Architecture Approach
 
 **Development Strategy:** Mock-First Greenfield Development
+
 - **Phase 1 (Current):** UI implementation with comprehensive mock data services
 - **Phase 2 (Future):** Full database integration with real-time analytics
 - **Rationale:** Enables rapid development and early user feedback while building production-quality foundation
 
 **Key Architectural Decisions:**
+
 - **Full-Stack Monolith:** Next.js 14+ App Router for unified development
 - **Vercel All-in-One:** Integrated hosting, database, storage, and analytics
 - **AI-Agent Friendly:** Optimized for Claude Code development workflows
@@ -25,4 +27,3 @@ This platform delivers a unique value proposition combining **physical exam expe
 **Revenue Model:** Freemium (Free package: single subject, Advanced package: ฿690 for all three subjects)
 **Conversion Strategy:** 40-50% registration conversion, 25-35% post-exam upgrade through strategic PDF restriction
 **Technical Requirements:** 99.9% uptime during exam periods, 48-hour result delivery, PDPA compliance
-

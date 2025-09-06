@@ -22,9 +22,8 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 
 ### Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|---------|
-| 2025-01-26 | 1.0 | Initial PRD creation from comprehensive Project Brief and Handoff Summary | John (PM) |
-| 2025-01-26 | 1.1 | Added Docker development environment requirements and containerization strategy | John (PM) |
-| 2025-01-26 | 1.2 | Added PDF solution management, data lifecycle policy, and enhanced admin capabilities (FR21-FR24, NFR16) | John (PM) |
-
+| Date       | Version | Description                                                                                              | Author    |
+| ---------- | ------- | -------------------------------------------------------------------------------------------------------- | --------- |
+| 2025-01-26 | 1.0     | Initial PRD creation from comprehensive Project Brief and Handoff Summary                                | John (PM) |
+| 2025-01-26 | 1.1     | Added Docker development environment requirements and containerization strategy                          | John (PM) |
+| 2025-01-26 | 1.2     | Added PDF solution management, data lifecycle policy, and enhanced admin capabilities (FR21-FR24, NFR16) | John (PM) |

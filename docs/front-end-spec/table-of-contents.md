@@ -1,4 +1,5 @@
 # Table of Contents
+
 - [Introduction](#introduction)
 - [Information Architecture](#information-architecture-ia)
 - [User Flows](#user-flows)
@@ -9,4 +10,3 @@
 - [Animation & Micro-interactions](#animation--micro-interactions)
 - [Performance Considerations](#performance-considerations)
 - [Next Steps](#next-steps)
-

@@ -101,4 +101,3 @@ so that users can book sessions with accurate availability and appropriate capac
 **AC5:** Real-time updates showing capacity changes during active booking sessions
 
 **AC6:** Complete booking flow testing from session selection through confirmation email
-

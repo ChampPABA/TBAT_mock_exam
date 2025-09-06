@@ -15,6 +15,7 @@
 ### Additional Technical Assumptions and Requests
 
 **Frontend Framework & Tooling:**
+
 - **Next.js 14+** with App Router for file-based routing and server components
 - **TypeScript** for type safety and developer experience
 - **Tailwind CSS** with shadcn/ui component library for rapid UI development
@@ -22,22 +23,26 @@
 - **Zustand** for lightweight state management and client-side data flow
 
 **Database & Data Management:**
+
 - **PostgreSQL** via Neon serverless for automatic scaling
 - **Prisma ORM** for type-safe database operations and migrations
 - **Real-time replication** and automated backups for data protection
 
 **Payment & External Services:**
+
 - **Stripe API** for payment processing (Thai Baht support confirmed)
 - **Resend** for transactional emails with high delivery rates
 - **Sharp** for image optimization and QR code generation
 - **Vercel Blob Storage** for secure PDF solution storage and delivery with 6-month retention policy
 
 **Performance & Scalability:**
+
 - **Vercel deployment** with edge functions and automatic CDN
 - **Redis caching** (Upstash) for session management and analytics caching
 - **Connection pooling** for database efficiency during traffic spikes
 
 **Development Environment & Containerization:**
+
 - **Docker Compose** for consistent local development environment
 - **PostgreSQL container** for isolated local database development
 - **Redis container** for local caching and session testing
@@ -46,19 +51,21 @@
 - **Environment parity** ensuring development closely matches production
 
 **Development & Deployment:**
+
 - **GitHub Actions** for CI/CD pipeline with automated testing
 - **Docker integration** in CI/CD for consistent build and test environments
 - **ESLint + Prettier** for code quality and consistency
 - **Husky** pre-commit hooks for quality gates
 
 **Analytics & Monitoring:**
+
 - **Vercel Analytics** for performance monitoring
 - **Sentry** for error tracking and debugging
 - **Custom analytics engine** for statistical calculations using Chart.js
 
 **Security & Compliance:**
+
 - **NextAuth.js** for authentication with JWT tokens
 - **bcrypt** for password hashing
 - **HTTPS enforcement** and security headers
 - **Basic PDPA compliance** through consent forms
-

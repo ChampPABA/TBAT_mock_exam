@@ -1,0 +1,28 @@
+FROM node:20-alpine
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+# Enable pnpm
+RUN corepack enable pnpm
+
+# Copy package files
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
+COPY apps/web/package.json ./apps/web/
+COPY apps/docs/package.json ./apps/docs/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/lib/package.json ./packages/lib/
+COPY packages/typescript-config/package.json ./packages/typescript-config/
+COPY packages/eslint-config/package.json ./packages/eslint-config/
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source code (excluding node_modules via .dockerignore)
+COPY . .
+
+EXPOSE 3000 3001
+
+# Start development server
+CMD ["pnpm", "run", "dev"]

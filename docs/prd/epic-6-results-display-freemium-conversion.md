@@ -115,4 +115,3 @@ so that students receive their complete results experience with functioning upgr
 **AC7:** Results email notifications integrated with communication system from Epic 8
 
 **AC8:** Complete results workflow testing from score upload through student result viewing, PDF download, and upgrade conversion
-

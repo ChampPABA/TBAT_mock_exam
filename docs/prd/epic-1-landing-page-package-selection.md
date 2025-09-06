@@ -101,4 +101,3 @@ so that users see accurate real-time information and can make informed package s
 **AC5:** Loading states implemented for all dynamic content with skeleton placeholders
 
 **AC6:** End-to-end testing completed covering package selection flow from landing page to confirmation
-

@@ -41,4 +41,3 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 ### Target Device and Platforms: Web Responsive
 
 **Mobile-First Progressive Enhancement:** Core experience optimized for mobile phones (80% traffic), enhanced progressively for tablets and desktop. Progressive Web App capabilities enabling offline functionality and app-like experience without requiring native app store deployment.
-

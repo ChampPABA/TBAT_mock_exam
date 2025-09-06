@@ -11,6 +11,7 @@ The TBAT Mock Exam Platform is a greenfield Next.js application for Thai Biomedi
 ## Development Architecture
 
 ### Tech Stack (Section 3: Tech Stack)
+
 - **Frontend**: Next.js 14+ with App Router, TypeScript 5.0+, Tailwind CSS 3.3+
 - **UI Components**: shadcn/ui with Radix UI primitives
 - **Backend**: Next.js API Routes with tRPC for type safety
@@ -68,6 +69,7 @@ Key TypeScript interfaces defined in `docs/architecture/section-4-data-models.md
 ### Quality Standards
 
 The Test Architect enforces these standards:
+
 - No flaky tests (proper async handling)
 - Stateless tests that run independently
 - Appropriate test levels (unit/integration/E2E)
@@ -106,12 +108,14 @@ pnpm build           # Build project
 ### MANDATORY SEQUENCE FOR ALL TASKS
 
 **1. Knowledge Retrieval Phase (START OF ANY TASK)**
+
 ```bash
 # ALWAYS: Retrieve related context before starting any task
 mcp__byterover-mcp__byterover-retrieve-knowledge --query "TBAT exam platform [specific feature]" --limit 3
 ```
 
 **2. Development Context Loading**
+
 ```bash
 # Load framework/library documentation
 mcp__context7__resolve-library-id --libraryName "[framework/library-name]"
@@ -121,6 +125,7 @@ mcp__context7__get-library-docs --context7CompatibleLibraryID "/resolved/library
 **3. Implementation Phase MCP Usage**
 
 For UI Components (shadcn MCP Integration):
+
 ```bash
 # Step 1: ALWAYS get component context via MCP server first
 mcp__shadcn-ui__get_component_details --componentName "[component-name]"
@@ -133,6 +138,7 @@ npx shadcn-ui@latest add [component-name]
 ```
 
 For Testing (Playwright):
+
 ```bash
 # Use Playwright MCP for browser automation and testing
 mcp__playwright__browser_navigate --url "http://localhost:3000"  # Dev server
@@ -142,6 +148,7 @@ mcp__playwright__browser_fill_form --fields '[{"name":"field","type":"textbox","
 ```
 
 **4. Knowledge Storage Phase (END OF SUCCESSFUL TASKS)**
+
 ```bash
 # ALWAYS: Store all critical information after successful tasks
 mcp__byterover-mcp__byterover-store-knowledge --messages "implementation details, solutions, lessons learned, test results, performance metrics"
@@ -150,30 +157,38 @@ mcp__byterover-mcp__byterover-store-knowledge --messages "implementation details
 ### Specific MCP Usage Guidelines
 
 #### ByteRover MCP (Critical for All Tasks)
+
 **Usage Pattern:**
+
 - **MANDATORY BEFORE** starting any task: Retrieve context
 - **MANDATORY AFTER** successful tasks: Store implementation knowledge
 - Store critical bugs, solutions, patterns, and TBAT-specific learnings
 
 **Key Commands:**
+
 - `mcp__byterover-mcp__byterover-retrieve-knowledge` - Get related context
 - `mcp__byterover-mcp__byterover-store-knowledge` - Store critical learnings
 
 #### Context7 MCP (Documentation & Libraries - ~80% of tasks)
+
 **When to use:**
+
 - Next.js 14+ App Router implementation
 - TypeScript/tRPC integration patterns
-- Prisma ORM and database operations  
+- Prisma ORM and database operations
 - NextAuth.js authentication flows
 - Stripe payment processing (Thai Baht)
 
 **Pattern:**
+
 1. Resolve library ID first
 2. Get documentation with specific topics
 3. Focus on TBAT platform requirements
 
 #### Playwright MCP (Testing & UI Automation - ~60% of tasks)
+
 **Critical for TBAT Platform:**
+
 - Exam workflow E2E testing (registration → exam → results)
 - Thai language UI testing and validation
 - Payment flow testing with Stripe Thailand
@@ -181,19 +196,23 @@ mcp__byterover-mcp__byterover-store-knowledge --messages "implementation details
 - PDF download and accessibility testing
 
 **Key Testing Scenarios:**
+
 - User registration and package selection
 - Exam code generation and validation
 - Session capacity management (2 sessions × 10 users)
 - Results analytics and PDF access (Advanced package)
 
 #### shadcn/ui MCP (Smart Component Implementation - ~90% of UI tasks)
+
 **TBAT-Specific Implementation Rules:**
+
 1. **Always get component context first** via MCP before implementation
 2. **Thai language support** - ensure components work with Thai text
 3. **Accessibility compliance** for educational platform requirements
 4. **Mobile-first responsive** design for exam interface
 
 **Critical Components for TBAT:**
+
 - Registration forms with Thai validation
 - Exam dashboard with countdown timers
 - Results display with analytics charts
@@ -201,6 +220,7 @@ mcp__byterover-mcp__byterover-store-knowledge --messages "implementation details
 - Admin panels for user management
 
 **MCP Pattern:**
+
 ```bash
 # Get component details and examples
 mcp__shadcn-ui__get_component_details --componentName "form"
@@ -222,6 +242,7 @@ npx shadcn-ui@latest add form
 ### Common MCP Workflows for TBAT Platform
 
 **User Registration Flow:**
+
 ```bash
 # 1. Get context
 mcp__byterover-mcp__byterover-retrieve-knowledge --query "TBAT user registration form validation"
@@ -240,6 +261,7 @@ mcp__byterover-mcp__byterover-store-knowledge --messages "Thai form validation p
 ```
 
 **Exam Interface Development:**
+
 ```bash
 # Context retrieval for exam UI patterns
 mcp__byterover-mcp__byterover-retrieve-knowledge --query "TBAT exam interface timer countdown"

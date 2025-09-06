@@ -24,11 +24,11 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 
 ### Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|---------|
-| 2025-01-26 | 1.0 | Initial PRD creation from comprehensive Project Brief and Handoff Summary | John (PM) |
-| 2025-01-26 | 1.1 | Added Docker development environment requirements and containerization strategy | John (PM) |
-| 2025-01-26 | 1.2 | Added PDF solution management, data lifecycle policy, and enhanced admin capabilities (FR21-FR24, NFR16) | John (PM) |
+| Date       | Version | Description                                                                                              | Author    |
+| ---------- | ------- | -------------------------------------------------------------------------------------------------------- | --------- |
+| 2025-01-26 | 1.0     | Initial PRD creation from comprehensive Project Brief and Handoff Summary                                | John (PM) |
+| 2025-01-26 | 1.1     | Added Docker development environment requirements and containerization strategy                          | John (PM) |
+| 2025-01-26 | 1.2     | Added PDF solution management, data lifecycle policy, and enhanced admin capabilities (FR21-FR24, NFR16) | John (PM) |
 
 ## Requirements
 
@@ -177,6 +177,7 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 ### Additional Technical Assumptions and Requests
 
 **Frontend Framework & Tooling:**
+
 - **Next.js 14+** with App Router for file-based routing and server components
 - **TypeScript** for type safety and developer experience
 - **Tailwind CSS** with shadcn/ui component library for rapid UI development
@@ -184,22 +185,26 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 - **Zustand** for lightweight state management and client-side data flow
 
 **Database & Data Management:**
+
 - **PostgreSQL** via Neon serverless for automatic scaling
 - **Prisma ORM** for type-safe database operations and migrations
 - **Real-time replication** and automated backups for data protection
 
 **Payment & External Services:**
+
 - **Stripe API** for payment processing (Thai Baht support confirmed)
 - **Resend** for transactional emails with high delivery rates
 - **Sharp** for image optimization and QR code generation
 - **Vercel Blob Storage** for secure PDF solution storage and delivery with 6-month retention policy
 
 **Performance & Scalability:**
+
 - **Vercel deployment** with edge functions and automatic CDN
 - **Redis caching** (Upstash) for session management and analytics caching
 - **Connection pooling** for database efficiency during traffic spikes
 
 **Development Environment & Containerization:**
+
 - **Docker Compose** for consistent local development environment
 - **PostgreSQL container** for isolated local database development
 - **Redis container** for local caching and session testing
@@ -208,17 +213,20 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 - **Environment parity** ensuring development closely matches production
 
 **Development & Deployment:**
+
 - **GitHub Actions** for CI/CD pipeline with automated testing
 - **Docker integration** in CI/CD for consistent build and test environments
 - **ESLint + Prettier** for code quality and consistency
 - **Husky** pre-commit hooks for quality gates
 
 **Analytics & Monitoring:**
+
 - **Vercel Analytics** for performance monitoring
 - **Sentry** for error tracking and debugging
 - **Custom analytics engine** for statistical calculations using Chart.js
 
 **Security & Compliance:**
+
 - **NextAuth.js** for authentication with JWT tokens
 - **bcrypt** for password hashing
 - **HTTPS enforcement** and security headers
@@ -227,33 +235,43 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 ## Epic List
 
 ### **Epic 0: Foundation & Environment Setup**
+
 **Goal:** Establish bulletproof project infrastructure, core services, and essential seed data to support 300+ concurrent users with exam-critical reliability from day one.
 
-### **Epic 1: Landing Page & Package Selection** 
+### **Epic 1: Landing Page & Package Selection**
+
 **Goal:** Create conversion-optimized landing page with credibility elements and seamless package selection flow for Free vs Advanced packages with capacity management for maximum user acquisition.
 
-### **Epic 2: User Authentication & Registration System** 
+### **Epic 2: User Authentication & Registration System**
+
 **Goal:** Enable secure user registration with email/password authentication, basic PDPA consent, and user profile management integrated with package selection flow.
 
 ### **Epic 3: Payment & Exam Code Generation**
+
 **Goal:** Implement Stripe payment processing for 690 THB Advanced packages and generate unique random exam codes (FREE-XXXXXXXX-SUBJECT / ADV-XXXXXXXX) with printable tickets.
 
 ### **Epic 4: Session Booking & Capacity Management**
+
 **Goal:** Enable students to select exam sessions (morning/afternoon) with intelligent capacity management hiding exact numbers and dynamic Free/Advanced availability messaging.
 
 ### **Epic 5: Admin Management System**
+
 **Goal:** Provide comprehensive admin interface for xlsx score upload, student data export, capacity monitoring, PDF solution management, and complete exam operations with user management capabilities.
 
 ### **Epic 6: Results Display & Freemium Conversion**
+
 **Goal:** Display exam results within 48 hours with freemium optimization - basic scores for Free users, blurred premium previews, PDF solution access for Advanced users, and 290 THB upgrade flow.
 
 ### **Epic 7: Advanced Analytics Dashboard**
+
 **Goal:** Deliver comprehensive statistical analytics for Advanced users including weighted scoring, box plots, percentile analysis, topic breakdowns, and study recommendations.
 
 ### **Epic 8: Communication & Notification System**
+
 **Goal:** Implement email notifications for registration confirmation, exam tickets, results availability, and toast notification system for real-time user feedback.
 
 ### **Epic 9: Mobile Optimization & Performance**
+
 **Goal:** Ensure mobile-first experience with PWA capabilities, < 2 second load times, 99.9% uptime, and cross-browser compatibility for 80%+ mobile traffic.
 
 ## Epic 0: Foundation & Environment Setup
@@ -270,7 +288,7 @@ so that all subsequent development can deploy reliably and consistently to produ
 
 **AC1:** Next.js 14+ monorepo created with Turborepo structure containing /apps/web, /packages/ui, /packages/lib directories
 
-**AC2:** TypeScript configuration established with strict mode, path aliases (@/), and consistent tsconfig across all packages  
+**AC2:** TypeScript configuration established with strict mode, path aliases (@/), and consistent tsconfig across all packages
 
 **AC3:** Tailwind CSS + shadcn/ui integrated with medical color palette (#0d7276 primary, #529a9d secondary, #cae0e1 light)
 
@@ -281,6 +299,7 @@ so that all subsequent development can deploy reliably and consistently to produ
 **AC6:** Environment variable structure established for development, staging, production with secure secrets management
 
 **AC7:** Docker development environment configured with:
+
 - Docker Compose orchestration for Next.js app, PostgreSQL, and Redis containers
 - Hot reload volumes for rapid development cycles
 - Environment parity between local development and production
@@ -592,7 +611,7 @@ so that the complete payment experience is functional before live integration.
 
 **AC3:** Printable ticket component with QR code generation using Sharp library
 
-**AC4:** Payment confirmation component displaying exam code and session details prominently  
+**AC4:** Payment confirmation component displaying exam code and session details prominently
 
 **AC5:** Loading states and payment processing animations for mobile user experience
 
@@ -844,7 +863,7 @@ so that admin operations work efficiently with proper validation and error handl
 
 **AC5:** PUT /api/admin/capacity/override endpoint for manual session capacity adjustments
 
-**AC6:** CRUD /api/admin/users/* endpoints for comprehensive user management including profile updates and exam code regeneration
+**AC6:** CRUD /api/admin/users/\* endpoints for comprehensive user management including profile updates and exam code regeneration
 
 **AC7:** GET /api/admin/audit/logs endpoint for administrative action tracking and compliance
 
@@ -1311,37 +1330,41 @@ so that the platform consistently delivers < 2 second load times and 99.9% uptim
 
 ### **Category Analysis**
 
-| Category                         | Status  | Critical Issues                           |
-| -------------------------------- | ------- | ----------------------------------------- |
+| Category                         | Status  | Critical Issues                          |
+| -------------------------------- | ------- | ---------------------------------------- |
 | 1. Problem Definition & Context  | PASS    | None - Well-documented with evidence     |
-| 2. MVP Scope Definition          | PASS    | Comprehensive, properly prioritized       |
+| 2. MVP Scope Definition          | PASS    | Comprehensive, properly prioritized      |
 | 3. User Experience Requirements  | PASS    | Mobile-first, Thai market optimized      |
 | 4. Functional Requirements       | PASS    | Complete FR/NFR with acceptance criteria |
-| 5. Non-Functional Requirements   | PASS    | Performance targets clearly defined       |
+| 5. Non-Functional Requirements   | PASS    | Performance targets clearly defined      |
 | 6. Epic & Story Structure        | PASS    | 5-step pattern consistently applied      |
-| 7. Technical Guidance            | PASS    | Complete stack decisions documented       |
+| 7. Technical Guidance            | PASS    | Complete stack decisions documented      |
 | 8. Cross-Functional Requirements | PARTIAL | Email delivery rates need validation     |
-| 9. Clarity & Communication       | PASS    | Clear, actionable, well-structured        |
+| 9. Clarity & Communication       | PASS    | Clear, actionable, well-structured       |
 
 ### **Strengths Identified**
 
 **✅ Foundation First Strategy Excellence:**
+
 - Epic 0 provides comprehensive infrastructure foundation
 - Each epic builds on stable, tested components
 - Clear separation of concerns enables parallel development
 
 **✅ Market-Specific Optimization:**
+
 - Thai language localization throughout
 - Bangkok vs Chiang Mai cost savings messaging
 - Government credibility integration (STeP, Deepa, Startup Thailand)
 - Mobile-first approach for 80%+ mobile traffic
 
 **✅ Business Model Integration:**
+
 - Freemium conversion psychology built into UI/UX
 - Clear revenue optimization (690 THB + 290 THB upgrade)
 - Capacity management supporting business logic
 
 **✅ Technical Feasibility:**
+
 - Realistic technology choices for 8-week timeline
 - Proven patterns (Next.js, Stripe, shadcn/ui)
 - Performance targets achievable with selected stack
@@ -1363,7 +1386,7 @@ The TBAT Mock Exam Platform PRD is comprehensive, properly structured, and ready
 > The TBAT Mock Exam Platform PRD has been completed and validated. Please begin UX architecture design focusing on:
 >
 > 1. **Mobile-First Design System** using medical color palette (#0d7276, #529a9d, #cae0e1)
-> 2. **Thai Student User Experience** with cultural considerations and Thai language optimization  
+> 2. **Thai Student User Experience** with cultural considerations and Thai language optimization
 > 3. **Freemium Conversion Flows** optimizing Free to Advanced (690 THB) and post-exam upgrade (290 THB)
 > 4. **Credibility Integration** incorporating government support badges and Dentorium Camp trust signals
 > 5. **Modal-Based Interactions** for registration, login, and payment flows
@@ -1382,7 +1405,7 @@ The TBAT Mock Exam Platform PRD is comprehensive, properly structured, and ready
 >
 > 1. **Foundation First Infrastructure** (Epic 0) supporting 300+ concurrent users with 99.9% uptime
 > 2. **Next.js 14+ Full-Stack Architecture** with Neon PostgreSQL and Stripe payment integration
-> 3. **Exam Code Generation System** with unique random IDs (FREE-XXXXXXXX-SUBJECT / ADV-XXXXXXXX) 
+> 3. **Exam Code Generation System** with unique random IDs (FREE-XXXXXXXX-SUBJECT / ADV-XXXXXXXX)
 > 4. **Advanced Analytics Engine** with weighted scoring and statistical calculations
 > 5. **Mobile Performance Optimization** achieving <2 second load times for Thai 3G networks
 >
@@ -1392,6 +1415,6 @@ The TBAT Mock Exam Platform PRD is comprehensive, properly structured, and ready
 
 ---
 
-**🎉 TBAT Mock Exam Platform PRD Complete!** 
+**🎉 TBAT Mock Exam Platform PRD Complete!**
 
 **Foundation First + Sequenced Decoupled Development strategy ready for implementation by 27 กันยายน 2568!**

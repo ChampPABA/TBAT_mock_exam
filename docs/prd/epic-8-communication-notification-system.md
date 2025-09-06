@@ -101,4 +101,3 @@ so that users receive timely, reliable communications throughout their exam prep
 **AC5:** User communication preferences integrated with email delivery system
 
 **AC6:** Communication system testing ensuring 98%+ email delivery rates and proper timing
-

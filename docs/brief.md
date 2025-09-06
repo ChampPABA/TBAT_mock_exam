@@ -56,12 +56,14 @@ The proposed solution is a web portal that directly addresses this gap. The core
 ### Detailed Business Model
 
 **Exam Schedule:** 27 กันยายน 2568 (Fixed date - no additional rounds)
+
 - **Session 1:** 9:00-12:00 (arrive 8:30)
 - **Session 2:** 13:00-16:00 (arrive 12:30)
 - **Capacity:** 300 students maximum per session
 - **Free Package Limit:** 150 students per session (Advanced Package can consume remaining capacity)
 
 **Capacity Management Logic:**
+
 - Free slots don't show remaining count (prevent artificial urgency)
 - When Free tier full: Hide Free options, show "เต็มแล้ว - ใช้ Advanced Package เท่านั้น"
 - Advanced Package: Unlimited until total session capacity reached
@@ -71,6 +73,7 @@ The proposed solution is a web portal that directly addresses this gap. The core
 ### MVP Scope
 
 **Core Features (Must Have):**
+
 - Simple email/password registration (no OTP required, 8+ character password with numbers + letters)
 - Landing page with credibility elements (testimonials, government support, organizational background)
 - Package selection with capacity management logic
@@ -88,6 +91,7 @@ The proposed solution is a web portal that directly addresses this gap. The core
 - Mobile-first responsive design with accessibility compliance (WCAG 2.1 AA)
 
 **Out of Scope for MVP:**
+
 - Online exam-taking functionality (hybrid offline/online model)
 - Multiple exam dates or venues
 - Community features or discussion boards
@@ -103,6 +107,7 @@ The proposed solution is a web portal that directly addresses this gap. The core
 ### Technical Requirements Summary
 
 **Frontend Architecture:**
+
 - Next.js 14+ with App Router and TypeScript
 - Tailwind CSS with shadcn/ui component library
 - Mobile-first responsive design
@@ -110,24 +115,28 @@ The proposed solution is a web portal that directly addresses this gap. The core
 - Progressive Web App capabilities
 
 **Backend & Database:**
+
 - PostgreSQL database (Neon serverless)
 - Prisma ORM for database management
 - Real-time replication and automated backups
 - Connection pooling for high traffic periods
 
 **Payment & Security:**
+
 - Stripe API integration for Thai Baht processing
 - JWT token-based authentication
 - PDPA compliance implementation
 - SSL encryption and security best practices
 
 **Performance & Scalability:**
+
 - Auto-scaling capabilities for registration periods
 - CDN for static asset delivery
 - Redis caching for sessions and analytics
 - Real-time monitoring and error recovery systems
 
 **Analytics Engine:**
+
 - Custom statistical calculation engine
 - Weighted scoring system (800 points per subject)
 - Box plot and percentile generation
@@ -137,12 +146,14 @@ The proposed solution is a web portal that directly addresses this gap. The core
 ### Constraints & Assumptions
 
 **Constraints:**
+
 - **Time-Critical Launch:** Must launch before 27 กันยายน 2568 to capture exam cycle
 - **Single Exam Event:** Fixed date with no additional rounds
 - **Venue Dependency:** Physical exam location in Chiang Mai required
 - **Capacity Limitations:** Maximum 300 students per session
 
 **Key Assumptions:**
+
 - Sufficient demand in Chiang Mai market (targeting 200+ annual students)
 - Students value realistic physical exam experience over online convenience
 - Pricing strategy acceptable (690 THB full package, 290 THB upgrade)
@@ -153,16 +164,19 @@ The proposed solution is a web portal that directly addresses this gap. The core
 ### Risk Analysis & Mitigation
 
 **High-Risk Scenarios:**
+
 - **Registration Day Overload:** Server crashes during peak registration → Auto-scaling, load balancing, queue management
 - **Payment Processing Failures:** Stripe gateway issues → Retry logic, clear error messaging, manual verification process
 - **Analytics Engine Failures:** Complex calculations crash on results day → Backup systems, pre-computed fallbacks
 - **Data Security Breach:** PDPA violations → Enhanced security protocols, incident response plan
 
 **Medium-Risk Scenarios:**
+
 - **Mobile Compatibility Issues:** Browser updates break functionality → Cross-platform testing, progressive enhancement
 - **Capacity Management Errors:** Overbooking or system bugs → Manual override capabilities, real-time monitoring
 
 **Mitigation Strategies:**
+
 - Comprehensive load testing with 1000+ concurrent users
 - Multiple backup systems and recovery procedures
 - Real-time monitoring with automated alerts
@@ -172,6 +186,7 @@ The proposed solution is a web portal that directly addresses this gap. The core
 ### Competitive Advantages
 
 **Unique Value Propositions:**
+
 - **Hybrid Model:** Only platform combining physical exams with advanced digital analytics
 - **Statistical Depth:** Most sophisticated analytics in Thai mock exam market
 - **Student Validation:** Organic demand from previous Dentorium Camp participants
@@ -182,6 +197,7 @@ The proposed solution is a web portal that directly addresses this gap. The core
 ### Success Metrics & KPIs
 
 **Primary KPIs:**
+
 - Total registrations per session (Target: 250+/300 capacity)
 - Free to Advanced conversion rate (Target: 40-50%)
 - Post-exam upgrade rate (Target: 25-35% of Free users)
@@ -191,6 +207,7 @@ The proposed solution is a web portal that directly addresses this gap. The core
 - User satisfaction scores (Target: 4.5+/5.0)
 
 **Secondary KPIs:**
+
 - Email delivery rates (Target: 98%+)
 - Page load times (Target: <2 seconds)
 - Analytics engagement time (Target: 5+ minutes for premium users)
@@ -200,6 +217,7 @@ The proposed solution is a web portal that directly addresses this gap. The core
 ### Next Steps for PRD Development
 
 This brief provides comprehensive foundation for PRD creation including:
+
 - ✅ Complete business model with pricing and capacity logic
 - ✅ Detailed technical architecture and requirements
 - ✅ User experience specifications with mobile optimization
