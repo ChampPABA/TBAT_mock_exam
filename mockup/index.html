@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Mock Exam - ทดสอบ TBAT ที่เชียงใหม่</title>
+    
+    <!-- Prompt Font for Thai language support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="ทดสอบ TBAT ที่เชียงใหม่ ไม่ต้องเดินทางไปกรุงเทพ ประหยัดค่าใช้จ่าย 5,000+ บาท">
+    <meta name="keywords" content="TBAT, Mock Exam, เชียงใหม่, Chiang Mai, Medical Exam">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">ทดสอบ TBAT ที่เชียงใหม่<br>ไม่ต้องเดินทางไปกรุงเทพ</h1>
+                <div class="countdown-container">
+                    <div class="countdown-label">เหลือเวลาอีก</div>
+                    <div id="countdown" class="countdown-timer">
+                        <div class="time-unit">
+                            <span id="days">0</span>
+                            <span>วัน</span>
+                        </div>
+                        <div class="time-unit">
+                            <span id="hours">0</span>
+                            <span>ชั่วโมง</span>
+                        </div>
+                        <div class="time-unit">
+                            <span id="minutes">0</span>
+                            <span>นาที</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="cta-button" onclick="scrollToPackages()">
+                    เลือกแพ็กเกจเลย
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Credibility Section -->
+    <section id="credibility" class="credibility-section">
+        <div class="container">
+            <h2 class="section-title">ได้รับการสนับสนุนจาก</h2>
+            <div class="logos-grid">
+                <div class="logo-item">
+                    <div class="logo-placeholder">STeP</div>
+                </div>
+                <div class="logo-item">
+                    <div class="logo-placeholder">Deepa</div>
+                </div>
+                <div class="logo-item">
+                    <div class="logo-placeholder">Startup<br>Thailand</div>
+                </div>
+            </div>
+            <div class="brand-section">
+                <h3 class="brand-title">ASPECT</h3>
+                <p class="brand-subtitle">ผู้จัด Dentorium Camp</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Package Comparison Section -->
+    <section id="packages" class="packages-section">
+        <div class="container">
+            <h2 class="section-title">เลือกแพ็กเกจของคุณ</h2>
+            <div class="packages-grid">
+                <!-- Free Package -->
+                <div class="package-card free-package">
+                    <div class="package-header">
+                        <h3 class="package-title">Free Package</h3>
+                        <div class="package-price">฿0</div>
+                        <div class="package-status available">เปิดรับสมัคร</div>
+                    </div>
+                    <ul class="package-features">
+                        <li>เลือกวิชาได้ 1 วิชา</li>
+                        <li>ผลลพธ์พื้นฐาน</li>
+                        <li>การเข้าถึงแบบจำกัด</li>
+                    </ul>
+                    <button class="package-button free-button">
+                        เลือกแพ็กเกจฟรี
+                    </button>
+                </div>
+
+                <!-- Advanced Package -->
+                <div class="package-card advanced-package featured">
+                    <div class="package-badge">แนะนำ</div>
+                    <div class="package-header">
+                        <h3 class="package-title">Advanced Package</h3>
+                        <div class="package-price">฿690</div>
+                        <div class="package-status available">พร้อมใช้งาน</div>
+                    </div>
+                    <ul class="package-features">
+                        <li>ครบทั้ง 3 วิชา (ชีววิทยา เคมี ฟิสิกส์)</li>
+                        <li>การวิเคราะห์แบบละเอียด</li>
+                        <li>ดาวน์โหลด PDF เฉลย</li>
+                        <li>ข้อมูลเชิงลึกและการวิเคราะห์</li>
+                    </ul>
+                    <button class="package-button advanced-button">
+                        อัพเกรดตั้งแต่ตอนนี้
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cost Comparison Section -->
+    <section id="cost-comparison" class="cost-comparison-section">
+        <div class="container">
+            <h2 class="section-title">ประหยัดค่าใช้จ่าย 5,000+ บาท</h2>
+            <div class="comparison-grid">
+                <div class="comparison-item bangkok">
+                    <h3 class="comparison-title">กรุงเทพฯ</h3>
+                    <div class="cost-breakdown">
+                        <div class="cost-item">
+                            <span>ค่าสอบ</span>
+                            <span>฿690</span>
+                        </div>
+                        <div class="cost-item">
+                            <span>ค่าเดินทาง</span>
+                            <span>฿3,000</span>
+                        </div>
+                        <div class="cost-item">
+                            <span>ค่าพัก</span>
+                            <span>฿2,500</span>
+                        </div>
+                        <div class="cost-item">
+                            <span>ค่าอาหาร</span>
+                            <span>฿800</span>
+                        </div>
+                        <div class="cost-total">
+                            <span>รวม</span>
+                            <span>฿6,990</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comparison-vs">VS</div>
+                
+                <div class="comparison-item chiangmai highlighted">
+                    <h3 class="comparison-title">เชียงใหม่</h3>
+                    <div class="cost-breakdown">
+                        <div class="cost-item">
+                            <span>ค่าสอบ</span>
+                            <span>฿690</span>
+                        </div>
+                        <div class="cost-item free">
+                            <span>ค่าเดินทาง</span>
+                            <span>฿0</span>
+                        </div>
+                        <div class="cost-item free">
+                            <span>ค่าพัก</span>
+                            <span>฿0</span>
+                        </div>
+                        <div class="cost-item free">
+                            <span>ค่าอาหาร</span>
+                            <span>฿0</span>
+                        </div>
+                        <div class="cost-total savings">
+                            <span>รวม</span>
+                            <span>฿690</span>
+                        </div>
+                    </div>
+                    <div class="savings-highlight">
+                        ประหยัด ฿6,300
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
