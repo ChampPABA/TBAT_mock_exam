@@ -1,0 +1,22 @@
+# TBAT Mock Exam Platform Product Requirements Document (PRD)
+
+## Table of Contents
+
+- [TBAT Mock Exam Platform Product Requirements Document (PRD)](#table-of-contents)
+  - [Goals and Background Context](#goals-and-background-context)
+  - [Requirements](#requirements)
+  - [User Interface Design Goals](#user-interface-design-goals)
+  - [Technical Assumptions](#technical-assumptions)
+  - [Epic List](#epic-list)
+  - [Epic 0: Foundation & Environment Setup](#epic-0-foundation-environment-setup)
+  - [Epic 1: Landing Page & Package Selection](#epic-1-landing-page-package-selection)
+  - [Epic 2: User Authentication & Registration System](#epic-2-user-authentication-registration-system)
+  - [Epic 3: Payment & Exam Code Generation](#epic-3-payment-exam-code-generation)
+  - [Epic 4: Session Booking & Capacity Management](#epic-4-session-booking-capacity-management)
+  - [Epic 5: Admin Management System](#epic-5-admin-management-system)
+  - [Epic 6: Results Display & Freemium Conversion](#epic-6-results-display-freemium-conversion)
+  - [Epic 7: Advanced Analytics Dashboard](#epic-7-advanced-analytics-dashboard)
+  - [Epic 8: Communication & Notification System](#epic-8-communication-notification-system)
+  - [Epic 9: Mobile Optimization & Performance](#epic-9-mobile-optimization-performance)
+  - [Checklist Results Report](#checklist-results-report)
+  - [Next Steps](#next-steps)

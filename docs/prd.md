@@ -27,6 +27,8 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 | Date | Version | Description | Author |
 |------|---------|-------------|---------|
 | 2025-01-26 | 1.0 | Initial PRD creation from comprehensive Project Brief and Handoff Summary | John (PM) |
+| 2025-01-26 | 1.1 | Added Docker development environment requirements and containerization strategy | John (PM) |
+| 2025-01-26 | 1.2 | Added PDF solution management, data lifecycle policy, and enhanced admin capabilities (FR21-FR24, NFR16) | John (PM) |
 
 ## Requirements
 
@@ -48,7 +50,7 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 
 **FR8:** The system shall generate printable exam tickets with QR codes containing student verification information
 
-**FR9:** The system shall provide admin interface for score upload via xlsx file import, capacity management, and xlsx export functionality for registration data and student information to support exam materials creation (seating charts, etc.)
+**FR9:** The system shall provide admin interface for score upload via xlsx file import, PDF solution upload, capacity management, user data management with CRUD operations, and xlsx export functionality for registration data and student information to support exam materials creation (seating charts, etc.)
 
 **FR10:** The system shall display results dashboard with freemium conversion optimization, showing basic scores for Free users with blurred premium previews and 290 THB upgrade CTA
 
@@ -71,6 +73,14 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 **FR19:** The system shall provide TBAT prediction analysis and improvement potential calculations
 
 **FR20:** The system shall deliver results within 48 hours of exam completion with automated email notifications
+
+**FR21:** The system shall provide PDF solution download capability exclusively for Advanced Package users, implementing freemium conversion strategy by restricting Free users from accessing exam solutions
+
+**FR22:** The system shall implement data lifecycle management with 6-month accessibility period for exam results and PDF solutions, after which data becomes inaccessible to maintain resource optimization
+
+**FR23:** The system shall enable admin PDF solution upload with automated email notifications to all Advanced Package users when solutions become available
+
+**FR24:** The system shall provide comprehensive admin user management with full CRUD capabilities including user data modification, exam code regeneration, and emergency technical issue resolution
 
 ### Non Functional
 
@@ -103,6 +113,8 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 **NFR14:** The system shall implement CDN for static asset delivery ensuring fast content loading across geographical regions
 
 **NFR15:** The system shall provide Redis caching for sessions and analytics to optimize performance and reduce database load
+
+**NFR16:** The system shall implement secure PDF storage and delivery with 99%+ download success rate, supporting concurrent access during peak periods while maintaining 6-month data retention policy
 
 ## User Interface Design Goals
 
@@ -180,14 +192,24 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 - **Stripe API** for payment processing (Thai Baht support confirmed)
 - **Resend** for transactional emails with high delivery rates
 - **Sharp** for image optimization and QR code generation
+- **Vercel Blob Storage** for secure PDF solution storage and delivery with 6-month retention policy
 
 **Performance & Scalability:**
 - **Vercel deployment** with edge functions and automatic CDN
 - **Redis caching** (Upstash) for session management and analytics caching
 - **Connection pooling** for database efficiency during traffic spikes
 
+**Development Environment & Containerization:**
+- **Docker Compose** for consistent local development environment
+- **PostgreSQL container** for isolated local database development
+- **Redis container** for local caching and session testing
+- **Hot reload capabilities** with Docker volumes for rapid development
+- **Multi-stage Docker builds** for production deployment optimization
+- **Environment parity** ensuring development closely matches production
+
 **Development & Deployment:**
 - **GitHub Actions** for CI/CD pipeline with automated testing
+- **Docker integration** in CI/CD for consistent build and test environments
 - **ESLint + Prettier** for code quality and consistency
 - **Husky** pre-commit hooks for quality gates
 
@@ -220,10 +242,10 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 **Goal:** Enable students to select exam sessions (morning/afternoon) with intelligent capacity management hiding exact numbers and dynamic Free/Advanced availability messaging.
 
 ### **Epic 5: Admin Management System**
-**Goal:** Provide comprehensive admin interface for xlsx score upload, student data export, capacity monitoring, and exam operations management.
+**Goal:** Provide comprehensive admin interface for xlsx score upload, student data export, capacity monitoring, PDF solution management, and complete exam operations with user management capabilities.
 
 ### **Epic 6: Results Display & Freemium Conversion**
-**Goal:** Display exam results within 48 hours with freemium optimization - basic scores for Free users, blurred premium previews, and 290 THB upgrade flow.
+**Goal:** Display exam results within 48 hours with freemium optimization - basic scores for Free users, blurred premium previews, PDF solution access for Advanced users, and 290 THB upgrade flow.
 
 ### **Epic 7: Advanced Analytics Dashboard**
 **Goal:** Deliver comprehensive statistical analytics for Advanced users including weighted scoring, box plots, percentile analysis, topic breakdowns, and study recommendations.
@@ -257,6 +279,12 @@ so that all subsequent development can deploy reliably and consistently to produ
 **AC5:** ESLint + Prettier + Husky pre-commit hooks enforcing code quality standards
 
 **AC6:** Environment variable structure established for development, staging, production with secure secrets management
+
+**AC7:** Docker development environment configured with:
+- Docker Compose orchestration for Next.js app, PostgreSQL, and Redis containers
+- Hot reload volumes for rapid development cycles
+- Environment parity between local development and production
+- Containerized database with persistent data volumes
 
 ### Story 0.2: Database Schema & Core Services Setup
 
@@ -801,22 +829,26 @@ so that all administrative actions are tracked and student data is properly mana
 ### Story 5.4: Backend API Implementation
 
 As a **Backend Developer**,  
-I want to create admin-specific APIs for file processing and data management,
+I want to create admin-specific APIs for file processing, PDF management, and comprehensive data management,
 so that admin operations work efficiently with proper validation and error handling.
 
 #### Acceptance Criteria
 
 **AC1:** POST /api/admin/scores/upload endpoint processing xlsx files with validation and error reporting
 
-**AC2:** GET /api/admin/export/students endpoint generating xlsx files with applied filters
+**AC2:** POST /api/admin/pdf/upload endpoint for PDF solution upload with metadata and automated user notifications
 
-**AC3:** GET /api/admin/dashboard/metrics endpoint providing real-time registration and capacity statistics
+**AC3:** GET /api/admin/export/students endpoint generating xlsx files with applied filters
 
-**AC4:** PUT /api/admin/capacity/override endpoint for manual session capacity adjustments
+**AC4:** GET /api/admin/dashboard/metrics endpoint providing real-time registration and capacity statistics
 
-**AC5:** GET /api/admin/audit/logs endpoint for administrative action tracking and compliance
+**AC5:** PUT /api/admin/capacity/override endpoint for manual session capacity adjustments
 
-**AC6:** Rate limiting and authentication middleware protecting all admin endpoints from unauthorized access
+**AC6:** CRUD /api/admin/users/* endpoints for comprehensive user management including profile updates and exam code regeneration
+
+**AC7:** GET /api/admin/audit/logs endpoint for administrative action tracking and compliance
+
+**AC8:** Rate limiting and authentication middleware protecting all admin endpoints from unauthorized access
 
 ### Story 5.5: Frontend-Backend Integration
 
@@ -852,9 +884,9 @@ so that Free users see value while being motivated to upgrade to Advanced analyt
 
 **AC1:** Free user results mockup showing basic score, percentile, rank with prominent but tasteful upgrade messaging
 
-**AC2:** Premium preview mockup with strategically blurred analytics and "อัปเกรดเพียง ฿290" call-to-action
+**AC2:** Premium preview mockup with strategically blurred analytics, PDF solution download preview, and "อัปเกรดเพียง ฿290" call-to-action
 
-**AC3:** Advanced user results mockup displaying full analytics dashboard with comprehensive score breakdowns
+**AC3:** Advanced user results mockup displaying full analytics dashboard with comprehensive score breakdowns and PDF solution download access
 
 **AC4:** Upgrade flow mockup with 290 THB payment process and immediate analytics unlock
 
@@ -878,9 +910,11 @@ so that the complete results experience is functional before real score integrat
 
 **AC4:** Analytics charts component using mock data for box plots, percentiles, and topic breakdowns
 
-**AC5:** Upgrade modal component integrated with payment flow from Epic 3
+**AC5:** PDF download component for Advanced users with secure access controls and download tracking
 
-**AC6:** Results loading states and error handling for score lookup failures
+**AC6:** Upgrade modal component integrated with payment flow from Epic 3
+
+**AC7:** Results loading states and error handling for score lookup failures
 
 ### Story 6.3: Database Schema Creation
 
@@ -900,7 +934,11 @@ so that exam scores can be processed and displayed with appropriate access contr
 
 **AC5:** Score_Calculations table storing pre-computed statistical analysis for performance optimization
 
-**AC6:** Results_Audit table tracking all result access attempts and upgrade conversions
+**AC6:** PDF_Solutions table storing solution file metadata, upload timestamps, and access controls linked to exam sessions
+
+**AC7:** Data_Expiry table managing 6-month accessibility policy with automated cleanup scheduling
+
+**AC8:** Results_Audit table tracking all result access attempts, PDF downloads, and upgrade conversions
 
 ### Story 6.4: Backend API Implementation
 
@@ -912,15 +950,19 @@ so that students can access their results with appropriate access controls and u
 
 **AC1:** GET /api/results/[examCode] endpoint returning appropriate results based on user package and upgrade status
 
-**AC2:** POST /api/results/upgrade endpoint processing 290 THB payment and unlocking analytics access
+**AC2:** GET /api/pdf/download/[examCode] endpoint providing secure PDF solution access for Advanced users only
 
-**AC3:** GET /api/analytics/[examCode] endpoint providing detailed analytics for upgraded users only
+**AC3:** POST /api/results/upgrade endpoint processing 290 THB payment and unlocking analytics and PDF access
 
-**AC4:** Weighted scoring algorithm implementation calculating 800 points per subject with proper topic weighting
+**AC4:** GET /api/analytics/[examCode] endpoint providing detailed analytics for upgraded users only
 
-**AC5:** Statistical analysis engine computing percentiles, rankings, and comparative analytics
+**AC5:** Weighted scoring algorithm implementation calculating 800 points per subject with proper topic weighting
 
-**AC6:** Results caching strategy with Redis to optimize performance during result release periods
+**AC6:** Statistical analysis engine computing percentiles, rankings, and comparative analytics
+
+**AC7:** Data expiry management system automatically restricting access after 6-month period
+
+**AC8:** Results caching strategy with Redis to optimize performance during result release periods
 
 ### Story 6.5: Frontend-Backend Integration
 
@@ -932,15 +974,19 @@ so that students receive their complete results experience with functioning upgr
 
 **AC1:** Results lookup working with exam codes providing appropriate Free/Advanced content
 
-**AC2:** Upgrade payment flow integrated with Stripe processing and immediate analytics access
+**AC2:** PDF solution download working for Advanced users with secure access controls and download tracking
 
-**AC3:** Real analytics calculations displaying accurate statistical analysis and study recommendations
+**AC3:** Upgrade payment flow integrated with Stripe processing and immediate analytics and PDF access
 
-**AC4:** Freemium conversion tracking and optimization based on actual user behavior
+**AC4:** Real analytics calculations displaying accurate statistical analysis and study recommendations
 
-**AC5:** Results email notifications integrated with communication system from Epic 8
+**AC5:** Data expiry policy enforcement ensuring 6-month accessibility with proper user communication
 
-**AC6:** Complete results workflow testing from score upload through student result viewing and upgrade conversion
+**AC6:** Freemium conversion tracking and optimization based on actual user behavior
+
+**AC7:** Results email notifications integrated with communication system from Epic 8
+
+**AC8:** Complete results workflow testing from score upload through student result viewing, PDF download, and upgrade conversion
 
 ## Epic 7: Advanced Analytics Dashboard
 
