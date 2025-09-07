@@ -49,6 +49,27 @@ so that all business logic features can integrate with stable, scalable data lay
 
 **AC6:** Redis cache (Upstash) configured for session management and analytics result caching
 
+**AC7:** Docker Compose configuration updated with PostgreSQL service including:
+
+- Persistent volume for database data
+- Environment variables for database credentials
+- Health check for database readiness
+- Automatic database creation on container startup
+
+**AC8:** Database migration workflow configured in Docker with:
+
+- Prisma migrate script in docker-compose.yml
+- Seed data script for development environment
+- Migration run on container startup or via docker-compose exec command
+- Volume mapping for migration files
+
+**AC9:** Service integration verified in Docker environment:
+
+- NextAuth service connects to PostgreSQL container
+- Stripe service environment variables properly configured
+- Redis (Upstash) connection verified from Docker container
+- All services accessible via docker-compose up command
+
 ### Story 0.3: Core Utilities & Security Implementation
 
 As a **Developer**,
@@ -69,6 +90,20 @@ so that all features can handle exam codes, data protection, and user safety rel
 
 **AC6:** Rate limiting middleware implemented for API endpoints with special consideration for payment routes
 
+**AC7:** Docker environment security configuration implemented:
+
+- Environment variables properly managed via .env.docker file
+- Secrets not exposed in Docker images or logs
+- PDPA compliance features accessible in containerized environment
+- Rate limiting middleware tested in Docker setup
+
+**AC8:** Utility services verified in Docker:
+
+- Exam code generation service functional in container
+- Password hashing service working with proper entropy
+- Error logging (Sentry) configured with Docker environment flag
+- All utilities accessible via Docker network
+
 ### Story 0.4: Performance & Monitoring Foundation
 
 As a **Developer**,
@@ -88,3 +123,17 @@ so that the platform can handle 300+ concurrent users with <2 second load times.
 **AC5:** Load testing framework established using Artillery or k6 for simulating 300+ concurrent registration scenarios
 
 **AC6:** Health check endpoints implemented for all critical services with automated alerting for downtime
+
+**AC7:** Docker performance monitoring setup:
+
+- Container resource limits configured (CPU, memory)
+- Docker health checks for all services
+- Performance metrics accessible from containers
+- Load testing executable against Docker environment
+
+**AC8:** Docker development workflow optimized:
+
+- Hot reload working for Next.js in Docker
+- Database query logs accessible via docker-compose logs
+- Monitoring dashboards accessible from host machine
+- Multi-stage Dockerfile for production-ready builds

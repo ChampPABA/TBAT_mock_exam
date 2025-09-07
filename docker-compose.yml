@@ -20,10 +20,19 @@ services:
       - /app/node_modules
       - /app/apps/web/node_modules
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - tbat-network
+    command: >
+      sh -c "
+        cd apps/web &&
+        npx prisma generate &&
+        npx prisma migrate deploy &&
+        npm run dev
+      "
 
   # PostgreSQL Database
   postgres:

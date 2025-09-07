@@ -1,0 +1,356 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id           String      @id @default(uuid())
+  email        String      @unique
+  passwordHash String      @map("password_hash")
+  thaiName     String      @map("thai_name")
+  phone        String
+  school       String
+  lineId       String?     @map("line_id")
+  packageType  PackageType @default(FREE) @map("package_type")
+  isUpgraded   Boolean     @default(false) @map("is_upgraded")
+  pdpaConsent  Boolean     @default(false) @map("pdpa_consent")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+
+  // Relations
+  sessions        UserSession[]
+  examCodes       ExamCode[]
+  payments        Payment[]
+  examResults     ExamResult[]
+  analytics       Analytics[]
+  pdfDownloads    PDFDownload[]
+  supportTickets  SupportTicket[]
+  accounts        Account[]
+
+  @@map("users")
+}
+
+model UserSession {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  sessionToken String   @unique @map("session_token")
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("user_sessions")
+}
+
+// NextAuth.js models
+model Account {
+  id                String  @id @default(uuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// Exam Registration & Codes
+model ExamCode {
+  id          String      @id @default(uuid())
+  userId      String      @map("user_id")
+  code        String      @unique
+  packageType PackageType @map("package_type")
+  subject     Subject
+  sessionTime SessionTime @map("session_time")
+  isUsed      Boolean     @default(false) @map("is_used")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  usedAt      DateTime?   @map("used_at")
+
+  // Relations
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examResults ExamResult[]
+
+  @@index([userId])
+  @@index([code])
+  @@map("exam_codes")
+}
+
+model SessionCapacity {
+  id          String      @id @default(uuid())
+  sessionTime SessionTime @map("session_time")
+  currentCount Int        @default(0) @map("current_count")
+  maxCapacity  Int        @default(300) @map("max_capacity")
+  examDate     DateTime   @map("exam_date")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  @@unique([sessionTime, examDate])
+  @@map("session_capacities")
+}
+
+// Payment Processing
+model Payment {
+  id                   String        @id @default(uuid())
+  userId               String        @map("user_id")
+  stripePaymentIntentId String       @unique @map("stripe_payment_intent_id")
+  amount               Int           // Amount in satangs (smallest currency unit)
+  currency             String        @default("thb")
+  paymentType          PaymentType   @map("payment_type")
+  status               PaymentStatus @default(PENDING)
+  completedAt          DateTime?     @map("completed_at")
+  createdAt            DateTime      @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([stripePaymentIntentId])
+  @@map("payments")
+}
+
+// Results & Analytics
+model ExamResult {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  examCodeId     String   @map("exam_code_id")
+  totalScore     Float    @map("total_score")
+  biologyScore   Float?   @map("biology_score")
+  chemistryScore Float?   @map("chemistry_score")
+  physicsScore   Float?   @map("physics_score")
+  percentile     Float?
+  completionTime Int      @map("completion_time") // Minutes
+  expiresAt      DateTime @map("expires_at")
+  isAccessible   Boolean  @default(true) @map("is_accessible")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examCode  ExamCode    @relation(fields: [examCodeId], references: [id])
+  analytics Analytics[]
+
+  @@index([userId])
+  @@index([examCodeId])
+  @@map("exam_results")
+}
+
+model Analytics {
+  id              String   @id @default(uuid())
+  resultId        String   @map("result_id")
+  userId          String   @map("user_id")
+  subjectBreakdowns Json   @map("subject_breakdowns")
+  recommendations Json
+  comparisonData  Json     @map("comparison_data")
+  generatedAt     DateTime @default(now()) @map("generated_at")
+
+  // Relations
+  result ExamResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([resultId])
+  @@index([userId])
+  @@map("analytics")
+}
+
+// PDF Solution Management
+model PDFSolution {
+  id            String   @id @default(uuid())
+  subject       Subject
+  examDate      DateTime @map("exam_date")
+  fileUrl       String   @map("file_url")
+  fileSize      Int      @map("file_size") // Bytes
+  description   String
+  uploadAdminId String   @map("upload_admin_id")
+  isActive      Boolean  @default(true) @map("is_active")
+  expiresAt     DateTime @map("expires_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  uploadAdmin      AdminUser          @relation(fields: [uploadAdminId], references: [id])
+  downloads        PDFDownload[]
+  notifications    PDFNotification[]
+
+  @@index([subject])
+  @@map("pdf_solutions")
+}
+
+model PDFDownload {
+  id            String   @id @default(uuid())
+  pdfId         String   @map("pdf_id")
+  userId        String   @map("user_id")
+  downloadToken String   @unique @map("download_token")
+  downloadedAt  DateTime @default(now()) @map("downloaded_at")
+  expiresAt     DateTime @map("expires_at")
+
+  // Relations
+  pdf  PDFSolution @relation(fields: [pdfId], references: [id], onDelete: Cascade)
+  user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([pdfId])
+  @@map("pdf_downloads")
+}
+
+model PDFNotification {
+  id            String   @id @default(uuid())
+  pdfId         String   @map("pdf_id")
+  sentToUserIds String[] @map("sent_to_user_ids")
+  emailCount    Int      @map("email_count")
+  failedCount   Int      @map("failed_count")
+  sentAt        DateTime @default(now()) @map("sent_at")
+
+  // Relations
+  pdf PDFSolution @relation(fields: [pdfId], references: [id], onDelete: Cascade)
+
+  @@index([pdfId])
+  @@map("pdf_notifications")
+}
+
+// Admin Operations
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  thaiName     String   @map("thai_name")
+  role         AdminRole
+  permissions  String[]
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  uploadedPDFs    PDFSolution[]
+  auditLogs       AuditLog[]
+  supportTickets  SupportTicket[]
+
+  @@map("admin_users")
+}
+
+model AuditLog {
+  id           String     @id @default(uuid())
+  adminId      String     @map("admin_id")
+  actionType   ActionType @map("action_type")
+  targetId     String     @map("target_id")
+  originalData Json       @map("original_data")
+  newData      Json       @map("new_data")
+  reason       String
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  // Relations
+  admin AdminUser @relation(fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([targetId])
+  @@map("audit_logs")
+}
+
+model SupportTicket {
+  id          String       @id @default(uuid())
+  userId      String       @map("user_id")
+  adminId     String       @map("admin_id")
+  issueType   IssueType    @map("issue_type")
+  description String
+  resolution  String?
+  status      TicketStatus @default(OPEN)
+  priority    Priority     @default(MEDIUM)
+  createdAt   DateTime     @default(now()) @map("created_at")
+  resolvedAt  DateTime?    @map("resolved_at")
+
+  // Relations
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  admin AdminUser @relation(fields: [adminId], references: [id])
+
+  @@index([userId])
+  @@index([adminId])
+  @@index([status])
+  @@map("support_tickets")
+}
+
+// Enums
+enum PackageType {
+  FREE
+  ADVANCED
+}
+
+enum Subject {
+  BIOLOGY
+  CHEMISTRY
+  PHYSICS
+}
+
+enum SessionTime {
+  MORNING   @map("09:00-12:00")
+  AFTERNOON @map("13:00-16:00")
+}
+
+enum PaymentType {
+  ADVANCED_PACKAGE
+  POST_EXAM_UPGRADE
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum AdminRole {
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum ActionType {
+  USER_UPDATE
+  CODE_REGEN
+  PDF_UPLOAD
+  CRISIS_RESOLUTION
+}
+
+enum IssueType {
+  CODE_PROBLEM
+  PAYMENT_ISSUE
+  RESULT_ERROR
+  PDF_ACCESS
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  ESCALATED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}

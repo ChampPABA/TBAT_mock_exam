@@ -1,0 +1,164 @@
+import Redis from "ioredis";
+import { Redis as UpstashRedis } from "@upstash/redis";
+
+// Local Redis for development
+const localRedis = new Redis({
+  host: "localhost",
+  port: 6379,
+  retryStrategy: (times) => {
+    const delay = Math.min(times * 50, 2000);
+    return delay;
+  },
+});
+
+// Upstash Redis for production
+const upstashRedis = process.env.UPSTASH_REDIS_REST_URL
+  ? new UpstashRedis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    })
+  : null;
+
+// Use Upstash in production, local Redis in development
+export const redis = upstashRedis || localRedis;
+
+// Cache keys
+export const cacheKeys = {
+  sessionCapacity: (sessionTime: string, date: string) => `session:capacity:${sessionTime}:${date}`,
+  examResult: (userId: string, examId: string) => `result:${userId}:${examId}`,
+  analytics: (userId: string) => `analytics:${userId}`,
+  userSession: (sessionToken: string) => `session:${sessionToken}`,
+  examCode: (code: string) => `exam:code:${code}`,
+  pdfDownload: (token: string) => `pdf:download:${token}`,
+};
+
+// Cache TTL (in seconds)
+export const cacheTTL = {
+  sessionCapacity: 60, // 1 minute
+  examResult: 3600, // 1 hour
+  analytics: 1800, // 30 minutes
+  userSession: 604800, // 7 days
+  examCode: 86400, // 1 day
+  pdfDownload: 86400, // 1 day
+};
+
+// Session capacity management
+export async function getSessionCapacity(sessionTime: string, date: string) {
+  const key = cacheKeys.sessionCapacity(sessionTime, date);
+
+  try {
+    const cached = await redis.get(key);
+    if (cached) {
+      return JSON.parse(cached as string);
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting session capacity from cache:", error);
+    return null;
+  }
+}
+
+export async function setSessionCapacity(sessionTime: string, date: string, capacity: any) {
+  const key = cacheKeys.sessionCapacity(sessionTime, date);
+
+  try {
+    await redis.setex(key, cacheTTL.sessionCapacity, JSON.stringify(capacity));
+    return true;
+  } catch (error) {
+    console.error("Error setting session capacity in cache:", error);
+    return false;
+  }
+}
+
+// Exam result caching
+export async function getCachedExamResult(userId: string, examId: string) {
+  const key = cacheKeys.examResult(userId, examId);
+
+  try {
+    const cached = await redis.get(key);
+    if (cached) {
+      return JSON.parse(cached as string);
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting exam result from cache:", error);
+    return null;
+  }
+}
+
+export async function cacheExamResult(userId: string, examId: string, result: any) {
+  const key = cacheKeys.examResult(userId, examId);
+
+  try {
+    await redis.setex(key, cacheTTL.examResult, JSON.stringify(result));
+    return true;
+  } catch (error) {
+    console.error("Error caching exam result:", error);
+    return false;
+  }
+}
+
+// Analytics caching
+export async function getCachedAnalytics(userId: string) {
+  const key = cacheKeys.analytics(userId);
+
+  try {
+    const cached = await redis.get(key);
+    if (cached) {
+      return JSON.parse(cached as string);
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting analytics from cache:", error);
+    return null;
+  }
+}
+
+export async function cacheAnalytics(userId: string, analytics: any) {
+  const key = cacheKeys.analytics(userId);
+
+  try {
+    await redis.setex(key, cacheTTL.analytics, JSON.stringify(analytics));
+    return true;
+  } catch (error) {
+    console.error("Error caching analytics:", error);
+    return false;
+  }
+}
+
+// Invalidate cache
+export async function invalidateCache(pattern: string) {
+  try {
+    if (localRedis) {
+      const keys = await localRedis.keys(pattern);
+      if (keys.length > 0) {
+        await localRedis.del(...keys);
+      }
+    } else if (upstashRedis) {
+      // Upstash doesn't support pattern-based deletion
+      // Need to handle this differently in production
+      console.warn("Pattern-based cache invalidation not supported in Upstash");
+    }
+    return true;
+  } catch (error) {
+    console.error("Error invalidating cache:", error);
+    return false;
+  }
+}
+
+// Health check
+export async function checkRedisConnection() {
+  try {
+    if (localRedis) {
+      const pong = await localRedis.ping();
+      return pong === "PONG";
+    } else if (upstashRedis) {
+      await upstashRedis.ping();
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Redis connection check failed:", error);
+    return false;
+  }
+}
