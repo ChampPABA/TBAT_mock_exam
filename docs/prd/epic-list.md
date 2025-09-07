@@ -14,7 +14,7 @@
 
 ### **Epic 3: Payment & Exam Code Generation**
 
-**Goal:** Implement Stripe payment processing for 690 THB Advanced packages and generate unique random exam codes (FREE-XXXXXXXX-SUBJECT / ADV-XXXXXXXX) with printable tickets.
+**Goal:** Implement Stripe payment processing for 690 THB Advanced packages and generate unique random exam codes (FREE-[8CHAR]-[SUBJECT] / ADV-[8CHAR]) with printable tickets.
 
 ### **Epic 4: Session Booking & Capacity Management**
 

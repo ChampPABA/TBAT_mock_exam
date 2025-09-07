@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?         // NextAuth.js standard field (maps to thai_name)
+  email         String          @unique
+  emailVerified DateTime?       // NextAuth.js standard field
+  image         String?         // NextAuth.js standard field
+  password_hash String?         // Custom field for credentials auth
+  thai_name     String?         // Custom TBAT field
+  phone         String?         // Custom TBAT field  
+  school        String?         // Custom TBAT field
+  line_id       String?         // Custom TBAT field
+  package_type  PackageType     @default(FREE)
+  is_upgraded   Boolean         @default(false)
+  pdpa_consent  Boolean         @default(false)
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+
+  // NextAuth.js Relations
+  accounts      Account[]
+  sessions      Session[]
+  
+  // Custom TBAT Relations
+  exam_codes    ExamCode[]
+  exam_results  ExamResult[]
+  payments      Payment[]
+
+  @@map("users")
+}
+
+// NextAuth.js required tables
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+  @@map("verification_tokens")
+}
+
+model ExamCode {
+  id           String      @id @default(cuid())
+  user_id      String
+  code         String      @unique
+  package_type PackageType
+  subject      Subject?
+  session_time SessionTime
+  is_used      Boolean     @default(false)
+  created_at   DateTime    @default(now())
+  used_at      DateTime?
+
+  // Relations
+  user         User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  exam_results ExamResult[]
+
+  @@map("exam_codes")
+}
+
+model ExamResult {
+  id              String   @id @default(cuid())
+  user_id         String
+  exam_code       String
+  subject_scores  Json     // Store as JSON: { biology?: number, chemistry?: number, physics?: number }
+  total_score     Int?     // ADVANCED only (combined 3 subjects)
+  completion_time Int      // in minutes
+  expires_at      DateTime
+  created_at      DateTime @default(now())
+
+  // Relations
+  user            User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  exam_code_ref   ExamCode @relation(fields: [exam_code], references: [code])
+
+  @@map("exam_results")
+}
+
+model Payment {
+  id                      String        @id @default(cuid())
+  user_id                 String
+  stripe_payment_intent_id String       @unique
+  amount                  Int          // in Thai Baht (690 or 290)
+  currency                String       @default("thb")
+  payment_type            PaymentType
+  status                  PaymentStatus @default(PENDING)
+  completed_at            DateTime?
+  created_at              DateTime      @default(now())
+
+  // Relations
+  user                    User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model ExamSession {
+  id           String      @id @default(cuid())
+  session_time SessionTime
+  capacity     Int         @default(10)
+  current_load Int         @default(0)
+  is_active    Boolean     @default(true)
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+
+  @@map("exam_sessions")
+}
+
+// Enums
+enum PackageType {
+  FREE
+  ADVANCED
+}
+
+enum Subject {
+  BIOLOGY
+  CHEMISTRY
+  PHYSICS
+}
+
+enum SessionTime {
+  MORNING   // 09:00-12:00
+  AFTERNOON // 13:00-16:00
+}
+
+enum PaymentType {
+  ADVANCED_PACKAGE
+  POST_EXAM_UPGRADE
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}

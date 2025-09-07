@@ -215,7 +215,7 @@ interface ExamCode {
   user_id: string; // Foreign key to User
   code: string; // FREE-[8CHAR]-[SUBJECT] or ADV-[8CHAR]
   package_type: "FREE" | "ADVANCED";
-  subject: "BIOLOGY" | "CHEMISTRY" | "PHYSICS";
+  subject?: "BIOLOGY" | "CHEMISTRY" | "PHYSICS"; // Required for FREE, null for ADVANCED
   session_time: "09:00-12:00" | "13:00-16:00";
   is_used: boolean; // Track exam completion
   created_at: Date;
@@ -374,7 +374,7 @@ interface SupportTicket {
 
 **Primary Relationships:**
 
-- User → ExamCode (1:many) - Users can have multiple exam codes
+- User → ExamCode (1:1 or 1:3) - FREE users have 1 code, ADVANCED users have 1 code covering 3 subjects
 - User → ExamResult (1:many) - Users can have results from multiple subjects
 - User → Payment (1:many) - Users can make multiple purchases
 - ExamResult → Analytics (1:1) - Each result has corresponding analytics
@@ -384,7 +384,7 @@ interface SupportTicket {
 **Business Logic Constraints:**
 
 - Free users: Maximum 1 ExamCode per registration
-- Advanced users: 3 ExamCodes (one per subject)
+- Advanced users: 1 ExamCode for all 3 subjects (ADV-[8CHAR])
 - PDF access: Advanced package required
 - Data expiry: Enforced at application level with database triggers
 

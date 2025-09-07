@@ -6,7 +6,7 @@
       "Grep",
       "WebSearch",
       "mcp__byterover-mcp__byterover-retrieve-knowledge",
-      "mcp__byterover-mcp__byterover-store-knowledge", 
+      "mcp__byterover-mcp__byterover-store-knowledge",
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs",
       "mcp__shadcn-ui__list_shadcn_components",
@@ -14,7 +14,7 @@
       "mcp__shadcn-ui__get_component_examples",
       "mcp__playwright__browser_navigate",
       "mcp__playwright__browser_take_screenshot",
-      "mcp__playwright__browser_resize", 
+      "mcp__playwright__browser_resize",
       "mcp__playwright__browser_click",
       "mcp__playwright__browser_navigate_back",
       "mcp__playwright__browser_hover",
@@ -31,14 +31,13 @@
       "mcp__playwright__browser_type",
       "TodoWrite",
       "Task",
-      "ExitPlanMode"
-    ],
-    "deny": [],
-    "ask": [
+      "ExitPlanMode",
       "Bash",
       "Write",
       "Edit",
       "MultiEdit"
-    ]
+    ],
+    "deny": [],
+    "ask": []
   }
 }

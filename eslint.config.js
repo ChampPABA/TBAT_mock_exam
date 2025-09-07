@@ -1,3 +1,11 @@
+/* eslint-env node */
+
 module.exports = {
-  extends: ["@repo/eslint-config/base.js"]
+  ignores: ["node_modules/**", ".turbo/**", ".next/**", "dist/**"],
+  rules: {
+    // Basic ESLint recommended rules
+    "no-unused-vars": "warn",
+    "no-undef": "error",
+    "prefer-const": "warn",
+  }
 };

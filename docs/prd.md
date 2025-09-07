@@ -248,7 +248,7 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 
 ### **Epic 3: Payment & Exam Code Generation**
 
-**Goal:** Implement Stripe payment processing for 690 THB Advanced packages and generate unique random exam codes (FREE-XXXXXXXX-SUBJECT / ADV-XXXXXXXX) with printable tickets.
+**Goal:** Implement Stripe payment processing for 690 THB Advanced packages and generate unique random exam codes (FREE-[8CHAR]-[SUBJECT] / ADV-[8CHAR]) with printable tickets.
 
 ### **Epic 4: Session Booking & Capacity Management**
 
@@ -575,7 +575,7 @@ so that users can register and login successfully with proper session management
 
 ## Epic 3: Payment & Exam Code Generation
 
-**Goal:** Implement Stripe payment processing for 690 THB Advanced packages and generate unique random exam codes (FREE-XXXXXXXX-SUBJECT / ADV-XXXXXXXX) with printable tickets.
+**Goal:** Implement Stripe payment processing for 690 THB Advanced packages and generate unique random exam codes (FREE-[8CHAR]-[SUBJECT] / ADV-[8CHAR]) with printable tickets.
 
 ### Story 3.1: UI/UX Mockup Implementation
 
@@ -587,7 +587,7 @@ so that the payment experience is optimized for mobile Thai users and exam code 
 
 **AC1:** Payment modal mockup created with Stripe elements integration and Thai Baht (฿690) display
 
-**AC2:** Exam code display mockup showing FREE-A1B2C3D4-PHY and ADV-E5F6G7H8 format examples
+**AC2:** Exam code display mockup showing FREE-A1B2C3D4-PHYSICS and ADV-E5F6G7H8 format examples
 
 **AC3:** Printable ticket mockup with QR code, exam details, and session information
 
@@ -1405,7 +1405,7 @@ The TBAT Mock Exam Platform PRD is comprehensive, properly structured, and ready
 >
 > 1. **Foundation First Infrastructure** (Epic 0) supporting 300+ concurrent users with 99.9% uptime
 > 2. **Next.js 14+ Full-Stack Architecture** with Neon PostgreSQL and Stripe payment integration
-> 3. **Exam Code Generation System** with unique random IDs (FREE-XXXXXXXX-SUBJECT / ADV-XXXXXXXX)
+> 3. **Exam Code Generation System** with unique random IDs (FREE-[8CHAR]-[SUBJECT] / ADV-[8CHAR])
 > 4. **Advanced Analytics Engine** with weighted scoring and statistical calculations
 > 5. **Mobile Performance Optimization** achieving <2 second load times for Thai 3G networks
 >

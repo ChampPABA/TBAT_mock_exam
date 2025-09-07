@@ -28,7 +28,7 @@
 >
 > 1. **Foundation First Infrastructure** (Epic 0) supporting 300+ concurrent users with 99.9% uptime
 > 2. **Next.js 14+ Full-Stack Architecture** with Neon PostgreSQL and Stripe payment integration
-> 3. **Exam Code Generation System** with unique random IDs (FREE-XXXXXXXX-SUBJECT / ADV-XXXXXXXX)
+> 3. **Exam Code Generation System** with unique random IDs (FREE-[8CHAR]-[SUBJECT] / ADV-[8CHAR])
 > 4. **Advanced Analytics Engine** with weighted scoring and statistical calculations
 > 5. **Mobile Performance Optimization** achieving <2 second load times for Thai 3G networks
 >
