@@ -12,7 +12,10 @@ architecture:
   architectureVersion: v4
   architectureSharded: true
   architectureShardedLocation: docs/architecture
-customTechnicalDocuments: null
+customTechnicalDocuments:
+  - docs/architecture/section-2-high-level-architecture.md
+  - docs/architecture/section-3-tech-stack.md
+  - docs/architecture/section-4-data-models.md
 devLoadAlwaysFiles:
   - docs/architecture/coding-standards.md
   - docs/architecture/tech-stack.md
