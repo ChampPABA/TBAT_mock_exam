@@ -33,8 +33,16 @@ COPY --from=builder /app/apps/web/.next/standalone ./
 COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder /app/apps/web/public ./apps/web/public
 
+# Copy Prisma files for production
+COPY --from=builder /app/apps/web/prisma ./apps/web/prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+
 # Set correct permissions
 RUN chown nextjs:nodejs apps/web
+
+# Health check script
+RUN echo '#!/bin/sh\nwget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1' > /healthcheck.sh \
+    && chmod +x /healthcheck.sh
 
 USER nextjs
 
@@ -43,4 +51,36 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
+# Production health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD /healthcheck.sh
+
 CMD ["node", "apps/web/server.js"]
+
+# Development stage with hot reload
+FROM base AS development
+WORKDIR /app
+
+# Install curl for health checks
+RUN apk add --no-cache curl libc6-compat
+
+# Copy package files
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
+
+# Install all dependencies including dev dependencies
+RUN corepack enable pnpm && pnpm install
+
+# Copy source code
+COPY . .
+
+EXPOSE 3000
+
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Development health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:3000/api/health || exit 1
+
+# Hot reload command
+CMD ["npm", "run", "dev"]

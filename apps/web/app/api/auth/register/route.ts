@@ -71,18 +71,14 @@ export const POST = withRateLimit(
       const user = await prisma.user.create({
         data: {
           email: email.toLowerCase(),
-          hashedPassword,
-          name,
-          thaiName: thaiName || "",
-          phoneNumber,
+          passwordHash: hashedPassword,
+          thaiName: thaiName || name || "",
+          phone: phoneNumber,
           pdpaConsent,
-          emailVerificationToken: verificationToken,
-          emailVerificationExpiry: verificationExpiry,
         },
         select: {
           id: true,
           email: true,
-          name: true,
           thaiName: true,
           createdAt: true,
         },
@@ -96,7 +92,7 @@ export const POST = withRateLimit(
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <h2>ยินดีต้อนรับสู่ TBAT Mock Exam Platform</h2>
-              <p>สวัสดีคุณ ${name},</p>
+              <p>สวัสดีคุณ ${user.thaiName},</p>
               <p>ขอบคุณที่ลงทะเบียนกับเรา กรุณายืนยันอีเมลของคุณโดยคลิกลิงก์ด้านล่าง:</p>
               <a href="${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${verificationToken}" 
                  style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
@@ -117,12 +113,15 @@ export const POST = withRateLimit(
         // Continue with registration even if email fails
       }
 
-      // Log registration for audit
-      await prisma.auditLog.create({
+      // Log registration for security audit
+      await prisma.securityLog.create({
         data: {
-          action: "USER_REGISTERED",
+          eventType: "AUTHENTICATION_SUCCESS",
           userId: user.id,
+          ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown",
+          userAgent: req.headers.get("user-agent") || "unknown",
           metadata: {
+            action: "USER_REGISTERED",
             email: user.email,
             timestamp: new Date().toISOString(),
           },
@@ -137,7 +136,6 @@ export const POST = withRateLimit(
           user: {
             id: user.id,
             email: user.email,
-            name: user.name,
             thaiName: user.thaiName,
           },
         },

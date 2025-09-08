@@ -1,0 +1,91 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "cd apps/web && pnpm build",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "pnpm install",
+  "devCommand": "cd apps/web && pnpm dev",
+  "regions": ["sin1"],
+  "functions": {
+    "apps/web/app/api/**/*": {
+      "maxDuration": 30,
+      "memory": 512,
+      "runtime": "nodejs20.x"
+    },
+    "apps/web/app/*": {
+      "maxDuration": 10,
+      "memory": 256,
+      "runtime": "edge"
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_VERCEL_ENV": "@vercel_env",
+    "NEXT_PUBLIC_VERCEL_URL": "@vercel_url"
+  },
+  "crons": [
+    {
+      "path": "/api/cron/cleanup",
+      "schedule": "0 2 * * *"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options", 
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.(jpg|jpeg|png|gif|ico|svg|webp))",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/_next/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/robots.txt",
+      "destination": "/api/robots"
+    }
+  ],
+  "redirects": [],
+  "github": {
+    "enabled": true,
+    "autoAlias": true
+  }
+}

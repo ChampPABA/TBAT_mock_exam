@@ -149,17 +149,47 @@ export const emailTemplates = {
 };
 
 // Send email function
-export async function sendEmail(to: string, template: keyof typeof emailTemplates, data: any) {
+// Overloaded function to support both template and direct email sending
+export async function sendEmail(params: {
+  to: string;
+  subject: string;
+  html: string;
+}): Promise<{ success: boolean; data?: any; error?: any }>;
+export async function sendEmail(
+  to: string,
+  template: keyof typeof emailTemplates,
+  data: any
+): Promise<{ success: boolean; data?: any; error?: any }>;
+export async function sendEmail(
+  toOrParams: string | { to: string; subject: string; html: string },
+  template?: keyof typeof emailTemplates,
+  data?: any
+): Promise<{ success: boolean; data?: any; error?: any }> {
   try {
-    const emailTemplate = emailTemplates[template];
-
-    const result = await resend.emails.send({
-      from: process.env.EMAIL_FROM!,
-      to,
-      subject: emailTemplate.subject,
-      html: emailTemplate.html(data),
-    });
-
+    let emailData: { from: string; to: string; subject: string; html: string };
+    
+    if (typeof toOrParams === 'object') {
+      // Direct email sending
+      emailData = {
+        from: process.env.EMAIL_FROM!,
+        to: toOrParams.to,
+        subject: toOrParams.subject,
+        html: toOrParams.html,
+      };
+    } else if (template) {
+      // Template-based email sending
+      const emailTemplate = emailTemplates[template];
+      emailData = {
+        from: process.env.EMAIL_FROM!,
+        to: toOrParams,
+        subject: emailTemplate.subject,
+        html: emailTemplate.html(data),
+      };
+    } else {
+      throw new Error("Invalid parameters for sendEmail");
+    }
+    
+    const result = await resend.emails.send(emailData);
     return { success: true, data: result };
   } catch (error) {
     console.error("Error sending email:", error);

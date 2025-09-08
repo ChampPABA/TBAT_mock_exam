@@ -1,0 +1,209 @@
+# Secure Docker Compose Configuration for TBAT Production Environment
+# This configuration includes security enhancements for production deployment
+
+services:
+  # Next.js Application with Security Hardening
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.docker
+    environment:
+      # Override sensitive defaults
+      - NODE_ENV=production
+      - DOCKER_ENVIRONMENT=true
+      - SENTRY_ENABLED=true
+      - RATE_LIMIT_ENABLED=true
+      - PDPA_CONSENT_REQUIRED=true
+    volumes:
+      # Read-only volumes for code
+      - ./apps/web:/app/apps/web:ro
+      - ./packages:/app/packages:ro
+      # Writable volumes for runtime
+      - /app/node_modules
+      - /app/apps/web/node_modules
+      - /app/apps/web/.next
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tbat-network
+    security_opt:
+      - no-new-privileges:true
+    read_only: false  # Next.js needs write access for .next
+    tmpfs:
+      - /tmp
+      - /app/apps/web/.next/cache
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    command: >
+      sh -c "
+        cd apps/web &&
+        npx prisma generate &&
+        npx prisma migrate deploy &&
+        npm run start
+      "
+
+  # PostgreSQL Database with Security Configuration
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "127.0.0.1:5432:5432"  # Bind only to localhost
+    environment:
+      POSTGRES_USER: ${DB_USER:-tbat_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Database password required}
+      POSTGRES_DB: ${DB_NAME:-tbat_db}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --auth-host=scram-sha-256 --auth-local=scram-sha-256"
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      # Security configuration
+      - ./docker/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    networks:
+      - tbat-network
+    security_opt:
+      - no-new-privileges:true
+    read_only: false  # PostgreSQL needs write access
+    tmpfs:
+      - /tmp
+      - /run
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-tbat_user} -d ${DB_NAME:-tbat_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  # Redis with Security Configuration
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "127.0.0.1:6379:6379"  # Bind only to localhost
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:?Redis password required}
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --appendonly yes
+      --appendfsync everysec
+    volumes:
+      - redis_data:/data
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - tbat-network
+    security_opt:
+      - no-new-privileges:true
+    user: redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+  # Nginx Reverse Proxy (Production Only)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - web
+    networks:
+      - tbat-network
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/postgres
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/redis
+
+networks:
+  tbat-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+    driver_opts:
+      com.docker.network.bridge.name: tbat_bridge
+
+# Security Notes:
+# 1. Use secrets management for production (Docker Swarm secrets or external vault)
+# 2. Regularly update base images for security patches
+# 3. Monitor container logs for suspicious activity
+# 4. Implement network segmentation in production
+# 5. Use TLS/SSL for all external communications
+# 6. Rotate database and Redis passwords regularly
+# 7. Implement backup and disaster recovery procedures
+# 8. Use container scanning tools to check for vulnerabilities
+# 9. Limit container capabilities and use read-only filesystems where possible
+# 10. Implement proper logging and monitoring with Sentry

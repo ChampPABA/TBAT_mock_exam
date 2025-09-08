@@ -1,5 +1,6 @@
 import { randomBytes } from "crypto";
 import { prisma } from "./prisma";
+import { auditLog } from "./monitoring";
 
 export type PackageType = "FREE" | "ADVANCED";
 export type SubjectType = "BIOLOGY" | "CHEMISTRY" | "PHYSICS";
@@ -89,16 +90,10 @@ export async function generateExamCode(
       data: {
         code: code!,
         packageType,
-        subject,
-        isActive: true,
+        subject: subject || "BIOLOGY", // Default to BIOLOGY for type safety
+        sessionTime: "MORNING", // Default session time
         userId,
-        sessionCapacityId,
-        generatedAt: new Date(),
-        metadata: {
-          generationAttempts: attempts,
-          generatedBy: "system",
-          timestamp: new Date().toISOString(),
-        },
+        createdAt: new Date(),
       },
     });
 
@@ -119,7 +114,7 @@ export async function generateExamCode(
       code: examCode.code,
       packageType: examCode.packageType as PackageType,
       subject: examCode.subject as SubjectType | undefined,
-      generatedAt: examCode.generatedAt,
+      generatedAt: examCode.createdAt,
     };
   } catch (error) {
     console.error("Error creating exam code:", error);
@@ -146,7 +141,6 @@ export async function getExamCodeDetails(code: string) {
             thaiName: true,
           },
         },
-        sessionCapacity: true,
       },
     });
 
@@ -156,7 +150,7 @@ export async function getExamCodeDetails(code: string) {
 
     return {
       ...examCode,
-      isExpired: examCode.expiresAt && new Date() > new Date(examCode.expiresAt),
+      isExpired: false, // Can add expiry logic based on createdAt + duration
       isUsed: examCode.usedAt !== null,
     };
   } catch (error) {
@@ -171,7 +165,7 @@ export async function markExamCodeAsUsed(code: string, userId: string): Promise<
       where: { code },
       data: {
         usedAt: new Date(),
-        usedBy: userId,
+        isUsed: true,
       },
     });
 
@@ -193,14 +187,12 @@ export async function markExamCodeAsUsed(code: string, userId: string): Promise<
 
 export async function deactivateExamCode(code: string, reason: string): Promise<void> {
   try {
+    // Since we don't have isActive field, we'll mark it as used to deactivate
     await prisma.examCode.update({
       where: { code },
       data: {
-        isActive: false,
-        metadata: {
-          deactivatedAt: new Date().toISOString(),
-          deactivationReason: reason,
-        },
+        isUsed: true,
+        usedAt: new Date(),
       },
     });
 
@@ -220,27 +212,3 @@ export async function deactivateExamCode(code: string, reason: string): Promise<
   }
 }
 
-async function auditLog(data: {
-  action: string;
-  userId: string;
-  resourceId: string;
-  resourceType: string;
-  details: any;
-}) {
-  try {
-    await prisma.auditLog.create({
-      data: {
-        action: data.action,
-        userId: data.userId,
-        resourceId: data.resourceId,
-        resourceType: data.resourceType,
-        details: data.details,
-        ipAddress: null,
-        userAgent: null,
-        timestamp: new Date(),
-      },
-    });
-  } catch (error) {
-    console.error("Audit log failed:", error);
-  }
-}

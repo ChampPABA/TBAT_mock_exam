@@ -38,22 +38,22 @@ export const POST = withRateLimit(
         where: { email: email.toLowerCase() },
       });
 
-      if (!user || !user.hashedPassword) {
+      if (!user || !user.passwordHash) {
         // Use generic error message to prevent user enumeration
         return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
       }
 
       // Verify password
-      const isValidPassword = await bcrypt.compare(password, user.hashedPassword);
+      const isValidPassword = await bcrypt.compare(password, user.passwordHash!);
 
       if (!isValidPassword) {
         return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
       }
 
-      // Check if email is verified (if required)
-      if (!user.emailVerified) {
+      // Check if account is active
+      if (!user.isActive) {
         return NextResponse.json(
-          { error: "Please verify your email before signing in" },
+          { error: "Your account has been deactivated" },
           { status: 403 }
         );
       }
@@ -61,7 +61,7 @@ export const POST = withRateLimit(
       // Update last login time
       await prisma.user.update({
         where: { id: user.id },
-        data: { updatedAt: new Date() },
+        data: { lastLoginAt: new Date() },
       });
 
       // Return success with user info (excluding sensitive data)
@@ -70,9 +70,8 @@ export const POST = withRateLimit(
         user: {
           id: user.id,
           email: user.email,
-          name: user.name,
           thaiName: user.thaiName,
-          role: user.role,
+          packageType: user.packageType,
         },
         message: "Sign in successful. Use NextAuth session for authentication.",
       });

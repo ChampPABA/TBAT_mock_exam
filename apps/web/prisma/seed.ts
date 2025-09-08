@@ -115,15 +115,16 @@ async function main() {
   // Free users get 1 exam code each
   for (let i = 0; i < 5; i++) {
     const user = testUsers[i];
+    if (!user) continue;
     const subjects = ["BIOLOGY", "CHEMISTRY", "PHYSICS"];
     const subject = subjects[i % 3];
 
     examCodes.push({
       userId: user.id,
       code: `FREE-${String(Math.random()).substring(2, 10)}-${subject}`,
-      packageType: "FREE",
-      subject,
-      sessionTime: i % 2 === 0 ? "MORNING" : "AFTERNOON",
+      packageType: "FREE" as any,
+      subject: subject as any,
+      sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
       isUsed: false,
     });
   }
@@ -131,31 +132,32 @@ async function main() {
   // Advanced users get 3 exam codes (one per subject)
   for (let i = 5; i < 10; i++) {
     const user = testUsers[i];
+    if (!user) continue;
     const baseCode = String(Math.random()).substring(2, 10);
 
     examCodes.push(
       {
         userId: user.id,
         code: `ADV-${baseCode}-BIO`,
-        packageType: "ADVANCED",
-        subject: "BIOLOGY",
-        sessionTime: i % 2 === 0 ? "MORNING" : "AFTERNOON",
+        packageType: "ADVANCED" as any,
+        subject: "BIOLOGY" as any,
+        sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
         isUsed: false,
       },
       {
         userId: user.id,
         code: `ADV-${baseCode}-CHEM`,
-        packageType: "ADVANCED",
-        subject: "CHEMISTRY",
-        sessionTime: i % 2 === 0 ? "MORNING" : "AFTERNOON",
+        packageType: "ADVANCED" as any,
+        subject: "CHEMISTRY" as any,
+        sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
         isUsed: false,
       },
       {
         userId: user.id,
         code: `ADV-${baseCode}-PHY`,
-        packageType: "ADVANCED",
-        subject: "PHYSICS",
-        sessionTime: i % 2 === 0 ? "MORNING" : "AFTERNOON",
+        packageType: "ADVANCED" as any,
+        subject: "PHYSICS" as any,
+        sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
         isUsed: false,
       }
     );
@@ -170,14 +172,15 @@ async function main() {
 
   for (let i = 5; i < 10; i++) {
     const user = testUsers[i];
+    if (!user) continue;
 
     payments.push({
       userId: user.id,
       stripePaymentIntentId: `pi_test_${String(Math.random()).substring(2, 20)}`,
       amount: 69000, // 690 THB
       currency: "thb",
-      paymentType: "ADVANCED_PACKAGE",
-      status: "COMPLETED",
+      paymentType: "ADVANCED_PACKAGE" as any,
+      status: "COMPLETED" as any,
       completedAt: new Date(),
     });
   }
@@ -265,7 +268,7 @@ async function main() {
   // Create sample support ticket
   await prisma.supportTicket.create({
     data: {
-      userId: testUsers[0].id,
+      userId: testUsers[0]?.id || "",
       adminId: normalAdmin.id,
       issueType: "CODE_PROBLEM",
       description: "ไม่สามารถใช้รหัสสอบได้",

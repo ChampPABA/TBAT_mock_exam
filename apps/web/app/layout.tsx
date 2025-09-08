@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Prompt } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { WebVitalsReporter } from "@/components/web-vitals-reporter";
 import "./globals.css";
 
 const prompt = Prompt({
@@ -21,7 +24,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th">
-      <body className={`${prompt.variable} font-prompt`}>{children}</body>
+      <body className={`${prompt.variable} font-prompt`}>
+        {children}
+        <WebVitalsReporter />
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   );
 }

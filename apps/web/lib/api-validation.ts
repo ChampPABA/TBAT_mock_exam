@@ -1,26 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z, ZodError, ZodSchema } from "zod";
+import DOMPurify from "dompurify";
+import { JSDOM } from "jsdom";
 
 /**
  * API Validation Middleware using Zod
  * Provides consistent validation and error handling for API routes
  */
 
+// Initialize DOMPurify with JSDOM for Node.js environment
+const window = new JSDOM("").window;
+const purify = DOMPurify(window as any);
+
 // Common validation schemas
 export const commonSchemas = {
   // Email validation
-  email: z.string().email("Invalid email format"),
+  email: z.string().email("Invalid email format / รูปแบบอีเมลไม่ถูกต้อง"),
 
-  // Thai phone number validation
-  thaiPhone: z.string().regex(/^(\+66|0)[0-9]{8,9}$/, "Invalid Thai phone number format"),
+  // Thai phone number validation (10 digits)
+  thaiPhone: z
+    .string()
+    .regex(/^[0-9]{10}$/, "Phone must be 10 digits / เบอร์โทรต้องเป็นตัวเลข 10 หลัก"),
 
-  // Strong password validation
+  // Strong password validation (simplified for Thai users)
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
+    .min(8, "Password must be at least 8 characters / รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร")
+    .regex(/[a-zA-Z]/, "Password must contain letters / รหัสผ่านต้องมีตัวอักษร")
+    .regex(/[0-9]/, "Password must contain numbers / รหัสผ่านต้องมีตัวเลข"),
+
+  // Thai name validation
+  thaiName: z
+    .string()
+    .min(2, "Name too short / ชื่อสั้นเกินไป")
+    .max(100, "Name too long / ชื่อยาวเกินไป")
+    .refine(
+      (val) => /^[ก-๙a-zA-Z\s\.]+$/.test(val),
+      "Name can only contain Thai/English letters / ชื่อต้องเป็นภาษาไทยหรืออังกฤษเท่านั้น"
+    ),
 
   // MongoDB ObjectId validation
   objectId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ID format"),
@@ -52,22 +69,105 @@ export const commonSchemas = {
   }),
 };
 
-// Validation schemas for specific endpoints
-export const apiSchemas = {
-  // User update schema
-  updateUser: z.object({
-    name: z.string().min(2).optional(),
-    thaiName: z.string().min(2).optional(),
-    phoneNumber: commonSchemas.thaiPhone.optional(),
-    schoolName: z.string().min(2).optional(),
-    targetMedicalSchool: z.string().optional(),
+// Extended validation schemas for comprehensive input validation
+export const extendedSchemas = {
+  // School name with Thai support
+  schoolName: z
+    .string()
+    .min(3, "School name too short / ชื่อโรงเรียนสั้นเกินไป")
+    .max(200, "School name too long / ชื่อโรงเรียนยาวเกินไป")
+    .transform((val) => purify.sanitize(val)),
+
+  // Exam subject validation
+  examSubject: z.enum(["BIOLOGY", "CHEMISTRY", "PHYSICS"], {
+    message: "Invalid subject / วิชาไม่ถูกต้อง",
   }),
 
-  // Exam code generation
+  // Score validation (0-100)
+  examScore: z
+    .number()
+    .min(0, "Score cannot be negative / คะแนนต้องไม่ติดลบ")
+    .max(100, "Score cannot exceed 100 / คะแนนต้องไม่เกิน 100")
+    .int("Score must be whole number / คะแนนต้องเป็นจำนวนเต็ม"),
+
+  // Payment amount in THB
+  paymentAmount: z
+    .number()
+    .positive("Amount must be positive / จำนวนเงินต้องเป็นบวก")
+    .multipleOf(0.01, "Invalid amount format / รูปแบบจำนวนเงินไม่ถูกต้อง")
+    .max(100000, "Amount too large / จำนวนเงินมากเกินไป"),
+
+  // Exam code pattern validation
+  examCode: z
+    .string()
+    .refine(
+      (val) => /^(FREE-[A-Z0-9]{8}-(BIOLOGY|CHEMISTRY|PHYSICS)|ADV-[A-Z0-9]{8})$/.test(val),
+      "Invalid exam code format / รูปแบบรหัสสอบไม่ถูกต้อง"
+    ),
+
+  // Session capacity ID
+  sessionCapacityId: z
+    .string()
+    .uuid("Invalid session ID / รหัสเซสชันไม่ถูกต้อง"),
+
+  // Thai citizen ID (13 digits)
+  thaiCitizenId: z
+    .string()
+    .regex(/^[0-9]{13}$/, "Thai ID must be 13 digits / เลขบัตรประชาชนต้องเป็น 13 หลัก")
+    .optional(),
+};
+
+// Validation schemas for specific endpoints
+export const apiSchemas = {
+  // User registration schema
+  registerUser: z.object({
+    email: commonSchemas.email,
+    password: commonSchemas.password,
+    thaiName: commonSchemas.thaiName,
+    phone: commonSchemas.thaiPhone,
+    school: extendedSchemas.schoolName,
+    packageType: z.enum(["FREE", "ADVANCED"]),
+    pdpaConsent: commonSchemas.pdpaConsent,
+  }).transform((data) => ({
+    ...data,
+    thaiName: purify.sanitize(data.thaiName),
+    school: purify.sanitize(data.school),
+  })),
+
+  // User update schema
+  updateUser: z.object({
+    thaiName: commonSchemas.thaiName.optional(),
+    phone: commonSchemas.thaiPhone.optional(),
+    school: extendedSchemas.schoolName.optional(),
+    targetMedicalSchool: z.string().max(200).optional(),
+  }).transform((data) => {
+    const sanitized: any = {};
+    if (data.thaiName) sanitized.thaiName = purify.sanitize(data.thaiName);
+    if (data.school) sanitized.school = purify.sanitize(data.school);
+    if (data.targetMedicalSchool) sanitized.targetMedicalSchool = purify.sanitize(data.targetMedicalSchool);
+    if (data.phone) sanitized.phone = data.phone;
+    return sanitized;
+  }),
+
+  // Exam code generation with subject validation
   generateExamCode: z.object({
     packageType: z.enum(["FREE", "ADVANCED"]),
-    sessionId: z.string(),
-  }),
+    subject: extendedSchemas.examSubject.optional(),
+    sessionCapacityId: extendedSchemas.sessionCapacityId.optional(),
+  }).refine(
+    (data) => {
+      if (data.packageType === "FREE" && !data.subject) {
+        return false;
+      }
+      if (data.packageType === "ADVANCED" && data.subject) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "FREE package requires subject, ADVANCED package must not have subject / แพ็กเกจฟรีต้องระบุวิชา แพ็กเกจขั้นสูงไม่ต้องระบุวิชา",
+    }
+  ),
 
   // Payment creation
   createPayment: z.object({
@@ -76,18 +176,37 @@ export const apiSchemas = {
     currency: z.literal("THB"),
   }),
 
-  // Exam submission
+  // Exam submission with validation
   submitExam: z.object({
-    examCodeId: z.string(),
-    answers: z.array(
-      z.object({
-        questionId: z.string(),
-        answer: z.string(),
-        timeSpent: z.number().int().nonnegative(),
-      })
-    ),
-    totalTimeSpent: z.number().int().positive(),
-  }),
+    examCode: extendedSchemas.examCode,
+    subject: extendedSchemas.examSubject,
+    answers: z
+      .array(
+        z.object({
+          questionId: z.string().uuid(),
+          answer: z.enum(["A", "B", "C", "D", "E"]),
+          timeSpent: z.number().int().min(0).max(300), // Max 5 minutes per question
+        })
+      )
+      .min(1, "At least one answer required / ต้องมีคำตอบอย่างน้อย 1 ข้อ")
+      .max(100, "Too many answers / คำตอบมากเกินไป"),
+    totalTimeSpent: z
+      .number()
+      .int()
+      .min(60, "Exam too short / เวลาสอบน้อยเกินไป")
+      .max(10800, "Exam time exceeded / เวลาสอบเกินกำหนด"), // Max 3 hours
+    startedAt: z.string().datetime(),
+    completedAt: z.string().datetime(),
+  }).refine(
+    (data) => {
+      const start = new Date(data.startedAt);
+      const end = new Date(data.completedAt);
+      return end > start;
+    },
+    {
+      message: "Completion time must be after start time / เวลาส่งต้องมาหลังเวลาเริ่ม",
+    }
+  ),
 
   // Support ticket creation
   createTicket: z.object({
@@ -238,24 +357,108 @@ export function withFullValidation<B, Q>(
 }
 
 /**
- * Sanitize user input to prevent XSS attacks
+ * Sanitize user input using DOMPurify to prevent XSS attacks
  */
 export function sanitizeInput(input: string): string {
-  return input
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    .replace(/\//g, "&#x2F;");
+  return purify.sanitize(input, {
+    ALLOWED_TAGS: [],
+    ALLOWED_ATTR: [],
+    KEEP_CONTENT: true,
+  });
+}
+
+/**
+ * Sanitize HTML content with allowed tags
+ */
+export function sanitizeHTML(html: string): string {
+  return purify.sanitize(html, {
+    ALLOWED_TAGS: ["b", "i", "em", "strong", "a", "p", "br"],
+    ALLOWED_ATTR: ["href", "target"],
+    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i,
+  });
 }
 
 /**
  * Validate and sanitize Thai language input
  */
-export function validateThaiInput(input: string): boolean {
-  // Check if string contains Thai characters
+export function validateThaiInput(input: string): {
+  isValid: boolean;
+  hasThai: boolean;
+  sanitized: string;
+} {
+  const sanitized = sanitizeInput(input);
   const thaiRegex = /[\u0E00-\u0E7F]/;
-  return thaiRegex.test(input);
+  const hasThai = thaiRegex.test(sanitized);
+  
+  // Check for malicious patterns
+  const maliciousPatterns = [
+    /<script/i,
+    /javascript:/i,
+    /on\w+=/i,
+    /eval\(/i,
+    /alert\(/i,
+  ];
+  
+  const isValid = !maliciousPatterns.some(pattern => pattern.test(input));
+  
+  return {
+    isValid,
+    hasThai,
+    sanitized,
+  };
+}
+
+/**
+ * Validate file upload
+ */
+export const fileUploadSchema = z.object({
+  filename: z.string().max(255),
+  mimetype: z.enum([
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+  ], {
+    message: "Invalid file type / ประเภทไฟล์ไม่ถูกต้อง",
+  }),
+  size: z
+    .number()
+    .max(10 * 1024 * 1024, "File too large (max 10MB) / ไฟล์ใหญ่เกินไป (สูงสุด 10MB)"),
+});
+
+/**
+ * API Error Response with Thai support
+ */
+export function createErrorResponse(
+  message: string,
+  messageThai?: string,
+  statusCode: number = 400
+): NextResponse {
+  return NextResponse.json(
+    {
+      error: message,
+      errorThai: messageThai || message,
+      timestamp: new Date().toISOString(),
+    },
+    { status: statusCode }
+  );
+}
+
+/**
+ * Success Response with Thai support
+ */
+export function createSuccessResponse<T>(
+  data: T,
+  message?: string,
+  messageThai?: string
+): NextResponse {
+  return NextResponse.json({
+    success: true,
+    message,
+    messageThai,
+    data,
+    timestamp: new Date().toISOString(),
+  });
 }
 
 /**

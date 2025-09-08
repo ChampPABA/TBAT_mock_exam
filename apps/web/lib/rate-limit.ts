@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
+import { logSecurityEvent, SecurityEventType, monitorRateLimit } from "./monitoring";
+import crypto from "crypto";
 
 // Rate limiting configuration
 export interface RateLimitConfig {
@@ -7,6 +9,8 @@ export interface RateLimitConfig {
   max: number; // Maximum requests in window
   message?: string; // Custom error message
   keyGenerator?: (req: NextRequest) => string; // Custom key generator
+  byUser?: boolean; // Enable user-based rate limiting
+  byIP?: boolean; // Enable IP-based rate limiting (default true)
 }
 
 // Default configurations for different endpoints
@@ -15,26 +19,43 @@ export const rateLimitConfigs = {
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 5, // 5 attempts per window
     message: "Too many authentication attempts. Please try again later.",
+    byUser: true, // Track by user for authenticated requests
+    byIP: true, // Also track by IP
   },
   register: {
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 3, // 3 registration attempts per hour
     message: "Too many registration attempts. Please try again later.",
+    byUser: false, // Can't track by user for registration
+    byIP: true,
   },
   passwordReset: {
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 3, // 3 password reset attempts per hour
     message: "Too many password reset requests. Please try again later.",
+    byUser: true,
+    byIP: true,
   },
   api: {
     windowMs: 60 * 1000, // 1 minute
     max: 100, // 100 requests per minute for general API
     message: "Too many requests. Please slow down.",
+    byUser: true,
+    byIP: true,
   },
   payment: {
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 10, // 10 payment attempts per hour
     message: "Too many payment attempts. Please try again later.",
+    byUser: true, // Critical: track by user for payments
+    byIP: true,
+  },
+  pdpa: {
+    windowMs: 24 * 60 * 60 * 1000, // 24 hours
+    max: 3, // 3 PDPA requests per day
+    message: "Too many PDPA requests. Please try again tomorrow.",
+    byUser: true,
+    byIP: true,
   },
 } as const;
 
@@ -51,118 +72,247 @@ const redis =
 const memoryStore = new Map<string, { count: number; resetTime: number }>();
 
 /**
+ * Get user ID from request (from JWT token or session)
+ */
+function getUserId(req: NextRequest): string | null {
+  // Try to get user ID from authorization header
+  const authHeader = req.headers.get("authorization");
+  if (authHeader?.startsWith("Bearer ")) {
+    const token = authHeader.substring(7);
+    try {
+      // Decode JWT token (simplified - in production, verify signature)
+      const tokenPart = token.split(".")[1];
+      if (tokenPart) {
+        const payload = JSON.parse(Buffer.from(tokenPart, "base64").toString());
+        return payload.userId || payload.sub || null;
+      }
+    } catch {
+      // Invalid token
+    }
+  }
+  
+  // Try to get from cookie session
+  const sessionCookie = req.cookies.get("session");
+  if (sessionCookie) {
+    try {
+      const session = JSON.parse(sessionCookie.value);
+      return session.userId || null;
+    } catch {
+      // Invalid session
+    }
+  }
+  
+  return null;
+}
+
+/**
  * Rate limiting middleware for Next.js API routes
  * Uses Upstash Redis in production, in-memory store in development
+ * Supports both IP-based and user-based rate limiting
  */
 export async function rateLimit(
   req: NextRequest,
   config: RateLimitConfig = rateLimitConfigs.api
 ): Promise<NextResponse | null> {
-  // Get client identifier (IP address or custom key)
-  const identifier = config.keyGenerator ? config.keyGenerator(req) : getClientIdentifier(req);
-
-  const key = `rate_limit:${identifier}:${req.nextUrl.pathname}`;
   const now = Date.now();
   const resetTime = now + config.windowMs;
+  const byIP = config.byIP !== false; // Default to true
+  const byUser = config.byUser === true;
+  
+  const identifiers: string[] = [];
+  
+  // Add IP-based identifier
+  if (byIP) {
+    const ipIdentifier = config.keyGenerator ? config.keyGenerator(req) : getClientIdentifier(req);
+    identifiers.push(`ip:${ipIdentifier}`);
+  }
+  
+  // Add user-based identifier
+  if (byUser) {
+    const userId = getUserId(req);
+    if (userId) {
+      identifiers.push(`user:${userId}`);
+    }
+  }
+  
+  // If no identifiers, allow request
+  if (identifiers.length === 0) {
+    return null;
+  }
+  
+  // Check rate limits for all identifiers
+  for (const identifier of identifiers) {
+    const key = `rate_limit:${identifier}:${req.nextUrl.pathname}`;
+    
+    try {
+      if (redis) {
+        // Use Redis for rate limiting in production
+        const current = await redis.get<{ count: number; resetTime: number }>(key);
 
-  try {
-    if (redis) {
-      // Use Redis for rate limiting in production
-      const current = await redis.get<{ count: number; resetTime: number }>(key);
+        if (current) {
+          if (now > current.resetTime) {
+            // Window expired, reset counter
+            await redis.setex(key, Math.floor(config.windowMs / 1000), {
+              count: 1,
+              resetTime,
+            });
+            continue; // Check next identifier
+          }
 
-      if (current) {
-        if (now > current.resetTime) {
-          // Window expired, reset counter
+          if (current.count >= config.max) {
+            // Rate limit exceeded - monitor and log
+            monitorRateLimit(identifier, req.nextUrl.pathname, true);
+            
+            // Log security event for critical endpoints
+            if (req.nextUrl.pathname.includes("/auth") || 
+                req.nextUrl.pathname.includes("/payment")) {
+              await logSecurityEvent(
+                SecurityEventType.RATE_LIMIT_EXCEEDED,
+                undefined,
+                {
+                  endpoint: req.nextUrl.pathname,
+                  identifier,
+                  count: current.count,
+                },
+                identifier
+              );
+            }
+            
+            return createRateLimitResponse(
+              config.message || "Too many requests. Please try again later.",
+              current.resetTime
+            );
+          }
+
+          // Increment counter
+          await redis.setex(key, Math.floor(config.windowMs / 1000), {
+            count: current.count + 1,
+            resetTime: current.resetTime,
+          });
+        } else {
+          // First request in window
           await redis.setex(key, Math.floor(config.windowMs / 1000), {
             count: 1,
             resetTime,
           });
-          return null; // Allow request
         }
-
-        if (current.count >= config.max) {
-          // Rate limit exceeded
-          return createRateLimitResponse(config.message, current.resetTime);
-        }
-
-        // Increment counter
-        await redis.setex(key, Math.floor(config.windowMs / 1000), {
-          count: current.count + 1,
-          resetTime: current.resetTime,
-        });
       } else {
-        // First request in window
-        await redis.setex(key, Math.floor(config.windowMs / 1000), {
-          count: 1,
-          resetTime,
-        });
-      }
-    } else {
-      // Use in-memory store for development
-      const current = memoryStore.get(key);
+        // Use in-memory store for development
+        const current = memoryStore.get(key);
 
-      if (current) {
-        if (now > current.resetTime) {
-          // Window expired, reset counter
+        if (current) {
+          if (now > current.resetTime) {
+            // Window expired, reset counter
+            memoryStore.set(key, { count: 1, resetTime });
+            continue; // Check next identifier
+          }
+
+          if (current.count >= config.max) {
+            // Rate limit exceeded - monitor and log
+            monitorRateLimit(identifier, req.nextUrl.pathname, true);
+            
+            // Log security event for critical endpoints
+            if (req.nextUrl.pathname.includes("/auth") || 
+                req.nextUrl.pathname.includes("/payment")) {
+              await logSecurityEvent(
+                SecurityEventType.RATE_LIMIT_EXCEEDED,
+                undefined,
+                {
+                  endpoint: req.nextUrl.pathname,
+                  identifier,
+                  count: current.count,
+                },
+                identifier
+              );
+            }
+            
+            return createRateLimitResponse(
+              config.message || "Too many requests. Please try again later.",
+              current.resetTime
+            );
+          }
+
+          // Increment counter
+          memoryStore.set(key, {
+            count: current.count + 1,
+            resetTime: current.resetTime,
+          });
+        } else {
+          // First request in window
           memoryStore.set(key, { count: 1, resetTime });
-          return null; // Allow request
         }
 
-        if (current.count >= config.max) {
-          // Rate limit exceeded
-          return createRateLimitResponse(config.message, current.resetTime);
+        // Clean up old entries periodically in memory store
+        if (Math.random() < 0.01) {
+          // 1% chance on each request
+          cleanupMemoryStore();
         }
-
-        // Increment counter
-        memoryStore.set(key, {
-          count: current.count + 1,
-          resetTime: current.resetTime,
-        });
-      } else {
-        // First request in window
-        memoryStore.set(key, { count: 1, resetTime });
       }
-
-      // Clean up old entries periodically in memory store
-      if (Math.random() < 0.01) {
-        // 1% chance on each request
-        cleanupMemoryStore();
-      }
+    } catch (error) {
+      console.error("Rate limiting error:", error);
+      // On error, allow request to prevent blocking legitimate users
+      // Continue to check next identifier
     }
-
-    return null; // Allow request
-  } catch (error) {
-    console.error("Rate limiting error:", error);
-    // On error, allow request to prevent blocking legitimate users
-    return null;
   }
+  
+  return null; // Allow request if all checks pass
+}
+
+/**
+ * Generate device fingerprint from request headers
+ * Combines multiple signals to create a unique device identifier
+ */
+function generateDeviceFingerprint(req: NextRequest): string {
+  const components = [];
+  
+  // User agent
+  const userAgent = req.headers.get("user-agent") || "unknown";
+  components.push(userAgent);
+  
+  // Accept headers (browser capabilities)
+  const acceptLanguage = req.headers.get("accept-language") || "";
+  const acceptEncoding = req.headers.get("accept-encoding") || "";
+  const accept = req.headers.get("accept") || "";
+  components.push(acceptLanguage, acceptEncoding, accept);
+  
+  // Screen info from custom headers (if client sends them)
+  const screenResolution = req.headers.get("x-screen-resolution") || "";
+  const timezone = req.headers.get("x-timezone") || "";
+  components.push(screenResolution, timezone);
+  
+  // DNT and other privacy headers
+  const dnt = req.headers.get("dnt") || "";
+  components.push(dnt);
+  
+  // Create hash of all components
+  const fingerprintData = components.join("|");
+  const hash = crypto.createHash("sha256").update(fingerprintData).digest("hex");
+  
+  return `fp_${hash.substring(0, 16)}`;
 }
 
 /**
  * Get client identifier from request
- * Uses IP address with fallback to user agent
+ * Uses IP address with device fingerprint for enhanced identification
  */
 function getClientIdentifier(req: NextRequest): string {
   // Try to get real IP from headers (considering proxies)
   const forwarded = req.headers.get("x-forwarded-for");
   const realIp = req.headers.get("x-real-ip");
-  const ip = req.ip;
 
+  let ipAddress = "unknown";
   if (forwarded) {
-    return forwarded.split(",")[0].trim();
+    ipAddress = forwarded.split(",")[0]?.trim() || "unknown";
+  } else if (realIp) {
+    ipAddress = realIp;
   }
 
-  if (realIp) {
-    return realIp;
-  }
-
-  if (ip) {
-    return ip;
-  }
-
-  // Fallback to user agent hash if no IP available
-  const userAgent = req.headers.get("user-agent") || "unknown";
-  return `ua_${Buffer.from(userAgent).toString("base64").substring(0, 16)}`;
+  // Generate device fingerprint
+  const deviceFingerprint = generateDeviceFingerprint(req);
+  
+  // Combine IP and fingerprint for robust identification
+  // This helps prevent bypassing rate limits by changing IP
+  return `${ipAddress}_${deviceFingerprint}`;
 }
 
 /**
@@ -202,6 +352,28 @@ function cleanupMemoryStore(): void {
       memoryStore.delete(key);
     }
   }
+}
+
+/**
+ * Legacy rate limit factory interface for backward compatibility
+ */
+export function rateLimitLegacy(config: {
+  interval: number;
+  uniqueTokenPerInterval: number;
+  maxRequests: number;
+}) {
+  const legacyConfig: RateLimitConfig = {
+    windowMs: config.interval,
+    max: config.maxRequests,
+    message: "Rate limit exceeded. Please try again later."
+  };
+
+  return async (req: NextRequest) => {
+    const rateLimitResponse = await rateLimit(req, legacyConfig);
+    return {
+      success: !rateLimitResponse
+    };
+  };
 }
 
 /**

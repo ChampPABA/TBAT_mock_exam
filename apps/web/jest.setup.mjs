@@ -1,4 +1,9 @@
 import '@testing-library/jest-dom'
+import { TextEncoder, TextDecoder } from 'util'
+
+// Add TextEncoder/TextDecoder polyfills for Node environment
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder
 
 // Mock environment variables for testing
 process.env.NODE_ENV = 'test'
@@ -47,6 +52,20 @@ jest.mock('@prisma/client', () => ({
       create: jest.fn(),
       findUnique: jest.fn(),
       update: jest.fn(),
+    },
+    securityLog: {
+      create: jest.fn(),
+      findUnique: jest.fn(),
+      findMany: jest.fn(),
+    },
+    adminUser: {
+      findUnique: jest.fn(),
+      findMany: jest.fn(),
+    },
+    auditLog: {
+      create: jest.fn(),
+      findMany: jest.fn(),
+      count: jest.fn(),
     },
     $disconnect: jest.fn(),
   })),

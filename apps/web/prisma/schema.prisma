@@ -12,18 +12,25 @@ datasource db {
 
 // User Management
 model User {
-  id           String      @id @default(uuid())
-  email        String      @unique
-  passwordHash String      @map("password_hash")
-  thaiName     String      @map("thai_name")
-  phone        String
-  school       String
-  lineId       String?     @map("line_id")
-  packageType  PackageType @default(FREE) @map("package_type")
-  isUpgraded   Boolean     @default(false) @map("is_upgraded")
-  pdpaConsent  Boolean     @default(false) @map("pdpa_consent")
-  createdAt    DateTime    @default(now()) @map("created_at")
-  updatedAt    DateTime    @updatedAt @map("updated_at")
+  id                  String      @id @default(uuid())
+  email               String      @unique
+  passwordHash        String?     @map("password_hash")
+  thaiName            String      @map("thai_name")
+  phone               String?
+  school              String?
+  lineId              String?     @map("line_id")
+  packageType         PackageType @default(FREE) @map("package_type")
+  isUpgraded          Boolean     @default(false) @map("is_upgraded")
+  pdpaConsent         Boolean     @default(false) @map("pdpa_consent")
+  failedLoginAttempts Int         @default(0) @map("failed_login_attempts")
+  lockedUntil         DateTime?   @map("locked_until")
+  passwordChangedAt   DateTime?   @map("password_changed_at")
+  lastLoginAt         DateTime?   @map("last_login_at")
+  isActive            Boolean     @default(true) @map("is_active")
+  deletedAt           DateTime?   @map("deleted_at")
+  metadata            Json?
+  createdAt           DateTime    @default(now()) @map("created_at")
+  updatedAt           DateTime    @updatedAt @map("updated_at")
 
   // Relations
   sessions        UserSession[]
@@ -34,6 +41,7 @@ model User {
   pdfDownloads    PDFDownload[]
   supportTickets  SupportTicket[]
   accounts        Account[]
+  pdpaConsents    PDPAConsent[]
 
   @@map("users")
 }
@@ -142,6 +150,9 @@ model ExamResult {
   id             String   @id @default(uuid())
   userId         String   @map("user_id")
   examCodeId     String   @map("exam_code_id")
+  subject        Subject?
+  score          Float?
+  totalQuestions Int?     @map("total_questions")
   totalScore     Float    @map("total_score")
   biologyScore   Float?   @map("biology_score")
   chemistryScore Float?   @map("chemistry_score")
@@ -271,6 +282,26 @@ model AuditLog {
   @@map("audit_logs")
 }
 
+// Security audit log for general security events
+model SecurityLog {
+  id           String      @id @default(uuid())
+  eventType    SecurityEventType @map("event_type")
+  action       String?
+  userId       String?     @map("user_id")
+  resourceId   String?     @map("resource_id")
+  resourceType String?     @map("resource_type")
+  metadata     Json?
+  details      Json?
+  ipAddress    String?     @map("ip_address")
+  userAgent    String?     @map("user_agent")
+  timestamp    DateTime    @default(now())
+  
+  @@index([userId])
+  @@index([eventType])
+  @@index([timestamp])
+  @@map("security_logs")
+}
+
 model SupportTicket {
   id          String       @id @default(uuid())
   userId      String       @map("user_id")
@@ -353,4 +384,47 @@ enum Priority {
   MEDIUM
   HIGH
   CRITICAL
+}
+
+enum SecurityEventType {
+  LOGIN_ATTEMPT
+  LOGIN_SUCCESS
+  LOGIN_FAILED
+  LOGOUT
+  PASSWORD_CHANGE
+  ACCOUNT_LOCKED
+  PDPA_CONSENT_GRANTED
+  PDPA_CONSENT_REVOKED
+  UNAUTHORIZED_ACCESS
+  RATE_LIMIT_EXCEEDED
+  SUSPICIOUS_ACTIVITY
+  AUTHENTICATION_SUCCESS
+  AUTHENTICATION_FAILED
+  PASSWORD_RESET_REQUEST
+  EMAIL_VERIFICATION
+  MULTIPLE_LOGIN_ATTEMPTS
+  PDF_UNAUTHORIZED_ACCESS
+  ADMIN_DATA_ACCESS
+  DATA_EXPORT
+  DATA_DELETION
+}
+
+// PDPA Consent Management
+model PDPAConsent {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  consentType  String   @map("consent_type")
+  status       String
+  grantedAt    DateTime? @map("granted_at")
+  revokedAt    DateTime? @map("revoked_at")
+  ipAddress    String?   @map("ip_address")
+  userAgent    String?   @map("user_agent")
+  metadata     Json?
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("pdpa_consents")
 }

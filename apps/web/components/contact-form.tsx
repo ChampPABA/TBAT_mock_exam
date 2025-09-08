@@ -42,8 +42,8 @@ const formSchema = z.object({
     .regex(/^[0-9\-\+\(\)\s]+$/, {
       message: "Phone number can only contain numbers and formatting characters.",
     }),
-  subject: z.string({
-    required_error: "Please select a subject.",
+  subject: z.string().min(1, {
+    message: "Please select a subject.",
   }),
   message: z
     .string()

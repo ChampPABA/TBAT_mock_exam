@@ -14,7 +14,10 @@
     "UPSTASH_REDIS_REST_URL",
     "UPSTASH_REDIS_REST_TOKEN",
     "EMAIL_FROM",
-    "EMAIL_ADMIN"
+    "EMAIL_ADMIN",
+    "SENTRY_DSN",
+    "SENTRY_ENABLED",
+    "SENTRY_ENVIRONMENT"
   ],
   "tasks": {
     "build": {
@@ -34,7 +37,10 @@
         "UPSTASH_REDIS_REST_URL",
         "UPSTASH_REDIS_REST_TOKEN",
         "EMAIL_FROM",
-        "EMAIL_ADMIN"
+        "EMAIL_ADMIN",
+        "SENTRY_DSN",
+        "SENTRY_ENABLED",
+        "SENTRY_ENVIRONMENT"
       ]
     },
     "lint": {
@@ -59,7 +65,10 @@
         "UPSTASH_REDIS_REST_URL",
         "UPSTASH_REDIS_REST_TOKEN",
         "EMAIL_FROM",
-        "EMAIL_ADMIN"
+        "EMAIL_ADMIN",
+        "SENTRY_DSN",
+        "SENTRY_ENABLED",
+        "SENTRY_ENVIRONMENT"
       ]
     }
   }

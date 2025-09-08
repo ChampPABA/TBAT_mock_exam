@@ -1,5 +1,5 @@
 import { hashPassword, verifyPassword, generateToken, verifyToken } from "@/lib/auth";
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 
 describe("Authentication Utilities", () => {
   describe("hashPassword", () => {
