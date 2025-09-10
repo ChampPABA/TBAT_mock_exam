@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import Navigation from '@/components/landing/navigation';
 import HeroSection from '@/components/landing/hero-section';
 import ValidatorSection from '@/components/landing/validator-section';
@@ -13,13 +14,12 @@ import TestimonialsSection from '@/components/landing/testimonials-section';
 import FAQSection from '@/components/landing/faq-section';
 import FinalCTASection from '@/components/landing/final-cta-section';
 import Footer from '@/components/landing/footer';
-import { RegistrationModalMockup } from '@/components/landing/registration-modal-mockup';
 
 export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const handleRegisterClick = () => {
-    setIsModalOpen(true);
+    router.push('/register');
   };
 
   const handleLoginClick = () => {
@@ -41,15 +41,15 @@ export default function Home() {
 
   const handleSelectPackage = (packageId: number) => {
     console.log(`Package selected: ${packageId}`);
-    alert(`เลือกแพ็กเกจ ID: ${packageId} - จะเชื่อมต่อกับระบบสมัครในอนาคต`);
+    router.push('/register');
   };
 
   const handleRegisterFreeClick = () => {
-    setIsModalOpen(true);
+    router.push('/register');
   };
 
   const handleUpgradeClick = () => {
-    setIsModalOpen(true);
+    router.push('/register');
   };
 
   return (
@@ -98,16 +98,6 @@ export default function Home() {
       
       {/* Footer */}
       <Footer />
-
-      {/* Registration Modal */}
-      <RegistrationModalMockup 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onRegistrationSuccess={(data) => {
-          console.log('Registration successful:', data);
-          alert(`สมัครสำเร็จ! รหัสสอบจะได้รับทางอีเมล ${data.email}`);
-        }}
-      />
     </div>
   );
 }
