@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features Section Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            }
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+      
+      .feature-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      }
+    </style>
+</head>
+<body>
+    <!-- Features Section -->
+    <section class="bg-gray-50 py-12 md:py-16" id="features">
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
+          ทำไมต้องเลือกเรา?
+        </h2>
+        <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          สนามสอบจำลองที่ครบครันที่สุด พร้อมระบบวิเคราะห์ผลการสอบ
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">🎯</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">แบบสอบตรงมาตรฐาน TBAT</h3>
+            <p class="text-gray-600">ข้อสอบจัดทำโดยผู้เชี่ยวชาญ ตรงตามมาตรฐานการสอบจริง รูปแบบและระดับความยากเหมือนสอบจริง 100%</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">📊</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">ระบบวิเคราะห์ผลการสอบ</h3>
+            <p class="text-gray-600">ระบบวิเคราะห์ผลแสดงจุดแข็ง-อ่อน เปรียบเทียบกับสถิติ พร้อมคำแนะนำการปรับปรุงแบบละเอียด</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">💰</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">ประหยัดค่าใช้จ่าย</h3>
+            <p class="text-gray-600">ไม่ต้องเดินทางไปกรุงเทพ ประหยัดค่าใช้จ่ายมากกว่า 5,000+ บาท นอนที่บ้าน สบายใจ</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">⚡</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">ผลสอบภายใน 48 ชั่วโมง</h3>
+            <p class="text-gray-600">รับผลสอบและการวิเคราะห์ภายใน 48 ชั่วโมงหลังสอบเสร็จ แจ้งผ่าน Email ให้คุณทราบ</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">📚</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">PDF เฉลยคำอธิบาย</h3>
+            <p class="text-gray-600">ดาวน์โหลดเฉลยพร้อมคำอธิบายละเอียด (Advanced Package) เรียนรู้จากข้อผิดพลาดได้อย่างมีประสิทธิภาพ</p>
+          </div>
+          <div class="feature-card bg-white p-6 rounded-xl shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg mb-4 flex items-center justify-center">
+              <span class="text-2xl text-white">🏆</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">ประสบการณ์จริง</h3>
+            <p class="text-gray-600">สภาพแวดล้อมการสอบจำลองสถานการณ์จริง 100% ช่วยลดความเครียดในวันสอบจริง</p>
+          </div>
+        </div>
+      </div>
+    </section>
+</body>
+</html>

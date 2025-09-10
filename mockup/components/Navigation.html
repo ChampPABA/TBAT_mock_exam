@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            }
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+      
+      .btn-hover-effect {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-hover-effect::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transition: width 0.6s, height 0.6s;
+        transform: translate(-50%, -50%);
+      }
+      
+      .btn-hover-effect:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50" role="navigation" aria-label="หลัก">
+      <div class="max-w-6xl mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <a href="/" class="flex items-center group" aria-label="TBAT Mock Exam หน้าหลัก">
+            <div class="flex items-center">
+              <span class="text-3xl font-bold text-tbat-primary group-hover:text-tbat-secondary transition-colors duration-200">TBAT</span>
+            </div>
+            <span class="text-2xl font-light text-gray-600 ml-2">Mock Exam</span>
+          </a>
+          
+          <!-- Desktop Navigation -->
+          <div class="flex items-center gap-6">
+            <a
+              href="#details"
+              class="nav-link text-gray-700 hover:text-tbat-primary font-medium transition-colors duration-200"
+              onclick="scrollToSection('details')"
+            >
+              รายละเอียด
+            </a>
+            <a
+              href="#features"
+              class="nav-link text-gray-700 hover:text-tbat-primary font-medium transition-colors duration-200"
+              onclick="scrollToSection('features')"
+            >
+              คุณสมบัติ
+            </a>
+            <a
+              href="#pricing"
+              class="nav-link text-gray-700 hover:text-tbat-primary font-medium transition-colors duration-200"
+              onclick="scrollToSection('pricing')"
+            >
+              แพ็กเกจ
+            </a>
+            <a
+              href="#faq"
+              class="nav-link text-gray-700 hover:text-tbat-primary font-medium transition-colors duration-200"
+              onclick="scrollToSection('faq')"
+            >
+              คำถามที่พบบ่อย
+            </a>
+            <button 
+              class="px-3 py-2 text-tbat-primary border border-tbat-primary rounded-lg hover:bg-tbat-primary hover:text-white transition-colors duration-200 font-medium text-sm"
+              onclick="handleLogin()"
+            >
+              เข้าสู่ระบบ
+            </button>
+            <button 
+              class="px-4 py-2 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-medium text-sm btn-hover-effect"
+              onclick="handleRegisterClick()"
+            >
+              สมัครสมาชิก
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <script>
+      // Navigation functionality
+      function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+
+      function handleRegisterClick() {
+        window.location.href = './02-registration.html';
+      }
+
+      function handleLogin() {
+        alert('Login functionality coming soon!');
+      }
+    </script>
+</body>
+</html>

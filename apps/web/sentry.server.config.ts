@@ -35,7 +35,7 @@ Sentry.init({
           "x-auth-token",
         ];
         sensitiveHeaders.forEach((header) => {
-          if (event.request.headers && event.request.headers[header]) {
+          if (event.request?.headers && event.request.headers[header]) {
             event.request.headers[header] = "[REDACTED]";
           }
         });
@@ -50,7 +50,7 @@ Sentry.init({
           "cvv",
           "stripeToken",
         ];
-        const data = event.request.data;
+        const data = event.request.data as Record<string, any>;
         sensitiveFields.forEach((field) => {
           if (data[field]) {
             data[field] = "[REDACTED]";
@@ -77,17 +77,5 @@ Sentry.init({
     }
     
     return event;
-  },
-  
-  // Server-specific error handling
-  onUncaughtException: (err, event) => {
-    console.error("Uncaught exception:", err);
-    // In production, you might want to gracefully shut down
-    if (process.env.NODE_ENV === "production") {
-      // Give Sentry time to send the event
-      setTimeout(() => {
-        process.exit(1);
-      }, 2000);
-    }
   },
 });

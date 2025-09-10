@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Mock Exam - Component Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-in',
+              'fade-in-up': 'fadeInUp 0.6s ease-out',
+              'scale-in': 'scaleIn 0.3s ease-out',
+              'slide-in-right': 'slideInRight 0.4s ease-out',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              scaleIn: {
+                '0%': { transform: 'scale(0.9)', opacity: '0' },
+                '100%': { transform: 'scale(1)', opacity: '1' },
+              },
+              slideInRight: {
+                '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        scroll-behavior: smooth;
+      }
+      
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+      
+      .hero-gradient {
+        background: linear-gradient(135deg, #cae0e1 0%, #ffffff 100%);
+      }
+      
+      .feature-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      }
+      
+      .btn-hover-effect {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-hover-effect::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transition: width 0.6s, height 0.6s;
+        transform: translate(-50%, -50%);
+      }
+      
+      .btn-hover-effect:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      
+      .pulse-animation {
+        animation: pulse 2s infinite;
+      }
+      
+      .card-glow:hover {
+        box-shadow: 0 0 30px rgba(13, 114, 118, 0.15);
+      }
+    </style>
+</head>
+<body>
+    <h1 class="text-center text-4xl font-bold py-8 bg-tbat-primary text-white">
+        🎯 TBAT Mock Exam - Desktop Components Demo
+    </h1>
+    
+    <div class="bg-gray-100 p-8">
+        <div class="max-w-4xl mx-auto space-y-12">
+            
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-4 text-tbat-primary">📋 Component List:</h2>
+                <ul class="grid grid-cols-2 gap-4 text-gray-700">
+                    <li>• <a href="Navigation.html" class="text-tbat-primary hover:underline">Navigation.html</a></li>
+                    <li>• <a href="HeroSection.html" class="text-tbat-primary hover:underline">HeroSection.html</a></li>
+                    <li>• <a href="FeaturesSection.html" class="text-tbat-primary hover:underline">FeaturesSection.html</a></li>
+                    <li>• <a href="PricingSection.html" class="text-tbat-primary hover:underline">PricingSection.html</a></li>
+                    <li>• <a href="FAQSection.html" class="text-tbat-primary hover:underline">FAQSection.html</a></li>
+                    <li>• <a href="Footer.html" class="text-tbat-primary hover:underline">Footer.html</a></li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-4 text-tbat-primary">✅ Refactoring Complete!</h2>
+                <div class="prose text-gray-700">
+                    <p><strong>✅ Completed Tasks:</strong></p>
+                    <ul>
+                        <li>Analyzed original mockup structure</li>
+                        <li>Removed all responsive/mobile CSS</li>
+                        <li>Created 6 standalone component files</li>
+                        <li>Each component has embedded CSS and functionality</li>
+                        <li>Preserved all original styling and animations</li>
+                        <li>Desktop-focused layout (1280px+ optimized)</li>
+                    </ul>
+                    
+                    <p><strong>🎯 Ready for Next.js Conversion:</strong></p>
+                    <ul>
+                        <li>Components are properly separated</li>
+                        <li>CSS is component-scoped</li>
+                        <li>JavaScript functions are isolated</li>
+                        <li>Original design integrity maintained</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-4 text-tbat-primary">📐 Component Specifications:</h2>
+                <div class="grid grid-cols-2 gap-6 text-sm text-gray-700">
+                    <div>
+                        <h3 class="font-semibold text-tbat-secondary mb-2">Navigation.html</h3>
+                        <p>Desktop navigation bar with TBAT branding, menu links, and action buttons. Includes smooth scroll functionality.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-tbat-secondary mb-2">HeroSection.html</h3>
+                        <p>Main hero section with gradient background, event details, countdown timer, and CTA buttons.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-tbat-secondary mb-2">FeaturesSection.html</h3>
+                        <p>6-feature grid layout showcasing platform benefits with hover animations.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-tbat-secondary mb-2">PricingSection.html</h3>
+                        <p>Side-by-side package comparison (Free vs Advanced) with detailed feature lists.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-tbat-secondary mb-2">FAQSection.html</h3>
+                        <p>Expandable FAQ items with toggle functionality and Thai content.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-tbat-secondary mb-2">Footer.html</h3>
+                        <p>4-column footer with contact info, social links, and important details.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

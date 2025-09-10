@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final CTA Section Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            }
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+      
+      .btn-hover-effect {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-hover-effect::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transition: width 0.6s, height 0.6s;
+        transform: translate(-50%, -50%);
+      }
+      
+      .btn-hover-effect:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+    </style>
+</head>
+<body>
+    <!-- Final CTA Section -->
+    <section class="py-16 md:py-20 bg-gradient-to-r from-tbat-primary to-tbat-secondary">
+      <div class="max-w-4xl mx-auto px-4 text-center text-white">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">
+          พร้อมทดสอบความสามารถของคุณแล้วหรือยัง?
+        </h2>
+        <p class="text-xl md:text-2xl mb-8 text-tbat-light">
+          สมัครเลยวันนี้ ที่นั่งจำกัด
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <button 
+            onclick="handleRegisterFree()"
+            class="px-8 py-4 bg-white text-tbat-primary rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors duration-200 btn-hover-effect"
+          >
+            สมัครฟรี - Free Package
+          </button>
+          <button 
+            onclick="handleRegisterAdvanced()"
+            class="px-8 py-4 border-2 border-white text-white rounded-xl font-bold text-lg hover:bg-white hover:text-tbat-primary transition-colors duration-200"
+          >
+            อัพเกรด - Advanced Package <span class="line-through">฿990</span> ฿690
+          </button>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 text-tbat-light">
+          <div class="flex items-center">
+            <span class="text-2xl mr-2">⏰</span>
+            <span>เหลือเวลาสมัคร: <span id="countdown-footer-days" class="font-bold text-white">--</span> วัน</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-2xl mr-2">🪑</span>
+            <span>จำกัด: <span class="font-bold text-white">รอบละไม่เกิน 300 ท่าน</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // CTA button handlers
+      function handleRegisterFree() {
+        alert('สมัคร Free Package - เลือกสอบ 1 วิชา');
+        // In real implementation, this would navigate to registration
+      }
+
+      function handleRegisterAdvanced() {
+        alert('สมัคร Advanced Package - ครบทั้ง 3 วิชา พร้อมวิเคราะห์ผลแบบละเอียด');
+        // In real implementation, this would navigate to registration
+      }
+
+      // Footer countdown timer
+      function initializeFooterCountdown() {
+        const targetDate = new Date('2025-09-24T23:59:59').getTime();
+        
+        function updateFooterCountdown() {
+          const now = new Date().getTime();
+          const timeLeft = targetDate - now;
+          
+          if (timeLeft > 0) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const footerDaysElement = document.getElementById('countdown-footer-days');
+            if (footerDaysElement) {
+              footerDaysElement.textContent = days;
+            }
+          } else {
+            const footerDaysElement = document.getElementById('countdown-footer-days');
+            if (footerDaysElement) {
+              footerDaysElement.textContent = '0';
+            }
+          }
+        }
+        
+        updateFooterCountdown();
+        setInterval(updateFooterCountdown, 1000);
+      }
+
+      // Initialize countdown on load
+      document.addEventListener('DOMContentLoaded', initializeFooterCountdown);
+    </script>
+</body>
+</html>

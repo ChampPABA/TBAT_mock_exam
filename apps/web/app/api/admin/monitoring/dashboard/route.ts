@@ -60,12 +60,12 @@ export async function GET(request: NextRequest) {
       },
     };
     
-    trackAPIPerformance("/api/admin/monitoring/dashboard", Date.now() - startTime, 200);
+    trackAPIPerformance("/api/admin/monitoring/dashboard", "GET", Date.now() - startTime, 200);
     
     return NextResponse.json(dashboardData);
   } catch (error) {
     console.error("Dashboard error:", error);
-    trackAPIPerformance("/api/admin/monitoring/dashboard", Date.now() - startTime, 500);
+    trackAPIPerformance("/api/admin/monitoring/dashboard", "GET", Date.now() - startTime, 500);
     return NextResponse.json(
       { error: "Failed to load dashboard" },
       { status: 500 }

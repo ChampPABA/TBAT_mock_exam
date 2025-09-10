@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validator Section Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            }
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+      
+      .validator-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .validator-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      }
+    </style>
+</head>
+<body>
+    <!-- Validator Section -->
+    <section class="py-12 md:py-16 bg-gradient-to-br from-tbat-bg to-white">
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
+          ผู้คัดเลือกและตรวจข้อสอบ
+        </h2>
+        <p class="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+          นักเรียนแพทย์และอดีตนักเรียนโอลิมปิกวิชาการ ที่มีประสบการณ์สอบ TBAT จริง
+        </p>
+        
+        <!-- Validator Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Validator 1 -->
+          <div class="validator-card bg-white rounded-xl shadow-lg p-6 h-full">
+            <div class="text-center mb-4">
+              <img src="../assets/validator1.jpg" alt="โมโม่ อธิบดี การะเกด" class="w-32 h-32 rounded-full mx-auto object-cover mb-3" />
+              <h3 class="text-xl font-bold text-gray-800">โมโม่ อธิบดี การะเกด</h3>
+              <p class="text-sm text-tbat-primary font-semibold">คณะแพทยศาสตร์ มหาวิทยาลัยเชียงใหม่</p>
+              <p class="text-xs text-gray-600">TCAS รอบ 1 Portfolio โครงการเรียนดีภาษาอังกฤษ</p>
+            </div>
+            <div class="text-sm text-gray-700">
+              <h4 class="font-semibold mb-2">ประวัติ/ผลงาน:</h4>
+              <ul class="space-y-1 text-xs">
+                <li>• ชนะเลิศ Thailand Junior Water Prize 2024 (Stockholm, Sweden)</li>
+                <li>• ตัวแทนประเทศไทย Asian Science Camp 2025</li>
+                <li>• เหรียญทอง YSC2024 และ YSC2025</li>
+                <li>• โอลิมปิกเคมี ค่าย 2 ศูนย์ มช.</li>
+                <li>• โอลิมปิกฟิสิกส์ ค่าย 1 ศูนย์ มช.</li>
+                <li>• รองชนะเลิศอันดับ 4 Chem Challenge #12 จุฬาฯ</li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Validator 2 -->
+          <div class="validator-card bg-white rounded-xl shadow-lg p-6 h-full">
+            <div class="text-center mb-4">
+              <img src="../assets/validator2.jpg" alt="กาณฑ์ เลาหพูนรังษี" class="w-32 h-32 rounded-full mx-auto object-cover mb-3" />
+              <h3 class="text-xl font-bold text-gray-800">กาณฑ์ เลาหพูนรังษี</h3>
+              <p class="text-sm text-tbat-primary font-semibold">คณะแพทยศาสตร์ มหาวิทยาลัยเชียงใหม่</p>
+              <p class="text-xs text-gray-600">ติดศิริราช TCAS รอบ 1 โครงการเรียนดีโอลิมปิก</p>
+            </div>
+            <div class="text-sm text-gray-700">
+              <h4 class="font-semibold mb-2">ประวัติ/ผลงาน:</h4>
+              <ul class="space-y-1 text-xs">
+                <li>• เหรียญเงิน เคมีโอลิมปิกระดับชาติ ครั้งที่ 20</li>
+                <li>• ผู้แทนศูนย์ มช. TChO 19</li>
+                <li>• ค่ายสสวท. 1 วิชาเคมี</li>
+                <li>• ชนะเลิศ Chem Challenge #11 จุฬาฯ</li>
+                <li>• เหรียญทอง MU CHEM CONTEST</li>
+                <li>• Semi-Final SIMSAT #3 ศิริราช</li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Validator 3 -->
+          <div class="validator-card bg-white rounded-xl shadow-lg p-6 h-full">
+            <div class="text-center mb-4">
+              <img src="../assets/validator3.jpg" alt="ภูวเดช เขื่อนแก้ว" class="w-32 h-32 rounded-full mx-auto object-cover object-top mb-3" style="object-position: 50% 30%;" />
+              <h3 class="text-xl font-bold text-gray-800">ภูวเดช เขื่อนแก้ว</h3>
+              <p class="text-sm text-tbat-primary font-semibold">คณะแพทยศาสตร์ศิริราชพยาบาล ปี 3</p>
+              <p class="text-xs text-gray-600">มหาวิทยาลัยมหิดล</p>
+            </div>
+            <div class="text-sm text-gray-700">
+              <h4 class="font-semibold mb-2">ประวัติ/ผลงาน:</h4>
+              <ul class="space-y-1 text-xs">
+                <li>• เหรียญทองแดง ชีววิทยาโอลิมปิกระดับชาติ ครั้งที่ 19</li>
+                <li>• ผู้แทนศูนย์ สอวน. ชีววิทยา มช. 2564</li>
+                <li>• ค่ายสสวท. ชีววิทยา 2564</li>
+                <li>• เหรียญทอง ชีววิทยา งานสัปดาห์วิทย์ 2564-2565</li>
+                <li>• 100 คะแนน A-level ชีววิทยา 2566</li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Validator 4 -->
+          <div class="validator-card bg-white rounded-xl shadow-lg p-6 h-full">
+            <div class="text-center mb-4">
+              <div class="w-32 h-32 rounded-full mx-auto bg-gray-200 flex items-center justify-center mb-3">
+                <span class="text-4xl text-gray-400">👤</span>
+              </div>
+              <h3 class="text-xl font-bold text-gray-800">นายกฤติน อารีย์รบ</h3>
+              <p class="text-sm text-tbat-primary font-semibold">รอข้อมูลเพิ่มเติม</p>
+            </div>
+            <div class="text-sm text-gray-700">
+              <h4 class="font-semibold mb-2">ประวัติ/ผลงาน:</h4>
+              <ul class="space-y-1 text-xs">
+                <li>• เกียรติคุณประกาศและเหรียญทองแดง TPhO ครั้งที่ 20 และ 21</li>
+                <li>• ผ่านการคัดเลือก IJSO รอบ 2</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Credibility/Partners Section -->
+    <section class="bg-gray-50 py-12 md:py-16 mt-6">
+      <div class="max-w-6xl mx-auto px-4 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+          การจัดสอบ TBAT Mock Exam ดำเนินการโดย ASPECT
+        </h2>
+        <p class="text-lg text-gray-600 mb-8">
+          ซึ่ง ASPECT ได้รับการสนับสนุนจากหน่วยงานพันธมิตร
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-12 items-center justify-items-center">
+          <div class="bg-white p-4 rounded-lg shadow-sm flex items-center justify-center h-24 w-full">
+            <img src="../assets/Logo/1.jpg" alt="Partner Logo" class="max-h-16 max-w-full object-contain" />
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm flex items-center justify-center h-24 w-full">
+            <img src="../assets/Logo/2.jpg" alt="Partner Logo" class="max-h-16 max-w-full object-contain" />
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm flex items-center justify-center h-24 w-full">
+            <img src="../assets/Logo/3.jpg" alt="Partner Logo" class="max-h-16 max-w-full object-contain" />
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm flex items-center justify-center h-24 w-full">
+            <img src="../assets/Logo/4.jpg" alt="Partner Logo" class="max-h-16 max-w-full object-contain" />
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow-sm flex items-center justify-center h-24 w-full">
+            <img src="../assets/Logo/5.png" alt="Partner Logo" class="max-h-16 max-w-full object-contain" />
+          </div>
+        </div>
+      </div>
+    </section>
+</body>
+</html>

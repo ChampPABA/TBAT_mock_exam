@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Section Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-in',
+              'fade-in-up': 'fadeInUp 0.6s ease-out',
+              'scale-in': 'scaleIn 0.3s ease-out',
+              'slide-in-right': 'slideInRight 0.4s ease-out',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              scaleIn: {
+                '0%': { transform: 'scale(0.9)', opacity: '0' },
+                '100%': { transform: 'scale(1)', opacity: '1' },
+              },
+              slideInRight: {
+                '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+      
+      .hero-gradient {
+        background: linear-gradient(135deg, #cae0e1 0%, #ffffff 100%);
+      }
+      
+      .btn-hover-effect {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-hover-effect::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transition: width 0.6s, height 0.6s;
+        transform: translate(-50%, -50%);
+      }
+      
+      .btn-hover-effect:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      
+      .pulse-animation {
+        animation: pulse 2s infinite;
+      }
+      
+      .card-glow:hover {
+        box-shadow: 0 0 30px rgba(13, 114, 118, 0.15);
+      }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-gradient py-20" aria-labelledby="hero-title">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center">
+          <!-- Badge -->
+          <span
+            class="inline-block bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4 animate-fade-in-up"
+          >
+            ศูนย์สอบ TBAT Mock Exam อันดับ 1 ของภาคเหนือ
+          </span>
+
+          <h1 id="hero-title" class="text-5xl font-bold text-gray-800 mb-4 animate-fade-in">
+            สนามสอบ TBAT จำลองที่เชียงใหม่
+            <br />
+            <span class="text-tbat-primary">สมัคร "สอบฟรี" ทุกคน</span><br />
+          </h1>
+          <p class="text-xl text-gray-600 mb-6 animate-fade-in-up" style="animation-delay: 0.1s">
+            <strong>Mock Exam จัดโดย ASPECT</strong> • <strong>TBAT จริงจัดโดยจุฬาลงกรณ์มหาวิทยาลัย</strong>
+            <br />
+            ใช้ยื่นเข้าคณะสายวิทยาศาสตร์สุขภาพ
+          </p>
+
+          <!-- Event Details Card -->
+          <div class="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto mb-8 animate-scale-in card-glow" style="animation-delay: 0.2s">
+            <div class="grid grid-cols-2 gap-4 text-left">
+              <div class="flex items-start">
+                <span class="text-2xl mr-3" aria-hidden="true">🗓️</span>
+                <div>
+                  <h3 class="font-semibold text-gray-800">วัน-เวลา</h3>
+                  <p class="text-gray-600 text-base">วันเสาร์ที่ 27 กันยายน 2568</p>
+                  <div class="mt-1 space-y-1">
+                    <p class="text-gray-600 text-base">รอบเช้า: 09:00 - 12:00 น. <p class="text-sm text-orange-600">(เช็คอิน 08:15)</p></p>
+                    <p class="text-gray-600 text-base">รอบบ่าย: 13:00 - 16:00 น. <p class="text-sm text-orange-600">(เช็คอิน 12:15)</p></p>
+                  </div>
+                    <span class="inline-block bg-red-100 text-red-700 text-xs px-2 py-1 rounded pulse-animation" role="status" aria-live="polite">
+                      (โปรดมาถึงก่อนเวลาสอบ 45 นาที)
+                    </span>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <span class="text-2xl mr-3" aria-hidden="true">📍</span>
+                <div>
+                  <h3 class="font-semibold text-gray-800">สถานที่</h3>
+                  <p class="text-gray-600 text-base">สำนักบริการวิชาการ มหาวิทยาลัยเชียงใหม่</p>
+                  <p class="text-gray-500 text-sm">ห้องทองกวาว 1 และห้องทองกวาว 2</p>
+                  <a href="https://maps.app.goo.gl/6crQRkv2eZzPwoXP8" target="_blank" class="text-tbat-primary text-xs hover:underline">ดูแผนที่ Google Maps</a>
+                  <div class="mt-1">
+                    <span class="inline-block bg-red-100 text-red-700 text-xs px-2 py-1 rounded pulse-animation" role="status" aria-live="polite">• สมัครสอบฟรี จำกัด 300 ที่เท่านั้น</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="flex gap-4 justify-center mb-6 animate-slide-in-right" style="animation-delay: 0.3s">
+            <button 
+              class="px-8 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-semibold text-lg btn-hover-effect"
+              onclick="handleRegisterClick()"
+            >
+              สมัครฟรีเลย
+            </button>
+            <button 
+              class="px-8 py-3 border-2 border-tbat-primary text-tbat-primary rounded-lg hover:bg-tbat-primary hover:text-white transition-colors duration-200 font-semibold text-lg"
+              onclick="scrollToSection('pricing')"
+            >
+              ดูแพ็กเกจ
+            </button>
+          </div>
+
+          <!-- Countdown Timer -->
+          <div class="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto mb-6 animate-scale-in" style="animation-delay: 0.4s">
+            <div class="text-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-800 mb-2">⏰ เหลือเวลาสมัคร</h3>
+              <p class="text-sm text-gray-600 mb-3">สมัครได้ถึงวันที่ 24 กันยายน 2568 เวลา 23:59 น.</p>
+              <div class="grid grid-cols-4 gap-3 text-center">
+                <div class="bg-tbat-primary text-white rounded-lg p-3">
+                  <div id="days" class="text-xl font-bold">--</div>
+                  <div class="text-xs">วัน</div>
+                </div>
+                <div class="bg-tbat-primary text-white rounded-lg p-3">
+                  <div id="hours" class="text-xl font-bold">--</div>
+                  <div class="text-xs">ชั่วโมง</div>
+                </div>
+                <div class="bg-tbat-primary text-white rounded-lg p-3">
+                  <div id="minutes" class="text-xl font-bold">--</div>
+                  <div class="text-xs">นาที</div>
+                </div>
+                <div class="bg-tbat-primary text-white rounded-lg p-3">
+                  <div id="seconds" class="text-xl font-bold">--</div>
+                  <div class="text-xs">วินาที</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exam Date Clarification -->
+          <div class="grid grid-cols-2 gap-4 max-w-4xl mx-auto animate-fade-in-up" style="animation-delay: 0.5s">
+            <!-- Mock Exam -->
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+              <h4 class="font-bold text-green-800 mb-1">📝 TBAT Mock Exam</h4>
+              <p class="text-green-700 text-base">
+                <strong>วันเสาร์ที่ 27 กันยายน 2568</strong>
+              </p>
+              <p class="text-green-600 text-xs">สนามสอบจำลองที่เชียงใหม่</p>
+            </div>
+            
+            <!-- Real TBAT -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+              <h4 class="font-bold text-blue-800 mb-1">🏛️ TBAT จริง</h4>
+              <p class="text-blue-700 text-base">
+                <strong>วันเสาร์ที่ 5 ตุลาคม 2568</strong>
+              </p>
+              <p class="text-blue-600 text-xs">สอบที่กรุงเทพมหานครและจังหวัดอื่นๆ</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Countdown Timer
+      function initializeCountdown() {
+        const targetDate = new Date('2025-09-24T23:59:59').getTime();
+        
+        const daysElement = document.getElementById('days');
+        const hoursElement = document.getElementById('hours');
+        const minutesElement = document.getElementById('minutes');
+        const secondsElement = document.getElementById('seconds');
+        
+        function updateCountdown() {
+          const now = new Date().getTime();
+          const timeLeft = targetDate - now;
+          
+          if (timeLeft > 0) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            if (daysElement) daysElement.textContent = days;
+            if (hoursElement) hoursElement.textContent = hours.toString().padStart(2, '0');
+            if (minutesElement) minutesElement.textContent = minutes.toString().padStart(2, '0');
+            if (secondsElement) secondsElement.textContent = seconds.toString().padStart(2, '0');
+          } else {
+            if (daysElement) daysElement.textContent = '0';
+            if (hoursElement) hoursElement.textContent = '00';
+            if (minutesElement) minutesElement.textContent = '00';
+            if (secondsElement) secondsElement.textContent = '00';
+          }
+        }
+        
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+      }
+
+      function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+
+      function handleRegisterClick() {
+        window.location.href = './02-registration.html';
+      }
+
+      // Initialize countdown on load
+      document.addEventListener('DOMContentLoaded', initializeCountdown);
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dentorium Camp Section Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            }
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+    </style>
+</head>
+<body>
+    <!-- Dentorium Camp Section -->
+    <section class="py-12 md:py-16 bg-white">
+      <div class="max-w-6xl mx-auto px-4 mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8">
+          📚 จากความสำเร็จ Dentorium Camp 2568
+        </h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <!-- Left: Description -->
+          <div class="space-y-4">
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+              <h3 class="text-xl font-bold text-tbat-primary mb-3">Dentorium Camp ครั้งแรก</h3>
+              <p class="text-gray-700 mb-2">จัดเมื่อ กรกฎาคม 2568</p>
+              <p class="text-gray-600 text-sm mb-3">ที่คณะทันตแพทยศาสตร์ ม.เชียงใหม่</p>
+              <p class="text-gray-700 italic">"ค่ายค้นหาตัวเอง ช่วยให้นักเรียนค้นพบว่าเหมาะกับการเรียนทันตแพทย์"</p>
+            </div>
+            
+            <div class="bg-gradient-to-br from-tbat-primary to-tbat-secondary text-white rounded-xl p-6 shadow-lg">
+              <h3 class="text-xl font-bold mb-3">ASPECT</h3>
+              <p class="text-lg mb-2">ผู้จัด Dentorium Camp และ TBAT Mock Exam</p>
+              <p class="text-tbat-light text-sm">"หลังจากจัด Dentorium Camp ครั้งแรกที่เชียงใหม่สำเร็จเป็นอย่างดี นักเรียนหลายคนขอให้จัด Mock TBAT ที่เชียงใหม่"</p>
+            </div>
+          </div>
+          
+          <!-- Right: Gallery Carousel -->
+          <div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-4 text-center">📸 ภาพบรรยากาศ</h4>
+            <div class="relative overflow-hidden rounded-xl shadow-lg">
+              <div id="dentorium-carousel" class="flex transition-transform duration-500 ease-in-out">
+                <div class="w-full flex-shrink-0">
+                  <img src="../assets/dentorium/1.JPG" alt="Dentorium Camp 1" class="w-full h-[200px] md:h-[250px] object-cover" />
+                </div>
+                <div class="w-full flex-shrink-0">
+                  <img src="../assets/dentorium/2.JPG" alt="Dentorium Camp 2" class="w-full h-[200px] md:h-[250px] object-cover" />
+                </div>
+                <div class="w-full flex-shrink-0">
+                  <img src="../assets/dentorium/3.JPG" alt="Dentorium Camp 3" class="w-full h-[200px] md:h-[250px] object-cover" />
+                </div>
+                <div class="w-full flex-shrink-0">
+                  <img src="../assets/dentorium/4.JPG" alt="Dentorium Camp 4" class="w-full h-[200px] md:h-[250px] object-cover" />
+                </div>
+                <div class="w-full flex-shrink-0">
+                  <img src="../assets/dentorium/5.JPG" alt="Dentorium Camp 5" class="w-full h-[200px] md:h-[250px] object-cover" />
+                </div>
+                <div class="w-full flex-shrink-0">
+                  <img src="../assets/dentorium/6.JPG" alt="Dentorium Camp 6" class="w-full h-[200px] md:h-[250px] object-cover" />
+                </div>
+                <div class="w-full flex-shrink-0">
+                  <img src="../assets/dentorium/7.JPG" alt="Dentorium Camp 7" class="w-full h-[200px] md:h-[250px] object-cover" />
+                </div>
+              </div>
+              
+              <!-- Carousel Controls -->
+              <button onclick="moveDentoriumCarousel(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-lg transition-all">
+                <svg class="w-4 h-4 text-tbat-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+              </button>
+              <button onclick="moveDentoriumCarousel(1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-lg transition-all">
+                <svg class="w-4 h-4 text-tbat-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </button>
+              
+              <!-- Indicators -->
+              <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1">
+                <button onclick="goToDentoriumSlide(0)" class="w-1.5 h-1.5 rounded-full bg-white/80 transition-all dentorium-dot"></button>
+                <button onclick="goToDentoriumSlide(1)" class="w-1.5 h-1.5 rounded-full bg-white/50 transition-all dentorium-dot"></button>
+                <button onclick="goToDentoriumSlide(2)" class="w-1.5 h-1.5 rounded-full bg-white/50 transition-all dentorium-dot"></button>
+                <button onclick="goToDentoriumSlide(3)" class="w-1.5 h-1.5 rounded-full bg-white/50 transition-all dentorium-dot"></button>
+                <button onclick="goToDentoriumSlide(4)" class="w-1.5 h-1.5 rounded-full bg-white/50 transition-all dentorium-dot"></button>
+                <button onclick="goToDentoriumSlide(5)" class="w-1.5 h-1.5 rounded-full bg-white/50 transition-all dentorium-dot"></button>
+                <button onclick="goToDentoriumSlide(6)" class="w-1.5 h-1.5 rounded-full bg-white/50 transition-all dentorium-dot"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Exam Room Gallery -->
+      <div class="max-w-5xl mx-auto px-4 mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
+          🏫 ห้องสอบมาตรฐาน
+        </h2>
+        <p class="text-lg text-gray-600 text-center mb-8">
+          สำนักบริการวิชาการ มหาวิทยาลัยเชียงใหม่
+        </p>
+        
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2">
+            <img src="../assets/room/1.png" alt="ห้องทองกวาว 1" class="w-full h-[250px] md:h-[300px] object-cover" />
+            <img src="../assets/room/2.png" alt="ห้องทองกวาว 2" class="w-full h-[250px] md:h-[300px] object-cover" />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">ห้องทองกวาว 1 & 2</h3>
+            <p class="text-tbat-primary font-semibold mb-3">ห้องเชื่อมต่อกันเป็นห้องสอบขนาดใหญ่ รองรับได้ 300 ที่นั่ง</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div class="flex items-start">
+                <span class="text-green-500 mr-2">✅</span>
+                <span class="text-gray-700">ห้องปรับอากาศเย็นสบาย</span>
+              </div>
+              <div class="flex items-start">
+                <span class="text-green-500 mr-2">✅</span>
+                <span class="text-gray-700">ระบบเสียงและแสงมาตรฐาน</span>
+              </div>
+              <div class="flex items-start">
+                <span class="text-green-500 mr-2">✅</span>
+                <span class="text-gray-700">ที่จอดรถฟรีภายใน มช.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Dentorium carousel functionality
+      let dentoriumCurrentSlide = 0;
+      const dentoriumTotalSlides = 7;
+
+      function moveDentoriumCarousel(direction) {
+        dentoriumCurrentSlide += direction;
+        if (dentoriumCurrentSlide >= dentoriumTotalSlides) {
+          dentoriumCurrentSlide = 0;
+        } else if (dentoriumCurrentSlide < 0) {
+          dentoriumCurrentSlide = dentoriumTotalSlides - 1;
+        }
+        updateDentoriumCarousel();
+      }
+
+      function goToDentoriumSlide(slideIndex) {
+        dentoriumCurrentSlide = slideIndex;
+        updateDentoriumCarousel();
+      }
+
+      function updateDentoriumCarousel() {
+        const carousel = document.getElementById('dentorium-carousel');
+        const dots = document.querySelectorAll('.dentorium-dot');
+        
+        if (carousel) {
+          carousel.style.transform = `translateX(-${dentoriumCurrentSlide * 100}%)`;
+        }
+        
+        dots.forEach((dot, index) => {
+          if (index === dentoriumCurrentSlide) {
+            dot.className = 'w-1.5 h-1.5 rounded-full bg-white/80 transition-all dentorium-dot';
+          } else {
+            dot.className = 'w-1.5 h-1.5 rounded-full bg-white/50 transition-all dentorium-dot';
+          }
+        });
+      }
+
+      // Auto-advance carousel
+      setInterval(() => {
+        moveDentoriumCarousel(1);
+      }, 5000);
+    </script>
+</body>
+</html>

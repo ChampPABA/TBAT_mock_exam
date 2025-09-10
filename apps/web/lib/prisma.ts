@@ -99,7 +99,6 @@ export const optimizedQueries = {
           id: true,
           email: true,
           passwordHash: true,
-          emailVerified: true,
         },
       }),
       "findUserForAuth"
@@ -224,7 +223,7 @@ export const cleanupUtils = {
     
     return prisma.examCode.deleteMany({
       where: {
-        expiresAt: { lt: sixMonthsAgo },
+        createdAt: { lt: sixMonthsAgo },
       },
     });
   },
@@ -248,7 +247,7 @@ export const cleanupUtils = {
     
     return prisma.auditLog.deleteMany({
       where: {
-        timestamp: { lt: threeMonthsAgo },
+        createdAt: { lt: threeMonthsAgo },
       },
     });
   },

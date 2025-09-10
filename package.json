@@ -11,7 +11,9 @@
     "lint-staged": "lint-staged",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up --build",
     "docker:down": "docker-compose -f docker-compose.dev.yml down",
-    "docker:prod": "docker-compose up --build"
+    "docker:prod": "docker-compose up --build",
+    "playwright:setup": "npx playwright install && node -e \"const fs=require('fs');const path=require('path');const dir='C:/Users/User/AppData/Local/ms-playwright';if(!fs.existsSync(path.join(dir,'chromium-1179'))&&fs.existsSync(path.join(dir,'chromium-1187'))){fs.cpSync(path.join(dir,'chromium-1187'),path.join(dir,'chromium-1179'),{recursive:true});console.log('Playwright version compatibility fixed!');}else{console.log('Playwright already compatible');}\"",
+    "test:e2e": "npm run playwright:setup && npx playwright test"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -23,6 +25,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2",

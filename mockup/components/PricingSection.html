@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Section Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            }
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+      
+      .btn-hover-effect {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-hover-effect::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transition: width 0.6s, height 0.6s;
+        transform: translate(-50%, -50%);
+      }
+      
+      .btn-hover-effect:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+    </style>
+</head>
+<body>
+    <!-- Pricing Section -->
+    <section class="py-12 md:py-16 bg-white" id="pricing">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            เลือกแพ็กเกจที่เหมาะกับคุณ
+          </h2>
+          <p class="text-lg text-gray-600">
+            เริ่มต้นฟรี หรือปลดล็อกความสามารถเต็มรูปแบบ
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <!-- Free Package -->
+          <div class="bg-white border-2 border-gray-200 rounded-2xl p-8 relative">
+            <!-- Status Indicator -->
+            <div class="absolute top-4 right-4 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+              เปิดรับสมัคร
+            </div>
+            
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-gray-800 mb-2">Free Package</h3>
+              <div class="text-4xl font-bold text-gray-800 mb-1">฿0</div>
+              <p class="text-gray-600">ทดลองฟรี</p>
+              <p class="text-red-600 text-sm font-semibold mt-2">จำกัด 300 ที่ (ไม่เกิน 150 ที่/รอบ)</p>
+            </div>
+            
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center text-gray-700">
+                <span class="w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm mr-3">✓</span>
+                เลือกสอบได้ 1 วิชา
+              </li>
+              <li class="flex items-center text-gray-700">
+                <span class="w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm mr-3">✓</span>
+                ผลสอบพื้นฐาน
+              </li>
+              <li class="flex items-center text-gray-700">
+                <span class="w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm mr-3">✓</span>
+                คะแนนรวมและเปรียบเทียบ
+              </li>
+              <li class="flex items-center text-gray-400">
+                <span class="w-5 h-5 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-sm mr-3">–</span>
+                การวิเคราะห์แบบจำกัด
+              </li>
+              <li class="flex items-center text-gray-400">
+                <span class="w-5 h-5 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-sm mr-3">–</span>
+                PDF เฉลยและคำอธิบาย
+              </li>
+              <li class="flex items-center text-gray-400">
+                <span class="w-5 h-5 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-sm mr-3">–</span>
+                รายงานการวิเคราะห์ละเอียด
+              </li>
+              <li class="flex items-center text-gray-400">
+                <span class="w-5 h-5 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-sm mr-3">–</span>
+                เอาข้อสอบกลับบ้านไม่ได้
+              </li>
+            </ul>
+            
+            <button class="w-full py-3 px-6 border-2 border-tbat-primary text-tbat-primary rounded-xl font-semibold hover:bg-tbat-primary hover:text-white transition-colors duration-200">
+              เลือกแพ็กเกจฟรี
+            </button>
+            
+            <p class="text-xs text-gray-500 text-center mt-4">
+              เหมาะสำหรับผู้ที่ต้องการทดลองสอบเบื้องต้น<br>
+              <span class="text-orange-600 font-semibold">⚠️ หมายเหตุ: เมื่อ Free Package เต็ม จะเปิดเฉพาะ Advanced Package เท่านั้น</span>
+            </p>
+          </div>
+
+          <!-- Advanced Package -->
+          <div class="bg-gradient-to-br from-tbat-primary to-tbat-secondary rounded-2xl p-8 text-white relative overflow-hidden">
+            <div class="absolute top-4 right-4 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-semibold">
+              แนะนำ
+            </div>
+            
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold mb-2">Advanced Package</h3>
+              <div class="mb-1">
+                <span class="text-2xl line-through text-gray-300">฿990</span>
+                <span class="text-4xl font-bold ml-2">฿690</span>
+              </div>
+              <p class="text-tbat-light">สิทธิพิเศษ สมัคร 3 วันแรกเท่านั้น</p>
+              <p class="text-yellow-300 text-sm font-semibold mt-2">จำนวนจำกัด</p>
+            </div>
+            
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                ครบทั้ง 3 วิชา (ชีวะ เคมี ฟิสิกส์)
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                รายงานการวิเคราะห์แบบละเอียด
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                ดาวน์โหลด PDF เฉลยและคำอธิบาย
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                เปรียบเทียบกับสถิติโรงเรียนดัง
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                แนะนำจุดที่ต้องปรับปรุง
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                การวิเคราะห์ผลการสอบ
+              </li>
+              <li class="flex items-center">
+                <span class="w-5 h-5 bg-white text-tbat-primary rounded-full flex items-center justify-center text-sm mr-3 font-bold">✓</span>
+                เอาข้อสอบกลับบ้านได้
+              </li>
+            </ul>
+            
+            <button class="w-full py-3 px-6 bg-white text-tbat-primary rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200 btn-hover-effect">
+              อัพเกรดเลย <span class="line-through text-gray-400">฿990</span> ฿690
+            </button>
+            
+            <p class="text-xs text-tbat-light text-center mt-4">
+              เหมาะสำหรับผู้ที่ต้องการเตรียมตัวอย่างจริงจัง
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Package selection functionality would go here
+    </script>
+</body>
+</html>

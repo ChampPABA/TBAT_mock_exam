@@ -35,11 +35,25 @@
       "mcp__shadcn__list_items_in_registries",
       "mcp__shadcn__search_items_in_registries",
       "mcp__shadcn__get_item_examples_from_registries",
-      "Bash", "Write", "Edit", "MultiEdit"
+      "Bash",
+      "Write",
+      "Edit",
+      "MultiEdit",
+      "mcp__playwright__playwright_navigate",
+      "mcp__playwright__playwright_screenshot",
+      "mcp__playwright__playwright_evaluate",
+      "mcp__playwright__playwright_console_logs",
+      "mcp__playwright__playwright_get_visible_html",
+      "mcp__playwright__playwright_click",
+      "mcp__playwright__playwright_close",
+      "mcp__playwright__playwright_fill",
+      "mcp__playwright__playwright_select"
     ],
     "deny": [],
     "ask": []
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["playwright"]
+  "enabledMcpjsonServers": [
+    "playwright"
+  ]
 }

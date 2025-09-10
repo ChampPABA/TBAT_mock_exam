@@ -92,12 +92,12 @@ export async function POST(request: NextRequest) {
     await logSecurityEvent(
       "ADMIN_DATA_ACCESS",
       admin.id,
-      request.headers.get("x-forwarded-for") || undefined,
       {
         action: "create_alert",
         alertId: alert.id,
         alertName: alert.name,
-      }
+      },
+      request.headers.get("x-forwarded-for") || undefined
     );
     
     return NextResponse.json({

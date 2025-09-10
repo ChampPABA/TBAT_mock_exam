@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonials Section Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "tbat-primary": "#0d7276",
+              "tbat-secondary": "#529a94",
+              "tbat-accent": "#90bfc0",
+              "tbat-bg": "#cae0e1",
+              "tbat-light": "#fdfefe",
+            }
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "Prompt", sans-serif;
+      }
+      
+      .testimonial-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .testimonial-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      }
+    </style>
+</head>
+<body>
+    <!-- Testimonials Section -->
+    <section class="py-12 md:py-16 bg-white">
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
+          เสียงตอบรับจากผู้เข้าร่วม
+        </h2>
+        <p class="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+          ผู้เข้าร่วม Dentorium Camp ครั้งแรกที่เชียงใหม่ เรียกร้องให้จัด Mock Exam ที่เชียงใหม่
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="testimonial-card bg-gray-50 rounded-2xl p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-tbat-primary rounded-full flex items-center justify-center text-white font-bold">
+                👨‍🎓
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-800">ผู้เข้าร่วม #1</h4>
+                <p class="text-sm text-gray-600">นักเรียนจากเชียงใหม่</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "หลังจากเข้า Dentorium Camp ที่เชียงใหม่ รู้สึกว่าถ้ามี Mock Exam ที่เชียงใหม่จะดีมาก ไม่ต้องเดินทางไกล"
+            </p>
+            <div class="flex mt-4">
+              <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+            </div>
+          </div>
+          
+          <div class="testimonial-card bg-gray-50 rounded-2xl p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-tbat-secondary rounded-full flex items-center justify-center text-white font-bold">
+                👩‍🎓
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-800">ผู้เข้าร่วม #2</h4>
+                <p class="text-sm text-gray-600">นักเรียนจากเชียงใหม่</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "เคยเข้า Dentorium Camp ครั้งแรกมาแล้ว อยากให้จัด Mock Exam ที่เชียงใหม่บ้าง จะได้ไม่ต้องเดินทางไกลไปกรุงเทพฯ"
+            </p>
+            <div class="flex mt-4">
+              <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+            </div>
+          </div>
+          
+          <div class="testimonial-card bg-gray-50 rounded-2xl p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-tbat-accent rounded-full flex items-center justify-center text-white font-bold">
+                👨‍🎓
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-800">ผู้เข้าร่วม #3</h4>
+                <p class="text-sm text-gray-600">นักเรียนจากเชียงใหม่</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "ขอบคุณที่จัด Mock Exam ให้ครับ หลังจากเข้า Dentorium Camp ที่เชียงใหม่แล้วรู้สึกว่าควรมีสนามทดสอบที่เชียงใหม่ด้วย"
+            </p>
+            <div class="flex mt-4">
+              <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+</body>
+</html>

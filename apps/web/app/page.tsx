@@ -1,21 +1,113 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
+import React, { useState } from 'react';
+import Navigation from '@/components/landing/navigation';
+import HeroSection from '@/components/landing/hero-section';
+import ValidatorSection from '@/components/landing/validator-section';
+import ExamDetailsSection from '@/components/landing/exam-details-section';
+import FeaturesSection from '@/components/landing/features-section';
+import PricingSection from '@/components/landing/pricing-section';
+import CostSavingsSection from '@/components/landing/cost-savings-section';
+import DentoriumSection from '@/components/landing/dentorium-section';
+import TestimonialsSection from '@/components/landing/testimonials-section';
+import FAQSection from '@/components/landing/faq-section';
+import FinalCTASection from '@/components/landing/final-cta-section';
+import Footer from '@/components/landing/footer';
+import { RegistrationModalMockup } from '@/components/landing/registration-modal-mockup';
 
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleRegisterClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleLoginClick = () => {
+    console.log('Login clicked!');
+    alert('เปิดหน้าเข้าสู่ระบบ - จะเชื่อมต่อกับ NextAuth ในอนาคต');
+  };
+
+  const handleViewPackagesClick = () => {
+    console.log('View packages clicked!');
+    // Scroll to pricing section
+    const element = document.getElementById('pricing');
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
+  const handleSelectPackage = (packageId: number) => {
+    console.log(`Package selected: ${packageId}`);
+    alert(`เลือกแพ็กเกจ ID: ${packageId} - จะเชื่อมต่อกับระบบสมัครในอนาคต`);
+  };
+
+  const handleRegisterFreeClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleUpgradeClick = () => {
+    setIsModalOpen(true);
+  };
+
   return (
-    <div className="from-primary-50 to-primary-100 flex min-h-screen items-center justify-center bg-gradient-to-br p-8">
-      <main className="w-full max-w-md rounded-lg bg-white p-8 text-center shadow-lg">
-        <h1 className="text-primary font-prompt mb-4 text-3xl font-bold">TBAT Mock Exam</h1>
-        <p className="mb-6 text-gray-600">ระบบสอบจำลอง TBAT สำหรับนักเรียนเชียงใหม่</p>
-        <div className="space-y-4">
-          <Button className="w-full">เริ่มทำแบบทดสอบ</Button>
-          <Button variant="outline" className="w-full">
-            ดูผลสอบ
-          </Button>
-          <Button variant="ghost" className="w-full">
-            เกี่ยวกับเรา
-          </Button>
-        </div>
-      </main>
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation */}
+      <Navigation 
+        onRegisterClick={handleRegisterClick}
+        onLoginClick={handleLoginClick}
+      />
+      
+      {/* Hero Section */}
+      <HeroSection 
+        onRegisterClick={handleRegisterClick}
+        onViewPackagesClick={handleViewPackagesClick}
+      />
+      
+      {/* Validator Section */}
+      <ValidatorSection />
+      
+      {/* Exam Details Section */}
+      <ExamDetailsSection />
+      
+      {/* Features Section */}
+      <FeaturesSection />
+      
+      {/* Pricing Section */}
+      <PricingSection onSelectPackage={handleSelectPackage} />
+      
+      {/* Cost Savings Section */}
+      <CostSavingsSection />
+      
+      {/* Dentorium Section */}
+      <DentoriumSection />
+      
+      {/* Testimonials Section */}
+      <TestimonialsSection />
+      
+      {/* FAQ Section */}
+      <FAQSection />
+      
+      {/* Final CTA Section */}
+      <FinalCTASection 
+        onRegisterFreeClick={handleRegisterFreeClick}
+        onUpgradeClick={handleUpgradeClick}
+      />
+      
+      {/* Footer */}
+      <Footer />
+
+      {/* Registration Modal */}
+      <RegistrationModalMockup 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onRegistrationSuccess={(data) => {
+          console.log('Registration successful:', data);
+          alert(`สมัครสำเร็จ! รหัสสอบจะได้รับทางอีเมล ${data.email}`);
+        }}
+      />
     </div>
   );
 }

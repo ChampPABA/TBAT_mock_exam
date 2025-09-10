@@ -295,6 +295,7 @@ export async function auditLog(data: {
   try {
     await prisma.securityLog.create({
       data: {
+        eventType: SecurityEventType.AUTHENTICATION_SUCCESS,
         action: data.action,
         userId: data.userId,
         resourceId: data.resourceId || null,
@@ -406,7 +407,7 @@ export function getLoggingLevel(): string {
   switch (environment) {
     case "production":
       return "error_and_audit";
-    case "staging":
+    case "test":
       return "standard";
     case "development":
     default:

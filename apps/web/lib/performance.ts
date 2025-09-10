@@ -105,11 +105,12 @@ export class PerformanceTracker {
           sendToAnalytics({
             name: `custom_${name}`,
             value: duration,
+            delta: duration,
             rating: getRating('custom', duration),
             id: `${name}_${Date.now()}`,
             navigationType: 'custom',
             entries: [],
-          } as Metric);
+          } as unknown as Metric);
         }
       }
     } catch (error) {
