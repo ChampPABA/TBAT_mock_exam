@@ -35,7 +35,7 @@ export const commonSchemas = {
     .min(2, "Name too short / ชื่อสั้นเกินไป")
     .max(100, "Name too long / ชื่อยาวเกินไป")
     .refine(
-      (val) => /^[ก-๙a-zA-Z\s\.]+$/.test(val),
+      (val) => /^[ก-๙a-zA-Z\s.]+$/.test(val),
       "Name can only contain Thai/English letters / ชื่อต้องเป็นภาษาไทยหรืออังกฤษเท่านั้น"
     ),
 

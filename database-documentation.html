@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Mock Exam - Database Schema Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #0d7276, #529a94);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(13, 114, 118, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid #0d7276;
+        }
+        
+        .section h2 {
+            color: #0d7276;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .section h3 {
+            color: #529a94;
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #0d7276, #529a94);
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: top;
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .model-box {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #0d7276;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .model-title {
+            background: #0d7276;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .field-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+        }
+        
+        .field {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border-left: 3px solid #529a94;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .field-name {
+            font-weight: 600;
+            color: #0d7276;
+        }
+        
+        .field-type {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .required {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .optional {
+            color: #28a745;
+        }
+        
+        .enum-values {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        
+        .enum-values strong {
+            color: #856404;
+        }
+        
+        .relationship {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #0d7276, #529a94);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(13, 114, 118, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .nav a {
+            color: #0d7276;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav a:hover {
+            background: #0d7276;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 1rem;
+            }
+            
+            .field-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .highlight {
+            background: #fff3cd !important;
+            border-left: 4px solid #ffc107 !important;
+        }
+        
+        .new-field {
+            background: #d1ecf1 !important;
+            border-left: 4px solid #17a2b8 !important;
+        }
+        
+        .new-field::after {
+            content: "NEW";
+            background: #17a2b8;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏥 TBAT Mock Exam Database Schema</h1>
+            <p>Complete Entity-Relationship Diagram & Data Dictionary</p>
+            <p><small>Generated: November 2024 | Version: 1.0</small></p>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="nav">
+            <ul>
+                <li><a href="#overview">📊 Overview</a></li>
+                <li><a href="#er-diagram">🔗 ER Diagram</a></li>
+                <li><a href="#core-models">👤 Core Models</a></li>
+                <li><a href="#exam-models">📝 Exam Models</a></li>
+                <li><a href="#payment-models">💰 Payment Models</a></li>
+                <li><a href="#admin-models">⚙️ Admin Models</a></li>
+                <li><a href="#enums">📋 Enums</a></li>
+                <li><a href="#data-dictionary">📚 Data Dictionary</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Overview Statistics -->
+        <section id="overview" class="section">
+            <h2>📊 Database Overview</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">18</div>
+                    <div>Tables</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">13</div>
+                    <div>Enums</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">35+</div>
+                    <div>Indexes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20+</div>
+                    <div>Relations</div>
+                </div>
+            </div>
+            
+            <h3>🎯 Key Features</h3>
+            <ul style="padding-left: 2rem; margin: 1rem 0;">
+                <li><strong>User Management:</strong> Complete user lifecycle with PDPA compliance</li>
+                <li><strong>Exam System:</strong> Multi-subject mock exams with capacity management</li>
+                <li><strong>Payment Processing:</strong> Stripe integration with Thai Baht support</li>
+                <li><strong>Analytics:</strong> Detailed exam results and performance tracking</li>
+                <li><strong>Admin Operations:</strong> Comprehensive audit logging and support system</li>
+                <li><strong>Security:</strong> Multi-layer security logging and authentication</li>
+            </ul>
+        </section>
+        
+        <!-- ER Diagram -->
+        <section id="er-diagram" class="section">
+            <h2>🔗 Entity Relationship Diagram</h2>
+            <div style="background: white; padding: 2rem; border-radius: 10px; text-align: center; border: 2px dashed #0d7276;">
+                <h3 style="color: #0d7276; margin-bottom: 2rem;">📊 Visual ER Diagram</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left;">
+                    
+                    <!-- Core Domain -->
+                    <div style="background: #e8f5e8; padding: 1rem; border-radius: 8px; border: 2px solid #28a745;">
+                        <h4 style="color: #155724; text-align: center; margin-bottom: 1rem;">👤 USER DOMAIN</h4>
+                        <div style="font-size: 0.9rem;">
+                            <div><strong>users</strong> (18 fields)</div>
+                            <div>├── user_sessions</div>
+                            <div>├── accounts (NextAuth)</div>
+                            <div>└── pdpa_consents</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exam Domain -->
+                    <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; border: 2px solid #ffc107;">
+                        <h4 style="color: #856404; text-align: center; margin-bottom: 1rem;">📝 EXAM DOMAIN</h4>
+                        <div style="font-size: 0.9rem;">
+                            <div><strong>exam_codes</strong></div>
+                            <div>├── exam_results</div>
+                            <div>├── analytics</div>
+                            <div>├── session_capacities</div>
+                            <div>└── capacity_status</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Package Domain -->
+                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; border: 2px solid #2196f3;">
+                        <h4 style="color: #0d47a1; text-align: center; margin-bottom: 1rem;">📦 PACKAGE DOMAIN</h4>
+                        <div style="font-size: 0.9rem;">
+                            <div><strong>packages</strong></div>
+                            <div>├── user_packages</div>
+                            <div>└── payments</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Content Domain -->
+                    <div style="background: #fce4ec; padding: 1rem; border-radius: 8px; border: 2px solid #e91e63;">
+                        <h4 style="color: #880e4f; text-align: center; margin-bottom: 1rem;">📄 CONTENT DOMAIN</h4>
+                        <div style="font-size: 0.9rem;">
+                            <div><strong>pdf_solutions</strong></div>
+                            <div>├── pdf_downloads</div>
+                            <div>└── pdf_notifications</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Admin Domain -->
+                    <div style="background: #f3e5f5; padding: 1rem; border-radius: 8px; border: 2px solid #9c27b0;">
+                        <h4 style="color: #4a148c; text-align: center; margin-bottom: 1rem;">⚙️ ADMIN DOMAIN</h4>
+                        <div style="font-size: 0.9rem;">
+                            <div><strong>admin_users</strong></div>
+                            <div>├── audit_logs</div>
+                            <div>├── support_tickets</div>
+                            <div>└── security_logs</div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+        
+        <!-- Core Models -->
+        <section id="core-models" class="section">
+            <h2>👤 Core Models</h2>
+            
+            <div class="model-box">
+                <div class="model-title">👤 users (Primary Entity)</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">id</span>
+                        <span class="field-type required">String (UUID) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">email</span>
+                        <span class="field-type required">String (Unique) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">passwordHash</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">thaiName</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field new-field">
+                        <span class="field-name">nickname</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">phone</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">school</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field new-field">
+                        <span class="field-name">grade</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">lineId</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">parentName</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">parentPhone</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">packageType</span>
+                        <span class="field-type required">PackageType (DEFAULT: FREE)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">isUpgraded</span>
+                        <span class="field-type">Boolean (DEFAULT: false)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">pdpaConsent</span>
+                        <span class="field-type">Boolean (DEFAULT: false)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">failedLoginAttempts</span>
+                        <span class="field-type">Int (DEFAULT: 0)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">lockedUntil</span>
+                        <span class="field-type optional">DateTime?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">lastLoginAt</span>
+                        <span class="field-type optional">DateTime?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">isActive</span>
+                        <span class="field-type">Boolean (DEFAULT: true)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">metadata</span>
+                        <span class="field-type optional">Json?</span>
+                    </div>
+                </div>
+                <div class="relationship">
+                    <strong>🔗 Relations:</strong> sessions, examCodes, payments, examResults, analytics, pdfDownloads, supportTickets, accounts, pdpaConsents, userPackages
+                </div>
+            </div>
+            
+            <div class="model-box">
+                <div class="model-title">🔐 user_sessions</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">id</span>
+                        <span class="field-type required">String (UUID) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">userId</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">sessionToken</span>
+                        <span class="field-type required">String (Unique) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">expiresAt</span>
+                        <span class="field-type required">DateTime *</span>
+                    </div>
+                </div>
+                <div class="relationship">
+                    <strong>🔗 Relations:</strong> user (userId → users.id)
+                </div>
+            </div>
+            
+            <div class="model-box">
+                <div class="model-title">🔒 accounts (NextAuth.js)</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">id</span>
+                        <span class="field-type required">String (UUID) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">userId</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">type</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">provider</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">providerAccountId</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">refresh_token</span>
+                        <span class="field-type optional">Text?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">access_token</span>
+                        <span class="field-type optional">Text?</span>
+                    </div>
+                </div>
+                <div class="relationship">
+                    <strong>🔗 Relations:</strong> user (userId → users.id)
+                </div>
+            </div>
+        </section>
+        
+        <!-- Exam Models -->
+        <section id="exam-models" class="section">
+            <h2>📝 Exam Models</h2>
+            
+            <div class="model-box">
+                <div class="model-title">📝 exam_codes</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">id</span>
+                        <span class="field-type required">String (UUID) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">userId</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">code</span>
+                        <span class="field-type required">String (Unique) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">packageType</span>
+                        <span class="field-type required">PackageType *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">subject</span>
+                        <span class="field-type required">Subject *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">sessionTime</span>
+                        <span class="field-type required">SessionTime *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">isUsed</span>
+                        <span class="field-type">Boolean (DEFAULT: false)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">usedAt</span>
+                        <span class="field-type optional">DateTime?</span>
+                    </div>
+                </div>
+                <div class="relationship">
+                    <strong>🔗 Relations:</strong> user (userId → users.id), examResults
+                </div>
+            </div>
+            
+            <div class="model-box">
+                <div class="model-title">📊 exam_results</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">id</span>
+                        <span class="field-type required">String (UUID) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">userId</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">examCodeId</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">subject</span>
+                        <span class="field-type optional">Subject?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">score</span>
+                        <span class="field-type optional">Float?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">totalScore</span>
+                        <span class="field-type required">Float *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">biologyScore</span>
+                        <span class="field-type optional">Float?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">chemistryScore</span>
+                        <span class="field-type optional">Float?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">physicsScore</span>
+                        <span class="field-type optional">Float?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">percentile</span>
+                        <span class="field-type optional">Float?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">completionTime</span>
+                        <span class="field-type required">Int (minutes) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">expiresAt</span>
+                        <span class="field-type required">DateTime *</span>
+                    </div>
+                </div>
+                <div class="relationship">
+                    <strong>🔗 Relations:</strong> user (userId → users.id), examCode (examCodeId → exam_codes.id), analytics
+                </div>
+            </div>
+            
+            <div class="model-box">
+                <div class="model-title">👥 session_capacities</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">sessionTime</span>
+                        <span class="field-type required">SessionTime *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">currentCount</span>
+                        <span class="field-type">Int (DEFAULT: 0)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">maxCapacity</span>
+                        <span class="field-type">Int (DEFAULT: 300)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">examDate</span>
+                        <span class="field-type required">DateTime *</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Payment Models -->
+        <section id="payment-models" class="section">
+            <h2>💰 Payment Models</h2>
+            
+            <div class="model-box">
+                <div class="model-title">📦 packages</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">type</span>
+                        <span class="field-type required">PackageType (Unique) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">price</span>
+                        <span class="field-type required">Int (satangs) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">currency</span>
+                        <span class="field-type">String (DEFAULT: "thb")</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">features</span>
+                        <span class="field-type">String[] *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">description</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="model-box">
+                <div class="model-title">💳 payments</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">userId</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">stripePaymentIntentId</span>
+                        <span class="field-type required">String (Unique) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">amount</span>
+                        <span class="field-type required">Int (satangs) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">currency</span>
+                        <span class="field-type">String (DEFAULT: "thb")</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">paymentType</span>
+                        <span class="field-type required">PaymentType *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">status</span>
+                        <span class="field-type">PaymentStatus (DEFAULT: PENDING)</span>
+                    </div>
+                </div>
+                <div class="relationship">
+                    <strong>🔗 Relations:</strong> user (userId → users.id)
+                </div>
+            </div>
+        </section>
+        
+        <!-- Admin Models -->
+        <section id="admin-models" class="section">
+            <h2>⚙️ Admin Models</h2>
+            
+            <div class="model-box">
+                <div class="model-title">👨‍💼 admin_users</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">email</span>
+                        <span class="field-type required">String (Unique) *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">passwordHash</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">thaiName</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">role</span>
+                        <span class="field-type required">AdminRole *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">permissions</span>
+                        <span class="field-type">String[] *</span>
+                    </div>
+                </div>
+                <div class="relationship">
+                    <strong>🔗 Relations:</strong> uploadedPDFs, auditLogs, supportTickets
+                </div>
+            </div>
+            
+            <div class="model-box">
+                <div class="model-title">📋 audit_logs</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">adminId</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">actionType</span>
+                        <span class="field-type required">ActionType *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">targetId</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">originalData</span>
+                        <span class="field-type required">Json *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">newData</span>
+                        <span class="field-type required">Json *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">reason</span>
+                        <span class="field-type required">String *</span>
+                    </div>
+                </div>
+                <div class="relationship">
+                    <strong>🔗 Relations:</strong> admin (adminId → admin_users.id)
+                </div>
+            </div>
+            
+            <div class="model-box">
+                <div class="model-title">🔒 security_logs</div>
+                <div class="field-list">
+                    <div class="field">
+                        <span class="field-name">eventType</span>
+                        <span class="field-type required">SecurityEventType *</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">action</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">userId</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">ipAddress</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">userAgent</span>
+                        <span class="field-type optional">String?</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">metadata</span>
+                        <span class="field-type optional">Json?</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Enums -->
+        <section id="enums" class="section">
+            <h2>📋 Enums & Types</h2>
+            
+            <div class="enum-values">
+                <strong>PackageType:</strong> FREE | ADVANCED
+            </div>
+            
+            <div class="enum-values">
+                <strong>Subject:</strong> BIOLOGY | CHEMISTRY | PHYSICS
+            </div>
+            
+            <div class="enum-values">
+                <strong>SessionTime:</strong> MORNING ("09:00-12:00") | AFTERNOON ("13:00-16:00")
+            </div>
+            
+            <div class="enum-values">
+                <strong>PaymentType:</strong> ADVANCED_PACKAGE | POST_EXAM_UPGRADE
+            </div>
+            
+            <div class="enum-values">
+                <strong>PaymentStatus:</strong> PENDING | COMPLETED | FAILED | REFUNDED
+            </div>
+            
+            <div class="enum-values">
+                <strong>AdminRole:</strong> ADMIN | SUPER_ADMIN
+            </div>
+            
+            <div class="enum-values">
+                <strong>ActionType:</strong> USER_UPDATE | CODE_REGEN | PDF_UPLOAD | CRISIS_RESOLUTION
+            </div>
+            
+            <div class="enum-values">
+                <strong>IssueType:</strong> CODE_PROBLEM | PAYMENT_ISSUE | RESULT_ERROR | PDF_ACCESS
+            </div>
+            
+            <div class="enum-values">
+                <strong>TicketStatus:</strong> OPEN | IN_PROGRESS | RESOLVED | ESCALATED
+            </div>
+            
+            <div class="enum-values">
+                <strong>Priority:</strong> LOW | MEDIUM | HIGH | CRITICAL
+            </div>
+            
+            <div class="enum-values">
+                <strong>AvailabilityStatus:</strong> AVAILABLE | LIMITED | FULL | CLOSED
+            </div>
+            
+            <div class="enum-values">
+                <strong>SecurityEventType:</strong> LOGIN_ATTEMPT | LOGIN_SUCCESS | LOGIN_FAILED | LOGOUT | PASSWORD_CHANGE | ACCOUNT_LOCKED | PDPA_CONSENT_GRANTED | PDPA_CONSENT_REVOKED | UNAUTHORIZED_ACCESS | RATE_LIMIT_EXCEEDED | SUSPICIOUS_ACTIVITY | AUTHENTICATION_SUCCESS | AUTHENTICATION_FAILED | PASSWORD_RESET_REQUEST | EMAIL_VERIFICATION | MULTIPLE_LOGIN_ATTEMPTS | PDF_UNAUTHORIZED_ACCESS | ADMIN_DATA_ACCESS | DATA_EXPORT | DATA_DELETION
+            </div>
+        </section>
+        
+        <!-- Data Dictionary -->
+        <section id="data-dictionary" class="section">
+            <h2>📚 Complete Data Dictionary</h2>
+            
+            <h3>👤 User Management Tables</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Null</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="18"><strong>users</strong></td>
+                            <td>id</td>
+                            <td>String (UUID)</td>
+                            <td>NO</td>
+                            <td>uuid()</td>
+                            <td>Primary key - unique user identifier</td>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>String</td>
+                            <td>NO</td>
+                            <td>-</td>
+                            <td>User email address (unique)</td>
+                        </tr>
+                        <tr>
+                            <td>passwordHash</td>
+                            <td>String</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td>Hashed password for authentication</td>
+                        </tr>
+                        <tr>
+                            <td>thaiName</td>
+                            <td>String</td>
+                            <td>NO</td>
+                            <td>-</td>
+                            <td>Full Thai name (ชื่อ-นามสกุล)</td>
+                        </tr>
+                        <tr class="new-field">
+                            <td><strong>nickname</strong></td>
+                            <td>String</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td><strong>NEW:</strong> User nickname (ชื่อเล่น)</td>
+                        </tr>
+                        <tr>
+                            <td>phone</td>
+                            <td>String</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td>Phone number (formatted: 08X-XXX-XXXX)</td>
+                        </tr>
+                        <tr>
+                            <td>school</td>
+                            <td>String</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td>School name</td>
+                        </tr>
+                        <tr class="new-field">
+                            <td><strong>grade</strong></td>
+                            <td>String</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td><strong>NEW:</strong> Student grade (m4, m5, m6, other)</td>
+                        </tr>
+                        <tr>
+                            <td>lineId</td>
+                            <td>String</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td>LINE ID for notifications</td>
+                        </tr>
+                        <tr>
+                            <td>parentName</td>
+                            <td>String</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td>Parent/Guardian name</td>
+                        </tr>
+                        <tr>
+                            <td>parentPhone</td>
+                            <td>String</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td>Parent/Guardian phone number</td>
+                        </tr>
+                        <tr>
+                            <td>packageType</td>
+                            <td>PackageType</td>
+                            <td>NO</td>
+                            <td>FREE</td>
+                            <td>Current package (FREE/ADVANCED)</td>
+                        </tr>
+                        <tr>
+                            <td>isUpgraded</td>
+                            <td>Boolean</td>
+                            <td>NO</td>
+                            <td>false</td>
+                            <td>Has user upgraded package?</td>
+                        </tr>
+                        <tr>
+                            <td>pdpaConsent</td>
+                            <td>Boolean</td>
+                            <td>NO</td>
+                            <td>false</td>
+                            <td>PDPA consent status</td>
+                        </tr>
+                        <tr>
+                            <td>failedLoginAttempts</td>
+                            <td>Int</td>
+                            <td>NO</td>
+                            <td>0</td>
+                            <td>Security: failed login counter</td>
+                        </tr>
+                        <tr>
+                            <td>lockedUntil</td>
+                            <td>DateTime</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td>Account lock expiration time</td>
+                        </tr>
+                        <tr>
+                            <td>lastLoginAt</td>
+                            <td>DateTime</td>
+                            <td>YES</td>
+                            <td>null</td>
+                            <td>Last successful login timestamp</td>
+                        </tr>
+                        <tr>
+                            <td>isActive</td>
+                            <td>Boolean</td>
+                            <td>NO</td>
+                            <td>true</td>
+                            <td>Account active status</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>📝 Exam System Tables</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="8"><strong>exam_codes</strong></td>
+                            <td>id</td>
+                            <td>String (UUID)</td>
+                            <td>Primary key</td>
+                        </tr>
+                        <tr>
+                            <td>userId</td>
+                            <td>String</td>
+                            <td>Foreign key to users.id</td>
+                        </tr>
+                        <tr>
+                            <td>code</td>
+                            <td>String (Unique)</td>
+                            <td>Unique exam code (e.g., FREE-ABC1-BIO)</td>
+                        </tr>
+                        <tr>
+                            <td>packageType</td>
+                            <td>PackageType</td>
+                            <td>Package type (FREE/ADVANCED)</td>
+                        </tr>
+                        <tr>
+                            <td>subject</td>
+                            <td>Subject</td>
+                            <td>Exam subject (BIOLOGY/CHEMISTRY/PHYSICS)</td>
+                        </tr>
+                        <tr>
+                            <td>sessionTime</td>
+                            <td>SessionTime</td>
+                            <td>Time slot (MORNING/AFTERNOON)</td>
+                        </tr>
+                        <tr>
+                            <td>isUsed</td>
+                            <td>Boolean</td>
+                            <td>Has code been used for exam?</td>
+                        </tr>
+                        <tr>
+                            <td>usedAt</td>
+                            <td>DateTime?</td>
+                            <td>When code was used</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="6"><strong>session_capacities</strong></td>
+                            <td>id</td>
+                            <td>String (UUID)</td>
+                            <td>Primary key</td>
+                        </tr>
+                        <tr>
+                            <td>sessionTime</td>
+                            <td>SessionTime</td>
+                            <td>Session time slot</td>
+                        </tr>
+                        <tr>
+                            <td>currentCount</td>
+                            <td>Int</td>
+                            <td>Current registered students</td>
+                        </tr>
+                        <tr>
+                            <td>maxCapacity</td>
+                            <td>Int</td>
+                            <td>Maximum capacity (300)</td>
+                        </tr>
+                        <tr>
+                            <td>examDate</td>
+                            <td>DateTime</td>
+                            <td>Exam date</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><em>Unique constraint: (sessionTime, examDate)</em></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>💰 Payment & Package Tables</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="6"><strong>packages</strong></td>
+                            <td>type</td>
+                            <td>PackageType</td>
+                            <td>Package type (unique)</td>
+                        </tr>
+                        <tr>
+                            <td>price</td>
+                            <td>Int</td>
+                            <td>Price in satangs (0 for FREE, 69000 for ADVANCED)</td>
+                        </tr>
+                        <tr>
+                            <td>currency</td>
+                            <td>String</td>
+                            <td>Currency code (default: "thb")</td>
+                        </tr>
+                        <tr>
+                            <td>features</td>
+                            <td>String[]</td>
+                            <td>Array of package features</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>String</td>
+                            <td>Package description</td>
+                        </tr>
+                        <tr>
+                            <td>isActive</td>
+                            <td>Boolean</td>
+                            <td>Package availability</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="7"><strong>payments</strong></td>
+                            <td>userId</td>
+                            <td>String</td>
+                            <td>Foreign key to users.id</td>
+                        </tr>
+                        <tr>
+                            <td>stripePaymentIntentId</td>
+                            <td>String</td>
+                            <td>Stripe payment intent ID (unique)</td>
+                        </tr>
+                        <tr>
+                            <td>amount</td>
+                            <td>Int</td>
+                            <td>Amount in satangs</td>
+                        </tr>
+                        <tr>
+                            <td>currency</td>
+                            <td>String</td>
+                            <td>Currency (default: "thb")</td>
+                        </tr>
+                        <tr>
+                            <td>paymentType</td>
+                            <td>PaymentType</td>
+                            <td>Type of payment</td>
+                        </tr>
+                        <tr>
+                            <td>status</td>
+                            <td>PaymentStatus</td>
+                            <td>Payment status (default: PENDING)</td>
+                        </tr>
+                        <tr>
+                            <td>completedAt</td>
+                            <td>DateTime?</td>
+                            <td>Payment completion timestamp</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>📊 Analytics & Results Tables</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Field</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="8"><strong>exam_results</strong></td>
+                            <td>userId</td>
+                            <td>Foreign key to users.id</td>
+                        </tr>
+                        <tr>
+                            <td>examCodeId</td>
+                            <td>Foreign key to exam_codes.id</td>
+                        </tr>
+                        <tr>
+                            <td>totalScore</td>
+                            <td>Overall exam score</td>
+                        </tr>
+                        <tr>
+                            <td>biologyScore</td>
+                            <td>Biology subject score</td>
+                        </tr>
+                        <tr>
+                            <td>chemistryScore</td>
+                            <td>Chemistry subject score</td>
+                        </tr>
+                        <tr>
+                            <td>physicsScore</td>
+                            <td>Physics subject score</td>
+                        </tr>
+                        <tr>
+                            <td>percentile</td>
+                            <td>Percentile ranking</td>
+                        </tr>
+                        <tr>
+                            <td>completionTime</td>
+                            <td>Time taken (minutes)</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5"><strong>analytics</strong></td>
+                            <td>resultId</td>
+                            <td>Foreign key to exam_results.id</td>
+                        </tr>
+                        <tr>
+                            <td>userId</td>
+                            <td>Foreign key to users.id</td>
+                        </tr>
+                        <tr>
+                            <td>subjectBreakdowns</td>
+                            <td>JSON data for subject analysis</td>
+                        </tr>
+                        <tr>
+                            <td>recommendations</td>
+                            <td>JSON data for improvement suggestions</td>
+                        </tr>
+                        <tr>
+                            <td>comparisonData</td>
+                            <td>JSON data for performance comparisons</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <div style="background: linear-gradient(135deg, #0d7276, #529a94); color: white; padding: 2rem; border-radius: 15px; text-align: center; margin-top: 3rem;">
+            <h3>🏥 TBAT Mock Exam Database Schema</h3>
+            <p>Complete documentation generated for development team</p>
+            <p><small>Built with Prisma ORM • PostgreSQL • Next.js • TypeScript</small></p>
+            <p><small style="opacity: 0.8;">Last updated: November 2024 • Version 1.0</small></p>
+        </div>
+    </div>
+</body>
+</html>

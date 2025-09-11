@@ -21,7 +21,7 @@ The TBAT Mock Exam Platform is a greenfield Next.js application for Thai Biomedi
 - **Payments**: Stripe (Thai Baht support)
 - **Deployment**: Vercel platform (all-in-one solution)
 - **Testing**: Jest 29+ for unit tests, Playwright for E2E
-- **Package Manager**: pnpm 8.0+
+- **Package Manager**: npm 9.0+
 
 ### Project Structure
 
@@ -90,8 +90,8 @@ npm test             # Run Jest tests
 npm run test:e2e     # Run Playwright E2E tests
 
 # Package management
-pnpm install         # Install dependencies
-pnpm build           # Build project
+npm install          # Install dependencies
+npm run build        # Build project
 ```
 
 ## Key Implementation Notes

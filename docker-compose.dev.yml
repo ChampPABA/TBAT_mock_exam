@@ -21,8 +21,7 @@ services:
       - ./apps/web:/app/apps/web:cached
       - ./packages:/app/packages:cached
       - ./package.json:/app/package.json:ro
-      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml:ro
-      - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml:ro
+      - ./package-lock.json:/app/package-lock.json:ro
       - /app/node_modules
       - /app/apps/web/node_modules
       - /app/apps/web/.next

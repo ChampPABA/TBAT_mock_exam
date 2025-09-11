@@ -72,10 +72,11 @@ graph TB
 
 ### Scalability Strategy
 
-**Current Capacity (20 Users):**
+**Current Capacity:**
 
-- **Registration:** 20 concurrent users during peak periods
-- **Exam Sessions:** 2 sessions × 10 students each
+- **Registration:** 20 concurrent users during peak registration periods
+- **Exam Participants:** 2 sessions × 300 students each (600 total on 27 กันยายน 2568)
+- **Concurrent Load:** System optimized for 20 simultaneous registrations
 - **Results Processing:** Real-time analytics generation
 - **PDF Delivery:** Concurrent downloads supported
 

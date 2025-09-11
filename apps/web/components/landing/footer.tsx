@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 const Footer: React.FC = () => {
   return (
@@ -71,6 +72,7 @@ const Footer: React.FC = () => {
               <a href="#details" className="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">รายละเอียดการสอบ</a>
               <a href="#pricing" className="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">แพ็กเกจ</a>
               <a href="#faq" className="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">คำถามที่พบบ่อย</a>
+              <Link href="/contact" className="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">ติดต่อเรา</Link>
               <a href="#" className="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">นโยบายความเป็นส่วนตัว</a>
               <a href="#" className="block text-gray-400 hover:text-tbat-accent transition-colors duration-200">เงื่อนไขการใช้งาน</a>
             </div>

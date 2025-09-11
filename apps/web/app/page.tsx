@@ -2,24 +2,58 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import Navigation from '@/components/landing/navigation';
 import HeroSection from '@/components/landing/hero-section';
-import ValidatorSection from '@/components/landing/validator-section';
-import ExamDetailsSection from '@/components/landing/exam-details-section';
-import FeaturesSection from '@/components/landing/features-section';
-import PricingSection from '@/components/landing/pricing-section';
-import CostSavingsSection from '@/components/landing/cost-savings-section';
-import DentoriumSection from '@/components/landing/dentorium-section';
-import TestimonialsSection from '@/components/landing/testimonials-section';
-import FAQSection from '@/components/landing/faq-section';
-import FinalCTASection from '@/components/landing/final-cta-section';
-import Footer from '@/components/landing/footer';
+
+// Dynamic imports for below-the-fold sections with better error handling
+const ValidatorSection = dynamic(() => import('@/components/landing/validator-section'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
+const ExamDetailsSection = dynamic(() => import('@/components/landing/exam-details-section'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
+const FeaturesSection = dynamic(() => import('@/components/landing/features-section'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
+const PricingSection = dynamic(() => import('@/components/landing/pricing-section'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
+const CostSavingsSection = dynamic(() => import('@/components/landing/cost-savings-section'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
+const DentoriumSection = dynamic(() => import('@/components/landing/dentorium-section'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
+const TestimonialsSection = dynamic(() => import('@/components/landing/testimonials-section'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
+const FAQSection = dynamic(() => import('@/components/landing/faq-section'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
+const FinalCTASection = dynamic(() => import('@/components/landing/final-cta-section'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
+const Footer = dynamic(() => import('@/components/landing/footer'), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse" />,
+  ssr: false
+});
 
 export default function Home() {
   const router = useRouter();
 
   const handleRegisterClick = () => {
-    router.push('/register');
+    // Use window.location for more reliable navigation
+    window.location.href = '/register';
   };
 
   const handleLoginClick = () => {
@@ -41,15 +75,15 @@ export default function Home() {
 
   const handleSelectPackage = (packageId: number) => {
     console.log(`Package selected: ${packageId}`);
-    router.push('/register');
+    window.location.href = '/register';
   };
 
   const handleRegisterFreeClick = () => {
-    router.push('/register');
+    window.location.href = '/register';
   };
 
   const handleUpgradeClick = () => {
-    router.push('/register');
+    window.location.href = '/register';
   };
 
   return (
@@ -98,6 +132,7 @@ export default function Home() {
       
       {/* Footer */}
       <Footer />
+
     </div>
   );
 }

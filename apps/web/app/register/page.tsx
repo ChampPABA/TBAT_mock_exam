@@ -717,6 +717,11 @@ export default function RegisterPage() {
                       <p className="text-gray-600 text-sm">
                         Advanced Package เพื่อสอบครบทุกวิชา พร้อมวิเคราะห์ผลละเอียด
                       </p>
+                      <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
+                        <span className="text-lg text-gray-500 line-through">฿990</span>
+                        <span className="text-xl font-bold text-green-600">฿690</span>
+                        <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-full">ประหยัด ฿300</span>
+                      </div>
                     </div>
                     <Button 
                       onClick={() => {
@@ -725,7 +730,13 @@ export default function RegisterPage() {
                       }}
                       type="button"
                       className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-lg hover:shadow-lg transition-all whitespace-nowrap animate-pulse-soft">
-                      Advanced Package ฿690
+                      <div className="flex flex-col items-center">
+                        <span className="text-sm">Advanced Package</span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs line-through opacity-75">฿990</span>
+                          <span className="font-bold">฿690</span>
+                        </div>
+                      </div>
                     </Button>
                   </div>
                 </div>

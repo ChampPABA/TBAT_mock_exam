@@ -5,20 +5,20 @@
 ### Story 2.1: UI/UX Mockup Implementation
 
 As a **UX Expert**,
-I want to create interactive mockups for registration and login modals,
+I want to create interactive mockups for registration and login pages,
 so that the authentication flow is optimized for mobile users and conversion.
 
 #### Acceptance Criteria
 
-**AC1:** Registration modal mockup created with step-by-step flow (package → profile → consent → confirmation)
+**AC1:** Registration page mockup created with step-by-step flow (package → profile → consent → confirmation)
 
-**AC2:** Login modal mockup with email/password fields, "จำรหัสผ่าน" checkbox, and "ลืมรหัสผ่าน" link
+**AC2:** Login page mockup with email/password fields, "จำรหัสผ่าน" checkbox, and "ลืมรหัสผ่าน" link
 
 **AC3:** Profile form mockup with Thai name fields, phone number, school, and subject selection for Free users
 
 **AC4:** PDPA consent mockup with clear, simple Thai language explaining data usage
 
-**AC5:** Mobile-optimized modal designs tested for single-thumb operation and keyboard handling
+**AC5:** Mobile-optimized page designs tested for single-thumb operation and touch-friendly form navigation
 
 **AC6:** Error states and validation messaging designed for clear user guidance
 
@@ -30,9 +30,9 @@ so that the registration experience is complete and ready for backend integratio
 
 #### Acceptance Criteria
 
-**AC1:** Registration modal component built with multi-step form using React Hook Form and Zod validation
+**AC1:** Registration page component built with multi-step form using React Hook Form and Zod validation
 
-**AC2:** Login modal component with email/password authentication and "remember me" functionality
+**AC2:** Login page component with email/password authentication and "remember me" functionality
 
 **AC3:** Profile form component with Thai name validation, phone number formatting, and school selection
 
@@ -40,7 +40,7 @@ so that the registration experience is complete and ready for backend integratio
 
 **AC5:** Form validation implemented with real-time feedback and Thai language error messages
 
-**AC6:** Modal state management implemented for seamless transitions between login/registration
+**AC6:** Page routing and state management implemented for seamless navigation between login/registration flows
 
 ### Story 2.3: Database Schema Creation
 

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface NavigationProps {
   onRegisterClick?: () => void;
@@ -9,6 +10,8 @@ interface NavigationProps {
 }
 
 export default function Navigation({ onRegisterClick, onLoginClick }: NavigationProps) {
+  const router = useRouter();
+  
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -20,8 +23,17 @@ export default function Navigation({ onRegisterClick, onLoginClick }: Navigation
   };
 
   const handleRegisterClick = () => {
-    if (onRegisterClick) {
-      onRegisterClick();
+    try {
+      if (onRegisterClick) {
+        onRegisterClick();
+      } else {
+        // Use Link component instead of router.push to avoid prefetch issues
+        window.location.href = '/register';
+      }
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Fallback to regular navigation
+      window.location.href = '/register';
     }
   };
 
@@ -99,6 +111,12 @@ export default function Navigation({ onRegisterClick, onLoginClick }: Navigation
             >
               คำถามที่พบบ่อย
             </a>
+            <Link
+              href="/contact"
+              className="nav-link text-gray-700 hover:text-tbat-primary font-medium transition-colors duration-200"
+            >
+              ติดต่อเรา
+            </Link>
             
             {/* Action Buttons */}
             <button 
@@ -107,12 +125,13 @@ export default function Navigation({ onRegisterClick, onLoginClick }: Navigation
             >
               เข้าสู่ระบบ
             </button>
-            <button 
-              onClick={handleRegisterClick}
-              className="px-4 py-2 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-medium text-sm btn-hover-effect relative overflow-hidden"
+            <Link 
+              href="/register"
+              data-testid="nav-register-button"
+              className="px-4 py-2 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-medium text-sm btn-hover-effect relative overflow-hidden inline-block text-center"
             >
               สมัครสมาชิก
-            </button>
+            </Link>
           </div>
         </div>
       </div>

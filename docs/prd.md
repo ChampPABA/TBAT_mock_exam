@@ -29,6 +29,7 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 | 2025-01-26 | 1.0     | Initial PRD creation from comprehensive Project Brief and Handoff Summary                                | John (PM) |
 | 2025-01-26 | 1.1     | Added Docker development environment requirements and containerization strategy                          | John (PM) |
 | 2025-01-26 | 1.2     | Added PDF solution management, data lifecycle policy, and enhanced admin capabilities (FR21-FR24, NFR16) | John (PM) |
+| 2025-09-11 | 1.3     | Clarified Story 1.3 AC2 capacity logic: 300 exam participants per session vs 20 concurrent system users | PO Sarah |
 
 ## Requirements
 
@@ -403,7 +404,7 @@ so that the complete user interface is functional and ready for backend integrat
 
 **AC3:** Package selection component with Free/Advanced toggle and capacity status messaging using mock data
 
-**AC4:** Modal system implemented for registration flow with mobile-optimized full-screen design
+**AC4:** Registration page implemented with dedicated route and mobile-optimized multi-step design
 
 **AC5:** Government credibility badge component with proper logo placement and responsive scaling
 
@@ -419,7 +420,7 @@ so that the landing page can display real-time availability and track user selec
 
 **AC1:** Package table created with Free/Advanced types, pricing (0/690), and feature definitions
 
-**AC2:** Capacity table created tracking morning/afternoon sessions with 300 total, 150 Free limits
+**AC2:** Capacity table created tracking morning/afternoon sessions with 300 exam participants per session (2 sessions × 300 = 600 total on 27 กันยายน 2568), supporting 20 concurrent system users, with 150 Free package limit per session
 
 **AC3:** User_Package junction table created linking user selections to package types and sessions
 
@@ -471,12 +472,12 @@ so that users see accurate real-time information and can make informed package s
 
 ## Epic 2: User Authentication & Registration System
 
-**Goal:** Enable secure user registration with email/password authentication, basic PDPA consent, and user profile management integrated seamlessly with package selection flow.
+**Goal:** Enable secure user registration with email/password authentication, basic PDPA consent, and user profile management through dedicated registration page integrated with package selection flow.
 
 ### Story 2.1: UI/UX Mockup Implementation
 
 As a **UX Expert**,
-I want to create interactive mockups for registration and login modals,
+I want to create interactive mockups for registration and login pages,
 so that the authentication flow is optimized for mobile users and conversion.
 
 #### Acceptance Criteria

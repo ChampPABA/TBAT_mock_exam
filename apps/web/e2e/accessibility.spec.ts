@@ -171,7 +171,7 @@ test.describe("Accessibility Tests (WCAG 2.1 AA)", () => {
   test.describe("Thai Language Accessibility", () => {
     test("should properly announce Thai content to screen readers", async ({ page }) => {
       // Check that Thai text elements have proper lang attributes or screen reader support
-      const thaiTextElements = await page.locator('text=/[ก-๏]/')all();
+      const thaiTextElements = await page.locator('text=/[ก-๏]/').all();
       
       for (const element of thaiTextElements) {
         if (await element.isVisible()) {

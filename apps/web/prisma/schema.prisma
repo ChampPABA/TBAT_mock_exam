@@ -16,9 +16,13 @@ model User {
   email               String      @unique
   passwordHash        String?     @map("password_hash")
   thaiName            String      @map("thai_name")
+  nickname            String?
   phone               String?
   school              String?
+  grade               String?     // "m4", "m5", "m6", "other"
   lineId              String?     @map("line_id")
+  parentName          String?     @map("parent_name")
+  parentPhone         String?     @map("parent_phone")
   packageType         PackageType @default(FREE) @map("package_type")
   isUpgraded          Boolean     @default(false) @map("is_upgraded")
   pdpaConsent         Boolean     @default(false) @map("pdpa_consent")
@@ -42,6 +46,7 @@ model User {
   supportTickets  SupportTicket[]
   accounts        Account[]
   pdpaConsents    PDPAConsent[]
+  userPackages    UserPackage[]
 
   @@map("users")
 }
@@ -91,6 +96,21 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
+// Package Management
+model Package {
+  id          String      @id @default(uuid())
+  type        PackageType @unique
+  price       Int         // Amount in satangs (0 for FREE, 69000 for ADVANCED)
+  currency    String      @default("thb")
+  features    String[]    // Array of feature descriptions for comparison
+  description String
+  isActive    Boolean     @default(true) @map("is_active")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@map("packages")
+}
+
 // Exam Registration & Codes
 model ExamCode {
   id          String      @id @default(uuid())
@@ -109,6 +129,9 @@ model ExamCode {
 
   @@index([userId])
   @@index([code])
+  @@index([packageType, sessionTime])
+  @@index([userId, packageType])
+  @@index([sessionTime, createdAt])
   @@map("exam_codes")
 }
 
@@ -122,7 +145,54 @@ model SessionCapacity {
   updatedAt    DateTime   @updatedAt @map("updated_at")
 
   @@unique([sessionTime, examDate])
+  @@index([sessionTime])
+  @@index([examDate])
+  @@index([currentCount])
   @@map("session_capacities")
+}
+
+// User-Package Relationship Management
+model UserPackage {
+  id            String      @id @default(uuid())
+  userId        String      @map("user_id")
+  packageType   PackageType @map("package_type")
+  sessionTime   SessionTime @map("session_time")
+  registeredAt  DateTime    @default(now()) @map("registered_at")
+  isActive      Boolean     @default(true) @map("is_active")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, packageType, sessionTime])
+  @@index([userId])
+  @@index([packageType])
+  @@index([sessionTime])
+  @@index([packageType, sessionTime])
+  @@index([sessionTime, registeredAt])
+  @@map("user_packages")
+}
+
+// Real-time Capacity Status Management
+model CapacityStatus {
+  id               String         @id @default(uuid())
+  sessionTime      SessionTime    @map("session_time")
+  examDate         DateTime       @map("exam_date")
+  totalCount       Int            @default(0) @map("total_count")
+  freeCount        Int            @default(0) @map("free_count")
+  advancedCount    Int            @default(0) @map("advanced_count")
+  maxCapacity      Int            @default(300) @map("max_capacity")
+  freeLimit        Int            @default(150) @map("free_limit")
+  availabilityStatus AvailabilityStatus @default(AVAILABLE) @map("availability_status")
+  lastUpdated      DateTime       @default(now()) @map("last_updated")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+
+  @@unique([sessionTime, examDate])
+  @@index([sessionTime])
+  @@index([availabilityStatus])
+  @@map("capacity_status")
 }
 
 // Payment Processing
@@ -407,6 +477,13 @@ enum SecurityEventType {
   ADMIN_DATA_ACCESS
   DATA_EXPORT
   DATA_DELETION
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  LIMITED
+  FULL
+  CLOSED
 }
 
 // PDPA Consent Management

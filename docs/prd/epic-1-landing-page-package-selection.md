@@ -52,7 +52,7 @@ so that the landing page can display real-time availability and track user selec
 
 **AC1:** Package table created with Free/Advanced types, pricing (0/690), and feature definitions
 
-**AC2:** Capacity table created tracking morning/afternoon sessions with 300 total, 150 Free limits
+**AC2:** Capacity table created tracking morning/afternoon sessions with 300 exam participants per session (2 sessions × 300 = 600 total on 27 กันยายน 2568), supporting 20 concurrent system users, with 150 Free package limit per session
 
 **AC3:** User_Package junction table created linking user selections to package types and sessions
 
@@ -101,3 +101,11 @@ so that users see accurate real-time information and can make informed package s
 **AC5:** Loading states implemented for all dynamic content with skeleton placeholders
 
 **AC6:** End-to-end testing completed covering package selection flow from landing page to confirmation
+
+---
+
+## Change Log
+
+| Date       | Version | Description                                   | Author |
+| ---------- | ------- | --------------------------------------------- | ------ |
+| 2025-09-11 | 1.1     | Clarified capacity logic: 300 exam participants per session vs 20 concurrent system users | PO Sarah |

@@ -17,7 +17,10 @@ async function main() {
     prisma.examResult.deleteMany(),
     prisma.payment.deleteMany(),
     prisma.examCode.deleteMany(),
+    prisma.userPackage.deleteMany(),
+    prisma.capacityStatus.deleteMany(),
     prisma.sessionCapacity.deleteMany(),
+    prisma.package.deleteMany(),
     prisma.verificationToken.deleteMany(),
     prisma.account.deleteMany(),
     prisma.userSession.deleteMany(),
@@ -50,6 +53,43 @@ async function main() {
 
   console.log("✅ Created admin users");
 
+  // Create packages
+  await prisma.package.createMany({
+    data: [
+      {
+        type: "FREE",
+        price: 0,
+        currency: "thb",
+        features: [
+          "เข้าสอบได้ 1 วิชา",
+          "ดูผลคะแนนเบื้องต้น",
+          "เปรียบเทียบคะแนนเฉลี่ย",
+          "ข้อมูลสถิติพื้นฐาน"
+        ],
+        description: "แพ็กเกจฟรี - เข้าสอบ 1 วิชา พร้อมผลคะแนนเบื้องต้น",
+        isActive: true,
+      },
+      {
+        type: "ADVANCED",
+        price: 69000, // 690 THB
+        currency: "thb",
+        features: [
+          "เข้าสอบได้ครบ 3 วิชา (ชีววิทยา เคมี ฟิสิกส์)",
+          "วิเคราะห์ผลคะแนนละเอียด",
+          "เปรียบเทียบคะแนนแต่ละวิชา",
+          "กราฟแสดงจุดแข็ง-จุดอ่อน",
+          "ดาวน์โหลดเฉลย PDF",
+          "คำแนะนำการปรับปรุง",
+          "สถิติเปรียบเทียบเชิงลึก"
+        ],
+        description: "แพ็กเกจพรีเมียม - เข้าสอบครบ 3 วิชา พร้อมวิเคราะห์ผลละเอียดและเฉลย PDF",
+        isActive: true,
+      },
+    ],
+  });
+
+  console.log("✅ Created packages");
+
   // Create test users
   const userPassword = await bcrypt.hash("password123", 12);
 
@@ -63,6 +103,8 @@ async function main() {
           thaiName: `นักเรียนฟรี ${i + 1}`,
           phone: `08${String(i + 1).padStart(8, "0")}`,
           school: `โรงเรียนทดสอบ ${i + 1}`,
+          parentName: `ผู้ปกครองฟรี ${i + 1}`,
+          parentPhone: `09${String(i + 1).padStart(8, "0")}`,
           packageType: "FREE",
           pdpaConsent: true,
         },
@@ -78,6 +120,8 @@ async function main() {
           phone: `09${String(i + 1).padStart(8, "0")}`,
           school: `โรงเรียนชั้นนำ ${i + 1}`,
           lineId: `line_${i + 1}`,
+          parentName: `ผู้ปกครองพรีเมียม ${i + 1}`,
+          parentPhone: `08${String(i + 6).padStart(8, "0")}`,
           packageType: "ADVANCED",
           pdpaConsent: true,
         },
@@ -95,19 +139,80 @@ async function main() {
       {
         sessionTime: "MORNING",
         currentCount: 5,
-        maxCapacity: 10,
+        maxCapacity: 300,
         examDate,
       },
       {
         sessionTime: "AFTERNOON",
         currentCount: 3,
-        maxCapacity: 10,
+        maxCapacity: 300,
         examDate,
       },
     ],
   });
 
   console.log("✅ Created session capacities");
+
+  // Create capacity status tracking
+  await prisma.capacityStatus.createMany({
+    data: [
+      {
+        sessionTime: "MORNING",
+        examDate,
+        totalCount: 5,
+        freeCount: 3,
+        advancedCount: 2,
+        maxCapacity: 300,
+        freeLimit: 150,
+        availabilityStatus: "AVAILABLE",
+      },
+      {
+        sessionTime: "AFTERNOON",
+        examDate,
+        totalCount: 3,
+        freeCount: 2,
+        advancedCount: 1,
+        maxCapacity: 300,
+        freeLimit: 150,
+        availabilityStatus: "AVAILABLE",
+      },
+    ],
+  });
+
+  console.log("✅ Created capacity status tracking");
+
+  // Create UserPackage relationships
+  const userPackages = [];
+  
+  // Free users get package relationships
+  for (let i = 0; i < 5; i++) {
+    const user = testUsers[i];
+    if (!user) continue;
+    
+    userPackages.push({
+      userId: user.id,
+      packageType: "FREE" as any,
+      sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
+      isActive: true,
+    });
+  }
+
+  // Advanced users get package relationships
+  for (let i = 5; i < 10; i++) {
+    const user = testUsers[i];
+    if (!user) continue;
+    
+    userPackages.push({
+      userId: user.id,
+      packageType: "ADVANCED" as any,
+      sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
+      isActive: true,
+    });
+  }
+
+  await prisma.userPackage.createMany({ data: userPackages });
+
+  console.log("✅ Created user package relationships");
 
   // Create exam codes for users
   const examCodes = [];

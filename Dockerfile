@@ -6,8 +6,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
-RUN corepack enable pnpm && pnpm install --frozen-lockfile --prefer-frozen-lockfile
+COPY package.json package-lock.json* ./
+RUN npm ci --only=production
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -16,7 +16,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build the application
-RUN corepack enable pnpm && pnpm build
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -65,10 +65,10 @@ WORKDIR /app
 RUN apk add --no-cache curl libc6-compat
 
 # Copy package files
-COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
+COPY package.json package-lock.json* ./
 
 # Install all dependencies including dev dependencies
-RUN corepack enable pnpm && pnpm install
+RUN npm install
 
 # Copy source code
 COPY . .

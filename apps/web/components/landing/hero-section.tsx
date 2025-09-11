@@ -152,6 +152,7 @@ export default function HeroSection({ onRegisterClick, onViewPackagesClick }: He
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6 animate-slide-in-right">
             <button 
               onClick={handleRegisterClick}
+              data-testid="register-button"
               className="px-8 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-semibold text-lg btn-hover-effect font-prompt"
             >
               สมัครฟรีเลย

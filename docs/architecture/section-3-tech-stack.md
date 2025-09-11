@@ -23,7 +23,7 @@
 | **Deployment Platform**  | Vercel             | Latest     | Application hosting                | Zero-configuration deployment, automatic scaling, integrated monitoring     |
 | **Monitoring**           | Vercel Analytics   | Built-in   | Performance monitoring             | Real-time insights, user behavior tracking, performance optimization        |
 | **Version Control**      | Git                | Latest     | Source code management             | Industry standard, GitHub integration, collaborative development            |
-| **Package Manager**      | pnpm               | 8.0+       | Dependency management              | Fast installs, efficient disk usage, monorepo support                       |
+| **Package Manager**      | npm                | 9.0+       | Dependency management              | Industry standard, universal support, integrated with Node.js ecosystem     |
 | **Testing Framework**    | Jest               | 29+        | Unit and integration testing       | Exam-critical reliability, extensive ecosystem, snapshot testing            |
 | **E2E Testing**          | Playwright         | Latest     | Browser automation testing         | Multi-browser support, exam workflow validation, accessibility testing      |
 | **Linting**              | ESLint             | 8.0+       | Code quality enforcement           | Consistent code style, error prevention, team collaboration                 |

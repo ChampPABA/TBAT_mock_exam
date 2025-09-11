@@ -1,0 +1,39 @@
+# Docker Compose for CI/CD Test Database Environment
+version: '3.8'
+
+services:
+  test-db:
+    image: postgres:15-alpine
+    container_name: tbat-test-db
+    environment:
+      POSTGRES_DB: tbat_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_pass
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"  # Use different port to avoid conflicts
+    volumes:
+      - test_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d tbat_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    tmpfs:
+      - /tmp
+      - /var/run/postgresql
+
+  # Redis for caching tests (if needed)
+  test-redis:
+    image: redis:7-alpine
+    container_name: tbat-test-redis
+    ports:
+      - "6380:6379"  # Use different port to avoid conflicts
+    command: redis-server --save "" --appendonly no
+    tmpfs:
+      - /data
+
+volumes:
+  test_db_data:
+    driver: local

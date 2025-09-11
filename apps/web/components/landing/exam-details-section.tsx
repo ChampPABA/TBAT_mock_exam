@@ -68,7 +68,7 @@ const ExamDetailsSection: React.FC<ExamDetailsSectionProps> = ({
                 <li key={index}>{subject}</li>
               ))}
             </ul>
-            <p className="text-xs text-orange-600 mt-2">Free: 1 วิชา | Advanced: 3 วิชา</p>
+            <p className="text-xs text-orange-800 mt-2">Free: 1 วิชา | Advanced: 3 วิชา</p>
           </div>
 
           {/* เวลาสอบ */}
@@ -113,7 +113,7 @@ const ExamDetailsSection: React.FC<ExamDetailsSectionProps> = ({
                   🏭 ห้องปรับอากาศ สะดวกสบาย
                 </span>
               </div>
-              <p className="text-xs text-orange-600 mt-2 font-semibold">
+              <p className="text-xs text-orange-800 mt-2 font-semibold">
                 💡 แนะนำ: มาถึงก่อนเวลาสอบ 45 นาที<br />
                 เพื่อเช็คอิน รับเอกสาร และเตรียมตัว
               </p>

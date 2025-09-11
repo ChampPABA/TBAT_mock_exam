@@ -150,16 +150,6 @@ export const emailTemplates = {
 
 // Send email function
 // Overloaded function to support both template and direct email sending
-export async function sendEmail(params: {
-  to: string;
-  subject: string;
-  html: string;
-}): Promise<{ success: boolean; data?: any; error?: any }>;
-export async function sendEmail(
-  to: string,
-  template: keyof typeof emailTemplates,
-  data: any
-): Promise<{ success: boolean; data?: any; error?: any }>;
 export async function sendEmail(
   toOrParams: string | { to: string; subject: string; html: string },
   template?: keyof typeof emailTemplates,

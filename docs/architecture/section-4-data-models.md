@@ -50,7 +50,7 @@ interface SessionCapacity {
   id: string;
   session_time: "09:00-12:00" | "13:00-16:00";
   current_count: number;
-  max_capacity: number; // 300 per session (updated for 20 users = 20 total)
+  max_capacity: number; // 300 exam participants per session (system serves 20 concurrent users)
   exam_date: Date; // 27 กันยายน 2568
   created_at: Date;
   updated_at: Date;
@@ -192,6 +192,14 @@ interface SupportTicket {
 
 - **Soft Delete:** Data marked inaccessible, not physically deleted
 - **Analytics Preservation:** Anonymized data retained for platform improvement
+
+---
+
+## Change Log
+
+| Date       | Version | Description                                   | Author |
+| ---------- | ------- | --------------------------------------------- | ------ |
+| 2025-09-11 | 1.1     | Clarified SessionCapacity max_capacity comment: 300 exam participants per session vs 20 concurrent system users | PO Sarah |
 - **Emergency Extension:** Admin override capability for special circumstances
 
 ### Database Relationships

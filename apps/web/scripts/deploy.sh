@@ -17,11 +17,11 @@ fi
 
 # Build the project
 echo "📦 Building the project..."
-pnpm build
+npm run build
 
 # Run tests
 echo "🧪 Running tests..."
-pnpm test
+npm test
 
 # Deploy based on environment
 if [ "$ENVIRONMENT" = "production" ]; then

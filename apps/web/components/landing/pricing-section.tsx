@@ -197,7 +197,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({
                 {pkg.note && (
                   <>
                     <br />
-                    <span className="text-orange-600 font-semibold">{pkg.note}</span>
+                    <span className="text-orange-800 font-semibold">{pkg.note}</span>
                   </>
                 )}
               </p>

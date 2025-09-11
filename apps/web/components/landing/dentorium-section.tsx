@@ -89,6 +89,7 @@ const DentoriumSection: React.FC = () => {
               {/* Carousel Controls */}
               <button 
                 onClick={() => moveCarousel(-1)}
+                aria-label="Previous slide"
                 className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-lg transition-all"
               >
                 <svg className="w-4 h-4 text-tbat-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,6 +98,7 @@ const DentoriumSection: React.FC = () => {
               </button>
               <button 
                 onClick={() => moveCarousel(1)}
+                aria-label="Next slide"
                 className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-lg transition-all"
               >
                 <svg className="w-4 h-4 text-tbat-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,6 +112,7 @@ const DentoriumSection: React.FC = () => {
                   <button
                     key={index}
                     onClick={() => goToSlide(index)}
+                    aria-label={`Go to slide ${index + 1}`}
                     className={`w-1.5 h-1.5 rounded-full transition-all ${
                       index === currentSlide ? 'bg-white/80' : 'bg-white/50'
                     }`}

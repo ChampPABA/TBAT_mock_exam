@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
+import { createDatabaseMonitor } from "./db-monitoring";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -48,6 +49,11 @@ if (process.env.NODE_ENV === "development" && !global.prisma) {
 
 if (process.env.NODE_ENV !== "production") {
   global.prisma = prisma;
+}
+
+// Initialize database monitoring
+if (process.env.NODE_ENV === "production" || process.env.ENABLE_DB_MONITORING === "true") {
+  createDatabaseMonitor(prisma);
 }
 
 // Connection health check
