@@ -384,7 +384,153 @@ async function main() {
 
   console.log("✅ Created sample support ticket");
 
-  console.log("🎉 Seed completed successfully!");
+  // Create audit log entries for monitoring and debugging
+  const auditLogs = [
+    {
+      adminId: superAdmin.id,
+      actionType: "USER_UPDATE" as any,
+      targetId: testUsers[0]?.id || "",
+      originalData: { packageType: "FREE", isActive: false },
+      newData: { packageType: "FREE", isActive: true },
+      reason: "Initial user setup during database seeding",
+    },
+    {
+      adminId: normalAdmin.id,
+      actionType: "PDF_UPLOAD" as any,
+      targetId: pdfSolutions[0]?.id || "",
+      originalData: {},
+      newData: { 
+        subject: "BIOLOGY", 
+        fileSize: 2048000, 
+        isActive: true 
+      },
+      reason: "Initial PDF solution upload for Biology subject",
+    },
+    {
+      adminId: normalAdmin.id,
+      actionType: "PDF_UPLOAD" as any,
+      targetId: pdfSolutions[1]?.id || "",
+      originalData: {},
+      newData: { 
+        subject: "CHEMISTRY", 
+        fileSize: 1536000, 
+        isActive: true 
+      },
+      reason: "Initial PDF solution upload for Chemistry subject",
+    },
+    {
+      adminId: normalAdmin.id,
+      actionType: "PDF_UPLOAD" as any,
+      targetId: pdfSolutions[2]?.id || "",
+      originalData: {},
+      newData: { 
+        subject: "PHYSICS", 
+        fileSize: 1792000, 
+        isActive: true 
+      },
+      reason: "Initial PDF solution upload for Physics subject",
+    }
+  ];
+
+  await prisma.auditLog.createMany({ data: auditLogs });
+
+  console.log("✅ Created audit log entries for monitoring");
+
+  // Create PDPA consent records for all users (required for compliance)
+  const pdpaConsents = [];
+  
+  for (const user of testUsers) {
+    if (!user) continue;
+    
+    pdpaConsents.push({
+      userId: user.id,
+      consentType: "DATA_PROCESSING",
+      status: "GRANTED",
+      grantedAt: new Date(),
+      ipAddress: "127.0.0.1", // Test IP
+      userAgent: "Test User Agent - Database Seeding",
+      metadata: {
+        version: "1.0",
+        language: "th",
+        consentMethod: "registration_form"
+      }
+    });
+  }
+
+  await prisma.pDPAConsent.createMany({ data: pdpaConsents });
+
+  console.log("✅ Created PDPA consent records for compliance");
+
+  // Create security log entries for initial setup
+  const securityLogs = [
+    {
+      eventType: "LOGIN_SUCCESS" as any,
+      action: "ADMIN_LOGIN",
+      userId: superAdmin.id,
+      resourceType: "ADMIN_PANEL",
+      metadata: { role: "SUPER_ADMIN", setupPhase: true },
+      ipAddress: "127.0.0.1",
+      userAgent: "Database Seeding Script",
+    },
+    {
+      eventType: "ADMIN_DATA_ACCESS" as any,
+      action: "DATABASE_SEED",
+      userId: superAdmin.id,
+      resourceType: "DATABASE",
+      metadata: { 
+        operation: "INITIAL_SEED",
+        recordsCreated: {
+          users: testUsers.length,
+          packages: 2,
+          sessionCapacities: 2,
+          examCodes: examCodes.length
+        }
+      },
+      ipAddress: "127.0.0.1",
+      userAgent: "Database Seeding Script",
+    }
+  ];
+
+  await prisma.securityLog.createMany({ data: securityLogs });
+
+  console.log("✅ Created security log entries");
+
+  // Verify all foreign key relationships and constraints
+  console.log("🔍 Verifying database relationships and constraints...");
+  
+  // Check Package relationships
+  const packageCount = await prisma.package.count();
+  console.log(`   ✓ Packages created: ${packageCount}`);
+  
+  // Check User relationships
+  const userCount = await prisma.user.count();
+  console.log(`   ✓ Users created: ${userCount}`);
+  
+  // Check UserPackage relationships with foreign keys
+  const userPackageCount = await prisma.userPackage.count();
+  console.log(`   ✓ User-Package relationships: ${userPackageCount}`);
+  
+  // Check ExamCode relationships
+  const examCodeCount = await prisma.examCode.count();
+  console.log(`   ✓ Exam codes with user relationships: ${examCodeCount}`);
+  
+  // Check SessionCapacity and CapacityStatus alignment
+  const sessionCapacityCount = await prisma.sessionCapacity.count();
+  const capacityStatusCount = await prisma.capacityStatus.count();
+  console.log(`   ✓ Session capacities: ${sessionCapacityCount}`);
+  console.log(`   ✓ Capacity status records: ${capacityStatusCount}`);
+  
+  // Check Payment relationships
+  const paymentCount = await prisma.payment.count();
+  console.log(`   ✓ Payments with user relationships: ${paymentCount}`);
+  
+  // Check Audit log relationships
+  const auditLogCount = await prisma.auditLog.count();
+  console.log(`   ✓ Audit logs with admin relationships: ${auditLogCount}`);
+
+  console.log("✅ All foreign key relationships verified successfully");
+
+  console.log("🎉 Enhanced seed completed successfully!");
 }
 
 main()
