@@ -73,8 +73,8 @@ export default function Home() {
     }
   };
 
-  const handleSelectPackage = (packageId: number) => {
-    console.log(`Package selected: ${packageId}`);
+  const handleSelectPackage = (packageType: "FREE" | "ADVANCED") => {
+    console.log(`Package selected: ${packageType}`);
     window.location.href = '/register';
   };
 

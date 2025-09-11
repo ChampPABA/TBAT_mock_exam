@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useCapacity } from '@/hooks/useCapacity';
+import { CapacityStatusSkeleton } from '@/components/ui/skeleton';
 
 interface HeroSectionProps {
   onRegisterClick?: () => void;
@@ -21,6 +23,9 @@ export default function HeroSection({ onRegisterClick, onViewPackagesClick }: He
     minutes: 0,
     seconds: 0
   });
+
+  // Fetch capacity data with real-time updates
+  const { data: capacityData, loading: capacityLoading, error: capacityError } = useCapacity();
 
   // Countdown timer hook
   useEffect(() => {
@@ -190,6 +195,67 @@ export default function HeroSection({ onRegisterClick, onViewPackagesClick }: He
               </div>
             </div>
           </div>
+
+          {/* Capacity Status */}
+          {capacityLoading ? (
+            <CapacityStatusSkeleton />
+          ) : capacityError ? (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 max-w-2xl mx-auto mb-6">
+              <p className="text-yellow-700 text-sm text-center font-prompt">
+                ไม่สามารถโหลดข้อมูลจำนวนที่นั่งได้ กรุณาลองใหม่อีกครั้ง
+              </p>
+            </div>
+          ) : capacityData && (
+            <div className="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto mb-6 animate-scale-in">
+              <div className="text-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3 font-prompt">📊 สถานะที่นั่งปัจจุบัน</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {capacityData.map((session) => {
+                    const percentage = (session.current_count / session.max_capacity) * 100;
+                    const getStatusColor = () => {
+                      if (session.availability_status === 'FULL') return 'text-red-600 bg-red-50';
+                      if (session.availability_status === 'NEARLY_FULL') return 'text-orange-600 bg-orange-50';
+                      if (session.availability_status === 'ADVANCED_ONLY') return 'text-purple-600 bg-purple-50';
+                      return 'text-green-600 bg-green-50';
+                    };
+
+                    return (
+                      <div key={session.session_time} className={`p-4 rounded-lg border ${getStatusColor()}`}>
+                        <h4 className="font-semibold mb-2 font-prompt">
+                          {session.session_time === 'MORNING' ? '🌅 รอบเช้า (09:00-12:00)' : '🌆 รอบบ่าย (13:00-16:00)'}
+                        </h4>
+                        <div className="space-y-2">
+                          <div className="text-sm font-prompt">
+                            สถานะ: <span className="font-semibold">{session.thai_message}</span>
+                          </div>
+                          {session.availability_status !== 'ADVANCED_ONLY' && (
+                            <div className="text-sm font-prompt">
+                              ผู้สมัคร: {session.current_count}/{session.max_capacity} คน ({percentage.toFixed(1)}%)
+                            </div>
+                          )}
+                          {/* Progress bar */}
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                              className={`h-2 rounded-full transition-all duration-300 ${
+                                session.availability_status === 'FULL' ? 'bg-red-500' :
+                                session.availability_status === 'NEARLY_FULL' ? 'bg-orange-500' :
+                                session.availability_status === 'ADVANCED_ONLY' ? 'bg-purple-500' :
+                                'bg-green-500'
+                              }`}
+                              style={{ width: `${Math.min(percentage, 100)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-gray-500 mt-3 font-prompt">
+                  * ข้อมูลอัปเดตทุก 30 วินาที | การสมัครจะปิดเมื่อเต็มจำนวน
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Exam Date Clarification */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto animate-fade-in-up">
