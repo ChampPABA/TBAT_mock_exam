@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Real-time Capacity Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; font-weight: bold; }
+        .available { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .limited { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .full { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .logs { background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+        .error { color: #dc3545; }
+        .success { color: #28a745; }
+        .info { color: #17a2b8; }
+        .timestamp { color: #6c757d; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #6c757d; cursor: not-allowed; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .stat-card { background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 TBAT Real-time Capacity Testing</h1>
+        <p>ทดสอบการอัปเดตแบบ real-time ของระบบจัดสรรที่นั่ง TBAT</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>📊 สถิติการเชื่อมต่อ</h3>
+                <div>✅ สำเร็จ: <span id="successCount">0</span></div>
+                <div>❌ ล้มเหลว: <span id="errorCount">0</span></div>
+                <div>🔄 การเรียกทั้งหมด: <span id="totalCalls">0</span></div>
+            </div>
+            <div class="stat-card">
+                <h3>⏱️ เวลาตอบสนอง</h3>
+                <div>เฉลี่ย: <span id="avgResponseTime">0</span> ms</div>
+                <div>ล่าสุด: <span id="lastResponseTime">0</span> ms</div>
+                <div>อัปเดตล่าสุด: <span id="lastUpdate">ไม่เคย</span></div>
+            </div>
+        </div>
+
+        <div class="status" id="capacityStatus">
+            🔄 กำลังโหลดข้อมูล...
+        </div>
+
+        <div>
+            <button onclick="startPolling()" id="startBtn">🟢 เริ่มการอัปเดต Real-time</button>
+            <button onclick="stopPolling()" id="stopBtn" disabled>🔴 หยุดการอัปเดต</button>
+            <button onclick="testOnce()" id="testBtn">⚡ ทดสอบครั้งเดียว</button>
+            <button onclick="clearLogs()" id="clearBtn">🗑️ ล้าง Logs</button>
+        </div>
+
+        <h3>📝 Activity Logs</h3>
+        <div class="logs" id="logs">
+            <div class="timestamp">เริ่มต้น test page - รอการทดสอบ...</div>
+        </div>
+    </div>
+
+    <script>
+        let pollingInterval = null;
+        let stats = {
+            success: 0,
+            error: 0,
+            total: 0,
+            responseTimes: []
+        };
+
+        function log(message, type = 'info') {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString('th-TH');
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
+            logs.appendChild(logEntry);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function updateStats() {
+            document.getElementById('successCount').textContent = stats.success;
+            document.getElementById('errorCount').textContent = stats.error;
+            document.getElementById('totalCalls').textContent = stats.total;
+            
+            if (stats.responseTimes.length > 0) {
+                const avg = stats.responseTimes.reduce((a, b) => a + b, 0) / stats.responseTimes.length;
+                document.getElementById('avgResponseTime').textContent = Math.round(avg);
+                document.getElementById('lastResponseTime').textContent = stats.responseTimes[stats.responseTimes.length - 1];
+            }
+            
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('th-TH');
+        }
+
+        async function fetchCapacity() {
+            const startTime = Date.now();
+            stats.total++;
+            
+            try {
+                log('🔄 กำลังเรียก API /api/capacity...', 'info');
+                
+                const response = await fetch('http://localhost:3001/api/capacity');
+                const responseTime = Date.now() - startTime;
+                stats.responseTimes.push(responseTime);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                stats.success++;
+                
+                log(`✅ API สำเร็จ - เวลา ${responseTime}ms`, 'success');
+                
+                // แสดงข้อมูล capacity
+                const morningSession = data.data.sessions.morning;
+                const afternoonSession = data.data.sessions.afternoon;
+                
+                const statusElement = document.getElementById('capacityStatus');
+                let statusClass = 'available';
+                let statusText = '';
+                
+                if (data.data.overall.overallStatus === 'AVAILABLE') {
+                    statusClass = 'available';
+                    statusText = `🟢 ${morningSession.message} - เช้า: ${morningSession.totalCount}/${morningSession.maxCapacity} | บ่าย: ${afternoonSession.totalCount}/${afternoonSession.maxCapacity}`;
+                } else if (data.data.overall.overallStatus === 'NEARLY_FULL') {
+                    statusClass = 'limited';  
+                    statusText = `🟡 ${morningSession.message} - เช้า: ${morningSession.totalCount}/${morningSession.maxCapacity} | บ่าย: ${afternoonSession.totalCount}/${afternoonSession.maxCapacity}`;
+                } else {
+                    statusClass = 'full';
+                    statusText = `🔴 ${morningSession.message} - เช้า: ${morningSession.totalCount}/${morningSession.maxCapacity} | บ่าย: ${afternoonSession.totalCount}/${afternoonSession.maxCapacity}`;
+                }
+                
+                statusElement.className = `status ${statusClass}`;
+                statusElement.textContent = statusText;
+                
+                log(`📊 ข้อมูล: ${statusText}`, 'info');
+                
+            } catch (error) {
+                stats.error++;
+                const responseTime = Date.now() - startTime;
+                stats.responseTimes.push(responseTime);
+                
+                log(`❌ เกิดข้อผิดพลาด: ${error.message} (${responseTime}ms)`, 'error');
+                
+                const statusElement = document.getElementById('capacityStatus');
+                statusElement.className = 'status full';
+                statusElement.textContent = '❌ ไม่สามารถโหลดข้อมูลได้ - ใช้ข้อมูลสำรอง';
+            }
+            
+            updateStats();
+        }
+
+        function startPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+            
+            log('🟢 เริ่มการอัปเดต Real-time ทุก 30 วินาที', 'success');
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            
+            // เรียกครั้งแรกทันที
+            fetchCapacity();
+            
+            // ตั้งค่า interval 30 วินาที
+            pollingInterval = setInterval(fetchCapacity, 30000);
+        }
+
+        function stopPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+            
+            log('🔴 หยุดการอัปเดต Real-time แล้ว', 'error');
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+        }
+
+        function testOnce() {
+            log('⚡ ทดสอบการเรียก API ครั้งเดียว', 'info');
+            fetchCapacity();
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '<div class="timestamp">ล้าง logs แล้ว...</div>';
+            stats = { success: 0, error: 0, total: 0, responseTimes: [] };
+            updateStats();
+        }
+
+        // Auto-start เมื่อโหลดหน้า
+        window.addEventListener('load', () => {
+            log('🚀 หน้า test พร้อมใช้งาน - คลิก "เริ่มการอัปเดต Real-time" เพื่อทดสอบ', 'success');
+        });
+    </script>
+</body>
+</html>

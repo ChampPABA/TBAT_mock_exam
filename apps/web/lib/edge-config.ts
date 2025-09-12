@@ -41,7 +41,7 @@ export async function getCachedData<T>(
     // Step 1: Try Edge Config (fastest, global edge distribution)
     if (process.env.EDGE_CONFIG) {
       try {
-        const edgeData = await get<T>(edgeConfigKey);
+        const edgeData = await get(edgeConfigKey) as T;
         if (edgeData !== null && edgeData !== undefined) {
           // Cache hit from Edge Config - also warm Redis for next fallback
           warmRedisCache(redisKey, edgeData, ttl);

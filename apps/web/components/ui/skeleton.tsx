@@ -72,6 +72,40 @@ function CapacityStatusSkeleton() {
   );
 }
 
+// Real-time capacity update indicator
+function CapacityUpdateIndicator({ isUpdating }: { isUpdating?: boolean }) {
+  if (!isUpdating) return null;
+  
+  return (
+    <div className="flex items-center justify-center p-2">
+      <div className="flex items-center space-x-2 text-blue-600">
+        <div className="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
+        <span className="text-xs font-medium">อัปเดตข้อมูลล่าสุด...</span>
+      </div>
+    </div>
+  );
+}
+
+// Loading overlay for smooth transitions
+function LoadingOverlay({ 
+  isVisible, 
+  message = "กำลังโหลด..." 
+}: { 
+  isVisible: boolean; 
+  message?: string; 
+}) {
+  if (!isVisible) return null;
+  
+  return (
+    <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-xl transition-opacity duration-200">
+      <div className="flex flex-col items-center space-y-2">
+        <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-sm text-gray-600 font-medium">{message}</span>
+      </div>
+    </div>
+  );
+}
+
 // Package comparison skeleton
 function PackageComparisonSkeleton() {
   return (
@@ -86,5 +120,7 @@ export {
   Skeleton, 
   PricingCardSkeleton, 
   CapacityStatusSkeleton, 
-  PackageComparisonSkeleton 
+  PackageComparisonSkeleton,
+  CapacityUpdateIndicator,
+  LoadingOverlay
 };

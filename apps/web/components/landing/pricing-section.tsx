@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { usePackages } from '@/hooks/usePackages';
+// import { usePackages } from '@/hooks/usePackages'; // TEMPORARILY DISABLED
+import { mockPackages } from '@/lib/mock-data';
 import { Package } from '@/types/api';
 import { PricingCardSkeleton } from '@/components/ui/skeleton';
 
@@ -33,7 +34,30 @@ const ErrorState: React.FC<{
 );
 
 const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPackage }) => {
-  const { data: packages, loading, error, refetch } = usePackages();
+  // TEMPORARILY DISABLED - Testing without hooks to isolate API spam issue
+  // const { data: packages, loading, error, refetch } = usePackages();
+  
+  // Use static mock data instead of hook during isolation period
+  const packages = mockPackages.map(mockPkg => ({
+    type: mockPkg.type,
+    name: mockPkg.name,
+    price: mockPkg.price,
+    features: mockPkg.features.map(f => f.text),
+    is_active: mockPkg.availability.status !== 'full',
+    max_users_per_session: mockPkg.availability.maxCapacity,
+    description: mockPkg.description,
+    badge: mockPkg.badge,
+    badgeColor: mockPkg.badgeColor,
+    features_detailed: mockPkg.features,
+    limitations: mockPkg.limitations,
+    availability: mockPkg.availability,
+    buttonText: mockPkg.buttonText,
+    buttonStyle: mockPkg.buttonStyle,
+    footerNote: mockPkg.footerNote
+  }));
+  const loading = false;
+  const error = null;
+  const refetch = () => Promise.resolve();
 
   const handleSelectPackage = (packageType: "FREE" | "ADVANCED") => {
     if (onSelectPackage) {

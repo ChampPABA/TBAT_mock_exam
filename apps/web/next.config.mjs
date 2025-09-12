@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false, // TEMPORARILY DISABLED to fix API spam issue 
   poweredByHeader: false,
   compress: true,
   
@@ -29,7 +29,15 @@ const nextConfig = {
   // Experimental features for performance
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['@radix-ui/*', 'lucide-react'],
+    optimizePackageImports: [
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-select', 
+      '@radix-ui/react-checkbox',
+      '@radix-ui/react-label',
+      '@radix-ui/react-radio-group',
+      '@radix-ui/react-slot',
+      'lucide-react'
+    ],
     webVitalsAttribution: ['CLS', 'LCP', 'FCP', 'FID', 'TTFB', 'INP'],
   },
 
@@ -63,35 +71,93 @@ const nextConfig = {
 
   // Webpack optimizations
   webpack: (config, { isServer }) => {
-    // Optimize bundle size
+    // Prevent Prisma client from being bundled in browser - CRITICAL FIX
+    if (!isServer) {
+      config.externals = [
+        ...(config.externals || []),
+        {
+          '@prisma/client': 'PrismaClient',
+          'prisma': 'prisma',
+          'ioredis': 'ioredis',
+          'redis': 'redis',
+        },
+      ];
+    }
+
+    // Optimize bundle size with aggressive chunk splitting
     config.optimization.splitChunks = {
       chunks: 'all',
+      maxInitialRequests: 25,
+      maxAsyncRequests: 20,
+      minSize: 20000,
+      maxSize: 300000, // Keep chunks under 300KB
       cacheGroups: {
         default: false,
         vendors: false,
+        
+        // React framework chunk
+        framework: {
+          name: 'framework',
+          chunks: 'all',
+          test: /[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types)[\\/]/,
+          priority: 40,
+          enforce: true
+        },
+        
+        // Radix UI components
+        radix: {
+          name: 'radix',
+          chunks: 'all',
+          test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+          priority: 35,
+          enforce: true
+        },
+        
+        // Large libraries chunk
+        lib: {
+          test(module) {
+            return (
+              module.size() > 160000 && 
+              /node_modules[/\\]/.test(module.identifier()) &&
+              !/[\\/]node_modules[\\/](@radix-ui|react|react-dom)[\\/]/.test(module.identifier())
+            );
+          },
+          name(module) {
+            const packageNameMatch = module.identifier().match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/);
+            const packageName = packageNameMatch ? packageNameMatch[1] : '';
+            return `npm.${packageName.replace('@', '').replace(/[^a-zA-Z0-9]/g, '-')}`;
+          },
+          priority: 30,
+          minChunks: 1,
+          reuseExistingChunk: true,
+          maxSize: 200000
+        },
+        
+        // Common shared modules
+        commons: {
+          name: 'commons',
+          minChunks: 2,
+          priority: 20,
+          chunks: 'async',
+          maxSize: 150000
+        },
+        
+        // Vendor utilities
         vendor: {
           name: 'vendor',
           chunks: 'all',
-          test: /node_modules/,
-          priority: 20
-        },
-        common: {
-          name: 'common',
-          minChunks: 2,
-          chunks: 'async',
-          priority: 10,
-          reuseExistingChunk: true,
-          enforce: true
+          test: /[\\/]node_modules[\\/](clsx|class-variance-authority|tailwind-merge)[\\/]/,
+          priority: 25
         }
       }
     };
 
-    // Performance hints
+    // Performance hints with stricter limits for bundle size optimization
     if (!isServer) {
       config.performance = {
         hints: 'warning',
-        maxEntrypointSize: 512000,
-        maxAssetSize: 512000
+        maxEntrypointSize: 350000, // 350KB max entry
+        maxAssetSize: 350000       // 350KB max asset
       };
     }
 

@@ -14,10 +14,15 @@ let queryCount = 0;
  * - Connection pooling configured for optimal performance
  * - Query performance logging
  * - Automatic retry on connection failures
+ * - Conditional initialization when DATABASE_URL is available
  */
-export const prisma =
-  global.prisma ||
-  new PrismaClient({
+function createPrismaClient() {
+  if (!process.env.DATABASE_URL) {
+    console.log("⚠️ DATABASE_URL not found - Prisma client not initialized");
+    return null;
+  }
+  
+  return new PrismaClient({
     log: process.env.NODE_ENV === "development" 
       ? [
           { level: "query", emit: "event" },
@@ -34,9 +39,12 @@ export const prisma =
     // Max 10 connections as per architecture requirements
     errorFormat: "minimal",
   });
+}
+
+export const prisma = global.prisma || createPrismaClient();
 
 // Log queries in development
-if (process.env.NODE_ENV === "development" && !global.prisma) {
+if (process.env.NODE_ENV === "development" && !global.prisma && prisma) {
   // @ts-ignore - Prisma event handlers
   prisma.$on("query", (e: any) => {
     queryCount++;
@@ -52,13 +60,18 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Initialize database monitoring
-if (process.env.NODE_ENV === "production" || process.env.ENABLE_DB_MONITORING === "true") {
+if (prisma && (process.env.NODE_ENV === "production" || process.env.ENABLE_DB_MONITORING === "true")) {
   createDatabaseMonitor(prisma);
 }
 
 // Connection health check
 export async function checkDatabaseConnection(): Promise<boolean> {
   try {
+    if (!prisma) {
+      console.log("Database connection skipped - Prisma not initialized");
+      return false;
+    }
+    
     await prisma.$queryRaw`SELECT 1`;
     return true;
   } catch (error) {

@@ -30,6 +30,7 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 | 2025-01-26 | 1.1     | Added Docker development environment requirements and containerization strategy                          | John (PM) |
 | 2025-01-26 | 1.2     | Added PDF solution management, data lifecycle policy, and enhanced admin capabilities (FR21-FR24, NFR16) | John (PM) |
 | 2025-09-11 | 1.3     | Clarified Story 1.3 AC2 capacity logic: 300 exam participants per session vs 20 concurrent system users | PO Sarah |
+| 2025-09-12 | 1.4     | Added epic dependency matrix and API contract documentation for development clarity | PO Sarah |
 
 ## Requirements
 
@@ -116,6 +117,28 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 **NFR15:** The system shall provide Redis caching for sessions and analytics to optimize performance and reduce database load
 
 **NFR16:** The system shall implement secure PDF storage and delivery with 99%+ download success rate, supporting concurrent access during peak periods while maintaining 6-month data retention policy
+
+## Epic Dependencies
+
+For detailed epic sequencing and critical path analysis, see: `docs/prd/epic-dependency-matrix.md`
+
+**Critical Dependencies:**
+- Epic 0 (Foundation) must complete before all other epics
+- Epic 1-3 can run in parallel after Epic 0
+- Epic 4-5 require Epic 1-3 completion
+- Epic 6-7 sequential after Epic 5
+- Epic 8-9 can run parallel in final phase
+
+## API Integration
+
+Complete API contract specifications available at: `docs/prd/api-contracts.md`
+
+**Key Integration Points:**
+- Authentication APIs (Epic 2)
+- Payment processing APIs (Epic 3) 
+- Capacity management APIs (Epic 4)
+- Results and analytics APIs (Epic 6-7)
+- Admin management APIs (Epic 5)
 
 ## User Interface Design Goals
 

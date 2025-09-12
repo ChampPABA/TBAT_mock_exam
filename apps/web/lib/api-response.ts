@@ -151,13 +151,8 @@ export function createErrorResponse(
   // Monitor error response with Sentry integration
   monitorAPIResponse(
     requestId || "unknown",
-    "ERROR",
     statusCode,
-    0, // No response time for errors
-    {
-      errorCode: error.code,
-      errorMessage: error.message,
-    }
+    0 // No response time for errors
   ).catch(() => {
     // Ignore monitoring errors to not break the response
   });
@@ -196,11 +191,9 @@ export async function createOptimizedResponse<T>(
       
       // Monitor cached response
       await monitorAPIResponse(
-        requestId,
         request.url,
         200,
-        responseTime,
-        { cached: true }
+        responseTime
       );
 
       return NextResponse.json({
@@ -268,15 +261,9 @@ export async function createOptimizedResponse<T>(
 
   // Monitor successful response
   await monitorAPIResponse(
-    requestId,
     request.url,
     options?.statusCode || 200,
-    responseTime,
-    {
-      cached,
-      compressed: headers.has("Content-Encoding"),
-      dataSize: responseData.length,
-    }
+    responseTime
   );
 
   return new NextResponse(

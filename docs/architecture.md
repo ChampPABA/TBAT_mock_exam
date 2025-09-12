@@ -4,9 +4,11 @@
 
 - **Project:** TBAT Mock Exam Platform
 - **Document Type:** Technical Architecture Specification
-- **Version:** 1.0
-- **Last Updated:** September 6, 2025
+- **Version:** 1.1
+- **Last Updated:** September 12, 2025
 - **Status:** Draft - In Development
+- **API Contracts:** docs/prd/api-contracts.md
+- **Epic Dependencies:** docs/prd/epic-dependency-matrix.md
 
 ## Section 1: Introduction
 
@@ -37,6 +39,22 @@ This platform delivers a unique value proposition combining **physical exam expe
 **Revenue Model:** Freemium (Free package: single subject, Advanced package: ฿690 for all three subjects)
 **Conversion Strategy:** 40-50% registration conversion, 25-35% post-exam upgrade through strategic PDF restriction
 **Technical Requirements:** 99.9% uptime during exam periods, 48-hour result delivery, PDPA compliance
+
+### API Architecture Integration
+
+Complete API contract specifications and integration patterns documented in `docs/prd/api-contracts.md`. All APIs follow RESTful conventions with TypeScript interfaces, Thai language error handling, and circuit breaker patterns for production reliability.
+
+**Key API Categories:**
+- Authentication & Registration APIs
+- Package & Capacity Management APIs  
+- Payment Processing APIs
+- Exam Code Generation APIs
+- Results & Analytics APIs
+- Admin Management APIs
+
+### Development Dependencies
+
+For detailed epic sequencing and critical path analysis, reference `docs/prd/epic-dependency-matrix.md`. The dependency matrix provides visual workflow, parallel development opportunities, and risk assessment for all 10 project epics.
 
 ## Section 2: High Level Architecture
 

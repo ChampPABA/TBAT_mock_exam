@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { UsePackagesHook, Package, DataFetchingOptions, RetryConfig, PackageFeature } from '@/types/api';
 import { mockPackages, PackageType } from '@/lib/mock-data';
+import { useOnlineStatus } from './useOnlineStatus';
 
 /**
  * Custom hook for fetching package data with loading states and error handling
@@ -48,19 +49,59 @@ const transformMockToApi = (mockPkg: PackageType): Package => {
 };
 
 /**
- * Simulate API call with mock data
+ * Fallback: Simulate API call with mock data (used when live API fails)
  */
 const fetchPackagesFromMock = async (): Promise<Package[]> => {
   // Simulate network delay (100-300ms)
   const delay = Math.random() * 200 + 100;
   await new Promise(resolve => setTimeout(resolve, delay));
   
-  // Simulate occasional errors (5% chance)
-  if (Math.random() < 0.05) {
-    throw new Error('เกิดข้อผิดพลาดในการโหลดข้อมูลแพ็กเกจ กรุณาลองใหม่อีกครั้ง');
+  return mockPackages.map(transformMockToApi);
+};
+
+/**
+ * Fetch packages from live API endpoint
+ */
+const fetchPackagesFromAPI = async (): Promise<Package[]> => {
+  const response = await fetch('/api/packages?includeAvailability=true');
+  
+  if (!response.ok) {
+    throw new Error(`API เกิดข้อผิดพลาด: ${response.status} - กรุณาลองใหม่อีกครั้ง`);
   }
   
-  return mockPackages.map(transformMockToApi);
+  const result = await response.json();
+  
+  if (!result.success) {
+    throw new Error(result.error?.message || 'เกิดข้อผิดพลาดในการโหลดข้อมูลแพ็กเกจ');
+  }
+  
+  // Transform API response to match expected Package interface
+  return result.data.packages.map((apiPkg: any): Package => ({
+    type: apiPkg.type,
+    price: apiPkg.price,
+    features: apiPkg.features,
+    is_active: apiPkg.isActive,
+    max_users_per_session: apiPkg.availability?.sessionCapacity?.morning?.maxCapacity || apiPkg.availability?.sessionCapacity?.afternoon?.maxCapacity,
+    name: apiPkg.type === 'FREE' ? 'Free Package' : 'Advanced Package',
+    description: apiPkg.description,
+    badge: apiPkg.type === 'ADVANCED' ? 'แนะนำ' : undefined,
+    badgeColor: apiPkg.type === 'ADVANCED' ? 'yellow' : undefined,
+    buttonText: apiPkg.availability?.available ? 'เลือกแพ็กเกจ' : 'เต็มแล้ว',
+    buttonStyle: apiPkg.type === 'ADVANCED' ? 'solid' : 'outline',
+    footerNote: apiPkg.type === 'FREE' ? 'จำกัด 1 วิชา' : 'ครบทุกวิชา + เฉลย PDF',
+    availability: {
+      status: apiPkg.availability?.available ? 'available' : 'full',
+      statusText: apiPkg.availability?.message || 'ยังมีที่นั่งว่าง',
+      maxCapacity: apiPkg.availability?.sessionCapacity?.morning?.maxCapacity,
+      currentCount: apiPkg.availability?.sessionCapacity?.morning?.totalCount
+    },
+    features_detailed: apiPkg.features.map((feature: string) => ({
+      text: feature,
+      included: true,
+      highlight: false
+    })),
+    limitations: apiPkg.type === 'FREE' ? ['จำกัด 1 วิชา', 'ไม่มีเฉลย PDF'] : undefined
+  }));
 };
 
 /**
@@ -98,48 +139,78 @@ const executeWithRetry = async <T>(
 };
 
 export function usePackages(options: Partial<DataFetchingOptions> = {}): UsePackagesHook {
-  const config = { ...DEFAULT_OPTIONS, ...options };
+  // Memoize config to prevent object recreation on every render
+  const config = useMemo(() => ({
+    ...DEFAULT_OPTIONS,
+    ...options
+  }), [options.enabled, options.refetchInterval, options.retry, options.onError, options.onSuccess]);
+  
+  const { isOnline, getOfflineMessage } = useOnlineStatus();
   
   const [data, setData] = useState<Package[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
+  
+  // Use a ref to prevent multiple fetches
+  const hasFetched = useRef(false);
 
   const fetchData = useCallback(async () => {
-    if (!config.enabled) return;
+    if (!config.enabled || hasFetched.current) return;
+    hasFetched.current = true;
     
     setLoading(true);
     setError(null);
     
     try {
-      const packages = await executeWithRetry(fetchPackagesFromMock, config.retry);
+      const packages = await executeWithRetry(fetchPackagesFromAPI, config.retry);
       setData(packages);
       config.onSuccess(packages);
     } catch (err) {
-      const errorObj = err instanceof Error ? err : new Error('เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ');
-      setError(errorObj);
-      config.onError(errorObj);
+      console.warn('API failed, attempting fallback to mock data:', err);
+      
+      try {
+        // Fallback to mock data with a warning
+        const mockPackages = await fetchPackagesFromMock();
+        setData(mockPackages);
+        
+        // Create a warning error to indicate we're using fallback data
+        const offlineMessage = getOfflineMessage();
+        const warningError = new Error(
+          offlineMessage || 'กำลังใช้ข้อมูลสำรอง - การเชื่อมต่อ API มีปัญหา'
+        );
+        setError(warningError);
+        config.onError(warningError);
+      } catch (fallbackErr) {
+        // Both API and fallback failed
+        const errorObj = err instanceof Error ? err : new Error('เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ');
+        setError(errorObj);
+        config.onError(errorObj);
+      }
     } finally {
       setLoading(false);
     }
-  }, [config]);
+  }, []); // Empty dependencies - stable callback
 
   const refetch = useCallback(async () => {
     await fetchData();
   }, [fetchData]);
 
   useEffect(() => {
-    if (config.enabled) {
+    if (config.enabled && !hasFetched.current) {
       fetchData();
     }
-  }, [fetchData, config.enabled]);
+  }, []); // Empty dependencies - run once on mount
 
   // Auto-refetch interval
   useEffect(() => {
     if (config.refetchInterval > 0 && config.enabled) {
-      const interval = setInterval(fetchData, config.refetchInterval);
+      const interval = setInterval(() => {
+        hasFetched.current = false; // Reset for interval fetch
+        fetchData();
+      }, config.refetchInterval);
       return () => clearInterval(interval);
     }
-  }, [fetchData, config.refetchInterval, config.enabled]);
+  }, [config.refetchInterval, config.enabled]); // Depend on stable config values only
 
   return {
     data,

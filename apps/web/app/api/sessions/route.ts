@@ -107,7 +107,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<SessionsAp
     // Apply rate limiting
     const rateLimitResponse = await rateLimit(request, rateLimitConfigs.api);
     if (rateLimitResponse) {
-      return rateLimitResponse;
+      return rateLimitResponse as NextResponse<SessionsApiResponse>;
     }
 
     // Parse and validate query parameters

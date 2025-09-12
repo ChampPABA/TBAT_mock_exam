@@ -1,6 +1,27 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
+ * Dynamic port detection for TBAT development server
+ * Supports multiple development scenarios and port configurations
+ */
+function getDevServerPort(): number {
+  // Check environment variable first
+  if (process.env.DEV_SERVER_PORT) {
+    return parseInt(process.env.DEV_SERVER_PORT, 10);
+  }
+  
+  // Check for common TBAT development ports in priority order
+  const commonPorts = [3002, 3001, 3000];
+  
+  // For now, return the most commonly used port
+  // In a more sophisticated setup, we could check which port is actually available
+  return 3002;
+}
+
+const devServerPort = getDevServerPort();
+const devServerUrl = `http://localhost:${devServerPort}`;
+
+/**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
@@ -18,7 +39,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://localhost:3000",
+    baseURL: devServerUrl,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
   },
@@ -53,8 +74,9 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000",
+    command: `npm run dev -- --port ${devServerPort}`,
+    url: devServerUrl,
     reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000, // 2 minutes timeout for dev server startup
   },
 });

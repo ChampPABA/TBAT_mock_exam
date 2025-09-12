@@ -1,9 +1,6 @@
-import * as Sentry from "@sentry/nextjs";
-import { SecurityEventType } from "@prisma/client";
-import { prisma } from "./prisma";
+'use client';
 
-// Re-export Prisma's SecurityEventType for consistency
-export { SecurityEventType };
+import * as Sentry from "@sentry/nextjs";
 
 // Severity levels
 export enum SeverityLevel {
@@ -48,11 +45,11 @@ export const metrics = {
 
 // Initialize Sentry (call this in app initialization)
 export function initializeSentry(): void {
-  const environment = process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV || "development";
+  const environment = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT || process.env.NODE_ENV || "development";
   
-  if (process.env.SENTRY_DSN && process.env.SENTRY_ENABLED !== "false") {
+  if (process.env.NEXT_PUBLIC_SENTRY_DSN && process.env.NEXT_PUBLIC_SENTRY_ENABLED !== "false") {
     Sentry.init({
-      dsn: process.env.SENTRY_DSN,
+      dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
       environment,
       tracesSampleRate: environment === "production" ? 0.1 : 1.0,
       profilesSampleRate: environment === "production" ? 0.1 : 1.0,
@@ -119,7 +116,7 @@ export function logError(
   
   console.error(`[${severity.toUpperCase()}]`, errorMessage, context);
   
-  if (process.env.SENTRY_ENABLED !== "false") {
+  if (process.env.NEXT_PUBLIC_SENTRY_ENABLED !== "false") {
     if (typeof error === "string") {
       Sentry.captureMessage(error, severity as Sentry.SeverityLevel);
     } else {
@@ -130,106 +127,6 @@ export function logError(
         },
       });
     }
-  }
-}
-
-// Log security event
-export async function logSecurityEvent(
-  eventType: SecurityEventType,
-  userId?: string,
-  details?: Record<string, any>,
-  ipAddress?: string
-): Promise<void> {
-  try {
-    // Log to Sentry
-    Sentry.captureMessage(`Security Event: ${eventType}`, {
-      level: eventType.includes("FAILURE") || eventType.includes("UNAUTHORIZED") 
-        ? "warning" 
-        : "info",
-      tags: {
-        eventType,
-        userId: userId || "anonymous",
-      },
-      contexts: {
-        security: {
-          eventType,
-          userId,
-          ipAddress,
-          ...details,
-        },
-      },
-    });
-    
-    // Log to database security log
-    await prisma.securityLog.create({
-      data: {
-        eventType: eventType,
-        action: eventType,
-        userId: userId || "system",
-        resourceId: details?.resourceId || null,
-        resourceType: "SecurityEvent",
-        details: {
-          ...details,
-          eventType,
-        },
-        ipAddress,
-        userAgent: details?.userAgent || null,
-        timestamp: new Date(),
-      },
-    });
-    
-    // Check for critical security events
-    if (
-      eventType === SecurityEventType.MULTIPLE_LOGIN_ATTEMPTS ||
-      eventType === SecurityEventType.PDF_UNAUTHORIZED_ACCESS ||
-      eventType === SecurityEventType.ADMIN_DATA_ACCESS
-    ) {
-      await sendSecurityAlert(eventType, userId, details, ipAddress);
-    }
-  } catch (error) {
-    console.error("Failed to log security event:", error);
-    logError(error as Error, { eventType, userId });
-  }
-}
-
-// Send security alert for critical events
-async function sendSecurityAlert(
-  eventType: SecurityEventType,
-  userId?: string,
-  details?: Record<string, any>,
-  ipAddress?: string
-): Promise<void> {
-  try {
-    // In production, this would send email/SMS alerts to administrators
-    const alert = {
-      type: "SECURITY_ALERT",
-      severity: "HIGH",
-      eventType,
-      userId,
-      ipAddress,
-      details,
-      timestamp: new Date().toISOString(),
-    };
-    
-    // Log critical alert
-    Sentry.captureMessage(`CRITICAL SECURITY ALERT: ${eventType}`, {
-      level: "error",
-      tags: {
-        alertType: "security",
-        critical: true,
-      },
-      contexts: {
-        alert,
-      },
-    });
-    
-    console.error("🚨 SECURITY ALERT:", alert);
-    
-    // Here you would integrate with notification service (email/SMS)
-    // await sendEmailAlert(alert);
-    // await sendSMSAlert(alert);
-  } catch (error) {
-    logError(error as Error, { context: "sendSecurityAlert" });
   }
 }
 
@@ -285,62 +182,6 @@ export function trackAPIPerformance(
   }
 }
 
-// Create audit log entry
-export async function auditLog(data: {
-  action: string;
-  userId: string;
-  resourceId?: string;
-  resourceType?: string;
-  details?: any;
-  ipAddress?: string;
-  userAgent?: string;
-}): Promise<void> {
-  try {
-    await prisma.securityLog.create({
-      data: {
-        eventType: SecurityEventType.AUTHENTICATION_SUCCESS,
-        action: data.action,
-        userId: data.userId,
-        resourceId: data.resourceId || null,
-        resourceType: data.resourceType || null,
-        details: data.details || {},
-        ipAddress: data.ipAddress || null,
-        userAgent: data.userAgent || null,
-        timestamp: new Date(),
-      },
-    });
-    
-    // Track audit metric
-    trackMetric("audit.log.created", 1, {
-      action: data.action,
-      resourceType: data.resourceType || "unknown",
-    });
-  } catch (error) {
-    logError(error as Error, { context: "auditLog", data });
-  }
-}
-
-// Monitor rate limit violations
-export function monitorRateLimit(
-  identifier: string,
-  endpoint: string,
-  exceeded: boolean
-): void {
-  if (exceeded) {
-    trackMetric(metrics.security.rateLimitHits, 1, {
-      endpoint,
-      identifier,
-    });
-    
-    logSecurityEvent(
-      SecurityEventType.RATE_LIMIT_EXCEEDED,
-      identifier,
-      { endpoint },
-      identifier
-    );
-  }
-}
-
 // Performance monitoring wrapper
 export function withPerformanceMonitoring<T extends (...args: any[]) => Promise<any>>(
   fn: T,
@@ -368,54 +209,6 @@ export function withPerformanceMonitoring<T extends (...args: any[]) => Promise<
       throw error;
     }
   }) as T;
-}
-
-// Check system health
-export async function checkSystemHealth(): Promise<{
-  healthy: boolean;
-  services: Record<string, boolean>;
-  metrics: Record<string, any>;
-}> {
-  const services: Record<string, boolean> = {};
-  const healthMetrics: Record<string, any> = {};
-  
-  try {
-    // Check database connection
-    const dbStart = Date.now();
-    await prisma.$queryRaw`SELECT 1`;
-    services.database = true;
-    healthMetrics.dbResponseTime = Date.now() - dbStart;
-  } catch (error) {
-    services.database = false;
-    logError(error as Error, { service: "database" });
-  }
-  
-  // Check Sentry connection
-  services.sentry = !!process.env.SENTRY_DSN && process.env.SENTRY_ENABLED !== "false";
-  
-  // Overall health
-  const healthy = Object.values(services).every((status) => status);
-  
-  return {
-    healthy,
-    services,
-    metrics: healthMetrics,
-  };
-}
-
-// Environment-specific logging
-export function getLoggingLevel(): string {
-  const environment = process.env.NODE_ENV || "development";
-  
-  switch (environment) {
-    case "production":
-      return "error_and_audit";
-    case "test":
-      return "standard";
-    case "development":
-    default:
-      return "verbose";
-  }
 }
 
 // Format error for logging
