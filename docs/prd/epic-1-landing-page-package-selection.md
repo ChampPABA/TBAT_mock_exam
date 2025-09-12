@@ -1,6 +1,6 @@
-# Epic 1: Landing Page & Package Selection
+# Epic 1: Landing Page & Frontend Package Selection Experience
 
-**Goal:** Create conversion-optimized landing page with credibility elements and seamless package selection flow for Free vs Advanced packages with capacity management for maximum user acquisition.
+**Goal:** Create conversion-optimized landing page with credibility elements and complete multi-step frontend package selection wizard using mock data, providing demo-ready user experience before authentication and payment integration in Epic 2.
 
 ### Story 1.1: UI/UX Mockup Implementation
 
@@ -36,7 +36,7 @@ so that the complete user interface is functional and ready for backend integrat
 
 **AC3:** Package selection component with Free/Advanced toggle and capacity status messaging using mock data
 
-**AC4:** Modal system implemented for registration flow with mobile-optimized full-screen design
+**AC4:** Multi-step package selection wizard implemented with React state management (no backend required)
 
 **AC5:** Government credibility badge component with proper logo placement and responsive scaling
 
@@ -90,22 +90,23 @@ so that users see accurate real-time information and can make informed package s
 
 #### Acceptance Criteria
 
-**AC1:** Landing page connected to live capacity API with automatic refresh every 30 seconds
+**AC1:** Landing page connected to enhanced mock API with realistic capacity variation
 
-**AC2:** Package selection component displays real availability status and appropriate messaging
+**AC2:** Package selection wizard demonstrating complete user journey with mock data
 
-**AC3:** Capacity management logic working correctly: hide Free options when full, show Advanced-only messaging
+**AC3:** Frontend capacity messaging displaying appropriate mock availability status
 
-**AC4:** Error handling implemented for API failures with graceful degradation to cached data
+**AC4:** Frontend error handling with fallback to mock data and user notifications
 
 **AC5:** Loading states implemented for all dynamic content with skeleton placeholders
 
-**AC6:** End-to-end testing completed covering package selection flow from landing page to confirmation
+**AC6:** End-to-end frontend testing covering complete package selection wizard with mock data
 
 ---
 
 ## Change Log
 
-| Date       | Version | Description                                   | Author |
-| ---------- | ------- | --------------------------------------------- | ------ |
-| 2025-09-11 | 1.1     | Clarified capacity logic: 300 exam participants per session vs 20 concurrent system users | PO Sarah |
+| Date       | Version | Description                                                                                                       | Author   |
+| ---------- | ------- | ----------------------------------------------------------------------------------------------------------------- | -------- |
+| 2025-09-11 | 1.1     | Clarified capacity logic: 300 exam participants per session vs 20 concurrent system users                         | PO Sarah |
+| 2025-09-12 | 1.2     | Epic 1 scope refinement: Frontend-first package selection experience, removed authentication/payment dependencies | PO Sarah |

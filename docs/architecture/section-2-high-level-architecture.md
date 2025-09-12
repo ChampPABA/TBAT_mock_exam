@@ -2,7 +2,7 @@
 
 ### System Overview
 
-The TBAT Mock Exam Platform implements a **serverless-first architecture** leveraging Vercel's integrated ecosystem for optimal performance and cost efficiency at 20-user scale.
+The TBAT Mock Exam Platform implements a **serverless-first architecture** with **frontend-first development strategy** leveraging Vercel's integrated ecosystem for optimal performance and cost efficiency at 20-user scale.
 
 ```mermaid
 graph TB
@@ -70,7 +70,13 @@ graph TB
 **Total Monthly Cost:** ~฿710/month (20-user scale)
 **Cost per User:** ~฿36/month (highly efficient at small scale)
 
-### Scalability Strategy
+### Development & Scalability Strategy
+
+**Frontend-First Development Approach:**
+
+- **Epic 1:** Complete frontend package selection experience with mock data and database foundation
+- **Epic 2+:** Authentication integration and real backend API replacement
+- **Benefits:** Early stakeholder validation, demo-ready platform, reduced Epic 2 dependencies
 
 **Current Capacity:**
 

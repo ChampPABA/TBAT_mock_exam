@@ -4,9 +4,9 @@
 
 **Goal:** Establish bulletproof project infrastructure, core services, and essential seed data to support 300+ concurrent users with exam-critical reliability from day one.
 
-### **Epic 1: Landing Page & Package Selection**
+### **Epic 1: Landing Page & Frontend Package Selection Experience**
 
-**Goal:** Create conversion-optimized landing page with credibility elements and seamless package selection flow for Free vs Advanced packages with capacity management for maximum user acquisition.
+**Goal:** Create conversion-optimized landing page with credibility elements and complete multi-step frontend package selection wizard using mock data, providing demo-ready user experience before authentication and payment integration in Epic 2.
 
 ### **Epic 2: User Authentication & Registration System**
 

@@ -4,7 +4,7 @@
 
 - **Project:** TBAT Mock Exam Platform
 - **Document Type:** Technical Architecture Specification
-- **Version:** 1.1
+- **Version:** 1.2
 - **Last Updated:** September 12, 2025
 - **Status:** Draft - In Development
 - **API Contracts:** docs/prd/api-contracts.md
@@ -20,11 +20,11 @@ This platform delivers a unique value proposition combining **physical exam expe
 
 ### Architecture Approach
 
-**Development Strategy:** Mock-First Greenfield Development
+**Development Strategy:** Frontend-First Mock-Driven Development
 
-- **Phase 1 (Current):** UI implementation with comprehensive mock data services
-- **Phase 2 (Future):** Full database integration with real-time analytics
-- **Rationale:** Enables rapid development and early user feedback while building production-quality foundation
+- **Phase 1 (Epic 1):** Complete frontend package selection experience with mock data and database foundation
+- **Phase 2 (Epic 2+):** Authentication integration and real backend API replacement
+- **Rationale:** Enables stakeholder validation and demo-ready platform while maintaining production database readiness
 
 **Key Architectural Decisions:**
 
@@ -45,8 +45,9 @@ This platform delivers a unique value proposition combining **physical exam expe
 Complete API contract specifications and integration patterns documented in `docs/prd/api-contracts.md`. All APIs follow RESTful conventions with TypeScript interfaces, Thai language error handling, and circuit breaker patterns for production reliability.
 
 **Key API Categories:**
+
 - Authentication & Registration APIs
-- Package & Capacity Management APIs  
+- Package & Capacity Management APIs
 - Payment Processing APIs
 - Exam Code Generation APIs
 - Results & Analytics APIs

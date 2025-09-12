@@ -2,7 +2,7 @@
 
 ### Core Data Models
 
-The data models support the hybrid offline/online exam system with enhanced PDF management and 6-month data lifecycle policy as defined in PRD v1.2.
+The data models support the hybrid offline/online exam system with **frontend-first development strategy**. Epic 1 utilizes mock data while maintaining production database readiness for Epic 2+ integration. Enhanced PDF management and 6-month data lifecycle policy as defined in PRD v1.2.
 
 #### User Management
 
@@ -197,9 +197,11 @@ interface SupportTicket {
 
 ## Change Log
 
-| Date       | Version | Description                                   | Author |
-| ---------- | ------- | --------------------------------------------- | ------ |
+| Date       | Version | Description                                                                                                     | Author   |
+| ---------- | ------- | --------------------------------------------------------------------------------------------------------------- | -------- |
 | 2025-09-11 | 1.1     | Clarified SessionCapacity max_capacity comment: 300 exam participants per session vs 20 concurrent system users | PO Sarah |
+| 2025-09-12 | 1.2     | Added frontend-first development strategy: Epic 1 mock data, Epic 2+ database integration                       | PO Sarah |
+
 - **Emergency Extension:** Admin override capability for special circumstances
 
 ### Database Relationships

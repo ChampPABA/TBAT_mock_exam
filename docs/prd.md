@@ -24,13 +24,14 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 
 ### Change Log
 
-| Date       | Version | Description                                                                                              | Author    |
-| ---------- | ------- | -------------------------------------------------------------------------------------------------------- | --------- |
-| 2025-01-26 | 1.0     | Initial PRD creation from comprehensive Project Brief and Handoff Summary                                | John (PM) |
-| 2025-01-26 | 1.1     | Added Docker development environment requirements and containerization strategy                          | John (PM) |
-| 2025-01-26 | 1.2     | Added PDF solution management, data lifecycle policy, and enhanced admin capabilities (FR21-FR24, NFR16) | John (PM) |
-| 2025-09-11 | 1.3     | Clarified Story 1.3 AC2 capacity logic: 300 exam participants per session vs 20 concurrent system users | PO Sarah |
-| 2025-09-12 | 1.4     | Added epic dependency matrix and API contract documentation for development clarity | PO Sarah |
+| Date       | Version | Description                                                                                               | Author    |
+| ---------- | ------- | --------------------------------------------------------------------------------------------------------- | --------- |
+| 2025-01-26 | 1.0     | Initial PRD creation from comprehensive Project Brief and Handoff Summary                                 | John (PM) |
+| 2025-01-26 | 1.1     | Added Docker development environment requirements and containerization strategy                           | John (PM) |
+| 2025-01-26 | 1.2     | Added PDF solution management, data lifecycle policy, and enhanced admin capabilities (FR21-FR24, NFR16)  | John (PM) |
+| 2025-09-11 | 1.3     | Clarified Story 1.3 AC2 capacity logic: 300 exam participants per session vs 20 concurrent system users   | PO Sarah  |
+| 2025-09-12 | 1.4     | Added epic dependency matrix and API contract documentation for development clarity                       | PO Sarah  |
+| 2025-09-12 | 1.5     | Epic 1 scope refinement: Frontend-first package selection experience, payment integration moved to Epic 2 | PO Sarah  |
 
 ## Requirements
 
@@ -123,6 +124,7 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 For detailed epic sequencing and critical path analysis, see: `docs/prd/epic-dependency-matrix.md`
 
 **Critical Dependencies:**
+
 - Epic 0 (Foundation) must complete before all other epics
 - Epic 1-3 can run in parallel after Epic 0
 - Epic 4-5 require Epic 1-3 completion
@@ -134,8 +136,9 @@ For detailed epic sequencing and critical path analysis, see: `docs/prd/epic-dep
 Complete API contract specifications available at: `docs/prd/api-contracts.md`
 
 **Key Integration Points:**
+
 - Authentication APIs (Epic 2)
-- Payment processing APIs (Epic 3) 
+- Payment processing APIs (Epic 3)
 - Capacity management APIs (Epic 4)
 - Results and analytics APIs (Epic 6-7)
 - Admin management APIs (Epic 5)
@@ -262,9 +265,9 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 
 **Goal:** Establish bulletproof project infrastructure, core services, and essential seed data to support 300+ concurrent users with exam-critical reliability from day one.
 
-### **Epic 1: Landing Page & Package Selection**
+### **Epic 1: Landing Page & Frontend Package Selection Experience**
 
-**Goal:** Create conversion-optimized landing page with credibility elements and seamless package selection flow for Free vs Advanced packages with capacity management for maximum user acquisition.
+**Goal:** Create conversion-optimized landing page with credibility elements and complete multi-step frontend package selection wizard using mock data, providing demo-ready user experience before authentication and payment integration in Epic 2.
 
 ### **Epic 2: User Authentication & Registration System**
 
@@ -389,9 +392,9 @@ so that the platform can handle 300+ concurrent users with <2 second load times.
 
 **AC6:** Health check endpoints implemented for all critical services with automated alerting for downtime
 
-## Epic 1: Landing Page & Package Selection
+## Epic 1: Landing Page & Frontend Package Selection Experience
 
-**Goal:** Create conversion-optimized landing page with credibility elements and seamless package selection flow for Free vs Advanced packages with capacity management for maximum user acquisition.
+**Goal:** Create conversion-optimized landing page with credibility elements and complete multi-step frontend package selection wizard using mock data, providing demo-ready user experience before authentication and payment integration in Epic 2.
 
 ### Story 1.1: UI/UX Mockup Implementation
 
