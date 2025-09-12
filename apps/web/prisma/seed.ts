@@ -234,38 +234,20 @@ async function main() {
     });
   }
 
-  // Advanced users get 3 exam codes (one per subject)
+  // Advanced users get 1 exam code (covers all subjects)
   for (let i = 5; i < 10; i++) {
     const user = testUsers[i];
     if (!user) continue;
     const baseCode = String(Math.random()).substring(2, 10);
 
-    examCodes.push(
-      {
-        userId: user.id,
-        code: `ADV-${baseCode}-BIO`,
-        packageType: "ADVANCED" as any,
-        subject: "BIOLOGY" as any,
-        sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
-        isUsed: false,
-      },
-      {
-        userId: user.id,
-        code: `ADV-${baseCode}-CHEM`,
-        packageType: "ADVANCED" as any,
-        subject: "CHEMISTRY" as any,
-        sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
-        isUsed: false,
-      },
-      {
-        userId: user.id,
-        code: `ADV-${baseCode}-PHY`,
-        packageType: "ADVANCED" as any,
-        subject: "PHYSICS" as any,
-        sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
-        isUsed: false,
-      }
-    );
+    examCodes.push({
+      userId: user.id,
+      code: `ADV-${baseCode}`,
+      packageType: "ADVANCED" as any,
+      subject: "BIOLOGY" as any, // Default subject, ADVANCED covers all subjects
+      sessionTime: (i % 2 === 0 ? "MORNING" : "AFTERNOON") as any,
+      isUsed: false,
+    });
   }
 
   await prisma.examCode.createMany({ data: examCodes });

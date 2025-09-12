@@ -27,6 +27,10 @@ export async function GET(request: NextRequest) {
     }
     
     // Check admin status
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not available" }, { status: 503 });
+    }
+    
     const admin = await prisma.adminUser.findUnique({
       where: { email: session.user.email },
     });
@@ -64,6 +68,10 @@ export async function POST(request: NextRequest) {
     }
     
     // Check admin status
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not available" }, { status: 503 });
+    }
+    
     const admin = await prisma.adminUser.findUnique({
       where: { email: session.user.email },
     });
@@ -122,6 +130,10 @@ export async function PUT(request: NextRequest) {
     }
     
     // Check admin status
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not available" }, { status: 503 });
+    }
+    
     const admin = await prisma.adminUser.findUnique({
       where: { email: session.user.email },
     });
@@ -163,6 +175,10 @@ export async function DELETE(request: NextRequest) {
     }
     
     // Check admin status
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not available" }, { status: 503 });
+    }
+    
     const admin = await prisma.adminUser.findUnique({
       where: { email: session.user.email },
     });
@@ -255,6 +271,8 @@ async function getAverageResponseTime(): Promise<number> {
 }
 
 async function getErrorRate(): Promise<number> {
+  if (!prisma) return 0;
+  
   const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
   const errors = await prisma.securityLog.count({
     where: {
@@ -266,6 +284,8 @@ async function getErrorRate(): Promise<number> {
 }
 
 async function getCapacityUsage(): Promise<number> {
+  if (!prisma) return 0;
+  
   const sessions = await prisma.sessionCapacity.findMany({
     where: { examDate: { gte: new Date() } },
   });
@@ -280,6 +300,8 @@ async function getCapacityUsage(): Promise<number> {
 }
 
 async function getSecurityEventCount(): Promise<number> {
+  if (!prisma) return 0;
+  
   const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
   return prisma.securityLog.count({
     where: {

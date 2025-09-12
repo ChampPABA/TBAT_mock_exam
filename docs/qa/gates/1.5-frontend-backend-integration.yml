@@ -1,0 +1,141 @@
+# Quality Gate Decision - Updated by Quinn (Test Architect)
+
+# Required fields
+schema: 1
+story: "1.5"
+story_title: "Frontend-Backend Integration"
+gate: "FAIL"
+status_reason: "CRITICAL: Production deployment blockers discovered. Temporary fixes violate acceptance criteria and create fake data system unsuitable for production."
+reviewer: "Quinn (Test Architect)"
+updated: "2025-09-11T13:00:00Z"
+
+# Waiver status - not active
+waiver: { active: false }
+
+# Critical issues identified during reopened review
+top_issues:
+  - severity: high
+    category: "production_readiness"
+    description: "Static mock data system masquerading as real-time integration"
+    suggested_owner: "dev"
+    refs: ["apps/web/app/api/capacity/route.ts", "PO-ASSESSMENT-REQUEST.md"]
+  - severity: high
+    category: "acceptance_criteria"
+    description: "AC1 violated - 30-second auto-refresh disabled to prevent errors"
+    suggested_owner: "dev" 
+    refs: ["apps/web/hooks/useCapacity.ts", "AC1"]
+  - severity: high
+    category: "acceptance_criteria"
+    description: "AC4 compromised - retry attempts reduced from 3 to 1"
+    suggested_owner: "dev"
+    refs: ["apps/web/hooks/useCapacity.ts", "AC4"]
+  - severity: medium
+    category: "technical_debt"
+    description: "Infrastructure dependencies missing (PostgreSQL, Redis)"
+    suggested_owner: "dev"
+    refs: ["DEPLOYMENT-CHECKLIST.md", "DEPLOYMENT-FIXES.md"]
+
+# Quality scoring - significant deduction for production blockers
+quality_score: 60  # 100 - (3 × 20 high issues) - (1 × 10 medium issues) = 60
+expires: "2025-09-25T13:00:00Z"  # 2 weeks validity
+
+# Evidence collected during reopened review
+evidence:
+  tests_reviewed: 8  # Same technical implementation
+  risks_identified: 4  # Critical production deployment risks
+  trace:
+    ac_covered: [2, 3, 5, 6]  # Only partial coverage now
+    ac_gaps: [1, 4, 7]  # AC1 (real-time), AC4 (error handling), AC7 (production ready)
+
+# NFR validation results - updated assessment
+nfr_validation:
+  security:
+    status: CONCERNS
+    notes: "Fake data system creates business risk - users making decisions on inaccurate information. No actual data protection since no real data handling."
+  performance:
+    status: CONCERNS  
+    notes: "Mock system performs well but disabled real-time refresh and reduced retries compromise production performance requirements"
+  reliability:
+    status: FAIL
+    notes: "CRITICAL: Temporary fixes break core reliability features - no auto-refresh, reduced error handling, no database resilience"
+  maintainability:
+    status: CONCERNS
+    notes: "High technical debt from temporary fixes. Code comments claim functionality that doesn't work in production."
+
+# Critical recommendations requiring immediate action
+recommendations:
+  immediate: # MUST fix before any deployment
+    - action: "Implement real database integration (PostgreSQL + Redis)"
+      refs: ["apps/web/app/api/capacity/route.ts", "DEPLOYMENT-CHECKLIST.md"]
+    - action: "Restore 30-second auto-refresh functionality per AC1"
+      refs: ["apps/web/hooks/useCapacity.ts:refetchInterval"]
+    - action: "Restore 3-attempt retry mechanism per AC4" 
+      refs: ["apps/web/hooks/useCapacity.ts:maxAttempts"]
+    - action: "Remove all temporary fixes documented in DEPLOYMENT-FIXES.md"
+      refs: ["DEPLOYMENT-FIXES.md", "PO-ASSESSMENT-REQUEST.md"]
+  future: # Address after immediate fixes
+    - action: "Implement proper monitoring for production database integration"
+      refs: ["lib/monitoring.ts"]
+    - action: "Add comprehensive E2E tests with real backend systems"
+      refs: ["components/landing/pricing-section.tsx"]
+
+# Build and deployment readiness - UPDATED
+deployment_ready: false  # CHANGED: Not ready due to fake data system
+build_status: "PASSED"  # Build works but functionality compromised
+typescript_errors: 0
+critical_warnings: 2  # Prisma instrumentation warnings indicate missing setup
+
+# Root cause analysis
+root_cause_analysis:
+  primary_cause: "HTTP 400 errors during development led to temporary fixes that disable core functionality"
+  contributing_factors:
+    - "Missing infrastructure setup (PostgreSQL, Redis)"
+    - "Complex API requirements not met in development environment"
+    - "Temporary fixes applied without production impact assessment"
+  business_impact: "Users would receive fake capacity data leading to registration conflicts and poor experience"
+
+# Story completion summary - UPDATED
+completion_status:
+  all_tasks_completed: false  # Task 1 and 2 compromised by temporary fixes
+  all_acceptance_criteria_met: false  # AC1, AC4, AC7 violated
+  production_ready: false  # CRITICAL: Fake data system not production suitable
+  documentation_complete: true  # Documentation exists but describes non-working system
+  monitoring_implemented: true  # Monitoring exists but for fake system
+
+# Updated quality gate decision rationale
+decision_rationale: |
+  CRITICAL PRODUCTION BLOCKERS IDENTIFIED
+  
+  After initial PASS assessment, significant issues were discovered through the
+  PO-ASSESSMENT-REQUEST.md document that reveal the current implementation is
+  unsuitable for production deployment.
+  
+  The implementation was initially assessed as excellent, but subsequent discovery
+  shows that temporary fixes were applied to resolve development issues that:
+  
+  1. VIOLATE ACCEPTANCE CRITERIA:
+     - AC1: 30-second auto-refresh disabled
+     - AC4: Error resilience reduced (3→1 retries)  
+     - AC7: Not production-ready due to fake data
+  
+  2. CREATE BUSINESS RISK:
+     - Users receive inaccurate capacity information
+     - Potential registration conflicts from stale data
+     - Business credibility impact from unreliable system
+  
+  3. INTRODUCE HIGH TECHNICAL DEBT:
+     - Mock system masquerading as real integration
+     - Disabled functionality that must be re-enabled
+     - Missing infrastructure dependencies
+  
+  GATE CHANGED FROM PASS TO FAIL
+  
+  The technical implementation quality remains high, but the functional
+  compromises make this unsuitable for production deployment. Development
+  team must either:
+  
+  Option 1: Implement full database integration (8 story points)
+  Option 2: Enhanced mock system with simulated real-time (3 story points)
+  Option 3: Infrastructure-first approach (5 story points)
+  
+  Re-review required after production blockers are resolved.

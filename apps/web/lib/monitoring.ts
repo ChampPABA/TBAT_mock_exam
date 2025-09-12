@@ -161,7 +161,8 @@ export async function logSecurityEvent(
     });
     
     // Log to database security log
-    await prisma.securityLog.create({
+    if (prisma) {
+      await prisma.securityLog.create({
       data: {
         eventType: eventType,
         action: eventType,
@@ -177,6 +178,7 @@ export async function logSecurityEvent(
         timestamp: new Date(),
       },
     });
+    }
     
     // Check for critical security events
     if (
@@ -296,7 +298,8 @@ export async function auditLog(data: {
   userAgent?: string;
 }): Promise<void> {
   try {
-    await prisma.securityLog.create({
+    if (prisma) {
+      await prisma.securityLog.create({
       data: {
         eventType: SecurityEventType.AUTHENTICATION_SUCCESS,
         action: data.action,
@@ -309,6 +312,7 @@ export async function auditLog(data: {
         timestamp: new Date(),
       },
     });
+    }
     
     // Track audit metric
     trackMetric("audit.log.created", 1, {
@@ -381,10 +385,14 @@ export async function checkSystemHealth(): Promise<{
   
   try {
     // Check database connection
-    const dbStart = Date.now();
-    await prisma.$queryRaw`SELECT 1`;
-    services.database = true;
-    healthMetrics.dbResponseTime = Date.now() - dbStart;
+    if (prisma) {
+      const dbStart = Date.now();
+      await prisma.$queryRaw`SELECT 1`;
+      services.database = true;
+      healthMetrics.dbResponseTime = Date.now() - dbStart;
+    } else {
+      services.database = false;
+    }
   } catch (error) {
     services.database = false;
     logError(error as Error, { service: "database" });

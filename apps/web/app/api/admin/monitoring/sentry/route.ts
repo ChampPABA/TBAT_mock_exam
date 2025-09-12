@@ -12,6 +12,10 @@ export async function GET(request: NextRequest) {
     }
     
     // Check admin status
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not available" }, { status: 503 });
+    }
+    
     const admin = await prisma.adminUser.findUnique({
       where: { email: session.user.email },
     });
@@ -99,6 +103,10 @@ export async function POST(request: NextRequest) {
     }
     
     // Check admin status
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not available" }, { status: 503 });
+    }
+    
     const admin = await prisma.adminUser.findUnique({
       where: { email: session.user.email },
     });

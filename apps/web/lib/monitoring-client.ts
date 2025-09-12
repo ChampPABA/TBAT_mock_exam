@@ -1,6 +1,7 @@
 'use client';
 
-import * as Sentry from "@sentry/nextjs";
+// Disable Sentry temporarily to fix TypeError
+// import * as Sentry from "@sentry/nextjs";
 
 // Severity levels
 export enum SeverityLevel {
@@ -45,6 +46,9 @@ export const metrics = {
 
 // Initialize Sentry (call this in app initialization)
 export function initializeSentry(): void {
+  // Disabled temporarily to fix TypeError
+  return;
+  /*
   const environment = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT || process.env.NODE_ENV || "development";
   
   if (process.env.NEXT_PUBLIC_SENTRY_DSN && process.env.NEXT_PUBLIC_SENTRY_ENABLED !== "false") {
@@ -104,6 +108,7 @@ export function initializeSentry(): void {
       ],
     });
   }
+  */
 }
 
 // Log error to Sentry
@@ -116,18 +121,19 @@ export function logError(
   
   console.error(`[${severity.toUpperCase()}]`, errorMessage, context);
   
-  if (process.env.NEXT_PUBLIC_SENTRY_ENABLED !== "false") {
-    if (typeof error === "string") {
-      Sentry.captureMessage(error, severity as Sentry.SeverityLevel);
-    } else {
-      Sentry.captureException(error, {
-        level: severity as Sentry.SeverityLevel,
-        contexts: {
-          custom: context || {},
-        },
-      });
-    }
-  }
+  // Sentry disabled temporarily
+  // if (process.env.NEXT_PUBLIC_SENTRY_ENABLED !== "false") {
+  //   if (typeof error === "string") {
+  //     Sentry.captureMessage(error, severity as Sentry.SeverityLevel);
+  //   } else {
+  //     Sentry.captureException(error, {
+  //       level: severity as Sentry.SeverityLevel,
+  //       contexts: {
+  //         custom: context || {},
+  //       },
+  //     });
+  //   }
+  // }
 }
 
 // Track metric
@@ -137,12 +143,11 @@ export function trackMetric(
   tags?: Record<string, string>
 ): void {
   try {
-    // Note: Sentry metrics API is still in beta
-    // For now, we'll use custom context to track metrics
-    Sentry.setContext("custom_metrics", {
-      [metricName]: value,
-      tags: tags || {},
-    });
+    // Sentry disabled temporarily
+    // Sentry.setContext("custom_metrics", {
+    //   [metricName]: value,
+    //   tags: tags || {},
+    // });
     
     // Log metric for debugging in development
     if (process.env.NODE_ENV === "development") {
@@ -236,7 +241,7 @@ export const integrationMonitoring = {
   /**
    * Track capacity update success/failure rates
    */
-  trackCapacityUpdate(success: boolean, responseTime: number, errorType?: string) {
+  trackCapacityUpdate(success: boolean, responseTime: number, errorType?: string): void {
     trackMetric(metrics.performance.capacityUpdateTime, responseTime, {
       success: success.toString(),
       errorType: errorType || "none"
@@ -257,7 +262,7 @@ export const integrationMonitoring = {
   /**
    * Track when fallback to mock data is activated
    */
-  trackFallbackActivation(endpoint: string, reason: string, hasCachedData: boolean) {
+  trackFallbackActivation(endpoint: string, reason: string, hasCachedData: boolean): void {
     trackMetric(metrics.performance.fallbackActivation, 1, {
       endpoint,
       reason,
@@ -279,7 +284,7 @@ export const integrationMonitoring = {
   /**
    * Track client-side cache performance
    */
-  trackCachePerformance(endpoint: string, cacheHit: boolean, dataAge?: number) {
+  trackCachePerformance(endpoint: string, cacheHit: boolean, dataAge?: number): void {
     trackMetric(metrics.performance.clientCacheHit, cacheHit ? 1 : 0, {
       endpoint,
       cacheHit: cacheHit.toString(),
@@ -290,7 +295,7 @@ export const integrationMonitoring = {
   /**
    * Monitor real-time polling performance
    */
-  trackPollingHealth(endpoint: string, intervalMs: number, consecutiveFailures: number) {
+  trackPollingHealth(endpoint: string, intervalMs: number, consecutiveFailures: number): void {
     if (consecutiveFailures > 0) {
       logError(
         `Polling issues detected for ${endpoint}`,
@@ -313,7 +318,7 @@ export const integrationMonitoring = {
   /**
    * Track user experience metrics for loading states
    */
-  trackLoadingExperience(component: string, loadingDuration: number, hadError: boolean) {
+  trackLoadingExperience(component: string, loadingDuration: number, hadError: boolean): void {
     trackMetric("user.experience.loading", loadingDuration, {
       component,
       hadError: hadError.toString(),

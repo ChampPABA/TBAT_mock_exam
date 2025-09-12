@@ -169,7 +169,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-tbat-bg/20 to-white min-h-screen font-thai">
+    <div className="bg-gradient-to-br from-tbat-bg/20 to-white min-h-screen font-prompt">
       {/* Skip to content link */}
       <a 
         href="#main-content" 

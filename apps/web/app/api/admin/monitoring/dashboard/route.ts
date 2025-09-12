@@ -14,6 +14,10 @@ export async function GET(request: NextRequest) {
     }
     
     // Check admin status
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not available" }, { status: 503 });
+    }
+    
     const admin = await prisma.adminUser.findUnique({
       where: { email: session.user.email },
     });
@@ -74,6 +78,8 @@ export async function GET(request: NextRequest) {
 }
 
 async function getUserMetrics() {
+  if (!prisma) return { total: 0, todayCount: 0, monthCount: 0, activeUsers: 0, growth: "0" };
+  
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -101,6 +107,8 @@ async function getUserMetrics() {
 }
 
 async function getExamMetrics() {
+  if (!prisma) return { totalExams: 0, todayExams: 0, avgScore: "0", completionRate: "0" };
+  
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   
@@ -115,7 +123,7 @@ async function getExamMetrics() {
     prisma.examCode.count({
       where: { isUsed: true },
     }).then(used => 
-      prisma.examCode.count().then(total => 
+      prisma!.examCode.count().then(total => 
         total > 0 ? ((used / total) * 100).toFixed(2) : "0"
       )
     ),
@@ -130,6 +138,8 @@ async function getExamMetrics() {
 }
 
 async function getPaymentMetrics() {
+  if (!prisma) return { monthlyRevenue: 0, totalRevenue: 0, successRate: "0", avgTransaction: "0" };
+  
   const now = new Date();
   const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   
@@ -148,7 +158,7 @@ async function getPaymentMetrics() {
     prisma.payment.count({
       where: { status: "COMPLETED" },
     }).then(completed =>
-      prisma.payment.count().then(total =>
+      prisma!.payment.count().then(total =>
         total > 0 ? ((completed / total) * 100).toFixed(2) : "0"
       )
     ),
@@ -167,6 +177,8 @@ async function getPaymentMetrics() {
 }
 
 async function getSystemMetrics() {
+  if (!prisma) return { database: "unhealthy", cache: "healthy", sessionCapacity: [], uptime: process.uptime() };
+  
   const [dbStatus, cacheStatus, sessionCapacity] = await Promise.all([
     prisma.$queryRaw`SELECT 1`.then(() => "healthy").catch(() => "unhealthy"),
     // Cache check would go here if Redis is configured
@@ -195,6 +207,8 @@ async function getSystemMetrics() {
 }
 
 async function getRecentErrors() {
+  if (!prisma) return [];
+  
   return prisma.securityLog.findMany({
     where: {
       eventType: {
@@ -218,6 +232,8 @@ async function getRecentErrors() {
 }
 
 async function getActiveAlerts() {
+  if (!prisma) return [];
+  
   const alerts = [];
   
   // Check for high error rate

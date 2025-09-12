@@ -34,6 +34,10 @@ export const POST = withRateLimit(
       const { email, password } = validation.data;
 
       // Find user by email
+      if (!prisma) {
+        return NextResponse.json({ error: "Database not available" }, { status: 503 });
+      }
+      
       const user = await prisma.user.findUnique({
         where: { email: email.toLowerCase() },
       });

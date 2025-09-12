@@ -34,9 +34,12 @@ export const POST = withRateLimit(
     try {
       // Parse and validate request body
       const body = await req.json();
+      console.log('Registration request body:', body);
+      
       const validation = registerSchema.safeParse(body);
 
       if (!validation.success) {
+        console.error('Validation failed:', validation.error.flatten());
         return NextResponse.json(
           {
             error: "Validation failed",
@@ -49,6 +52,10 @@ export const POST = withRateLimit(
       const { email, password, name, thaiName, phoneNumber, pdpaConsent } = validation.data;
 
       // Check if user already exists
+      if (!prisma) {
+        return NextResponse.json({ error: "Database not available" }, { status: 503 });
+      }
+      
       const existingUser = await prisma.user.findUnique({
         where: { email: email.toLowerCase() },
       });
@@ -68,7 +75,7 @@ export const POST = withRateLimit(
       const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
       // Create user in database
-      const user = await prisma.user.create({
+      const user = await prisma!.user.create({
         data: {
           email: email.toLowerCase(),
           passwordHash: hashedPassword,
@@ -114,7 +121,7 @@ export const POST = withRateLimit(
       }
 
       // Log registration for security audit
-      await prisma.securityLog.create({
+      await prisma!.securityLog.create({
         data: {
           eventType: "AUTHENTICATION_SUCCESS",
           userId: user.id,

@@ -47,7 +47,9 @@
       "mcp__playwright__playwright_click",
       "mcp__playwright__playwright_close",
       "mcp__playwright__playwright_fill",
-      "mcp__playwright__playwright_select"
+      "mcp__playwright__playwright_select",
+      "mcp__playwright__playwright_press_key",
+      "mcp__playwright__playwright_get_visible_text"
     ],
     "deny": [],
     "ask": []

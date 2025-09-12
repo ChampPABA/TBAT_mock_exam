@@ -45,6 +45,8 @@ export async function generateRandomString(length: number): Promise<string> {
 
 export async function checkCodeUniqueness(code: string): Promise<boolean> {
   try {
+    if (!prisma) return true; // Assume unique if DB unavailable
+    
     const existingCode = await prisma.examCode.findUnique({
       where: { code },
     });
@@ -86,6 +88,10 @@ export async function generateExamCode(
   }
 
   try {
+    if (!prisma) {
+      throw new Error("Database not available");
+    }
+    
     const examCode = await prisma.examCode.create({
       data: {
         code: code!,
@@ -131,6 +137,10 @@ export async function validateExamCode(code: string): Promise<boolean> {
 
 export async function getExamCodeDetails(code: string) {
   try {
+    if (!prisma) {
+      return null;
+    }
+    
     const examCode = await prisma.examCode.findUnique({
       where: { code },
       include: {
@@ -161,6 +171,10 @@ export async function getExamCodeDetails(code: string) {
 
 export async function markExamCodeAsUsed(code: string, userId: string): Promise<void> {
   try {
+    if (!prisma) {
+      throw new Error("Database not available");
+    }
+    
     await prisma.examCode.update({
       where: { code },
       data: {
@@ -187,6 +201,10 @@ export async function markExamCodeAsUsed(code: string, userId: string): Promise<
 
 export async function deactivateExamCode(code: string, reason: string): Promise<void> {
   try {
+    if (!prisma) {
+      throw new Error("Database not available");
+    }
+    
     // Since we don't have isActive field, we'll mark it as used to deactivate
     await prisma.examCode.update({
       where: { code },

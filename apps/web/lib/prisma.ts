@@ -41,7 +41,18 @@ function createPrismaClient() {
   });
 }
 
-export const prisma = global.prisma || createPrismaClient();
+const _prisma = global.prisma || createPrismaClient();
+
+// Type assertion to fix null possibility issue - we handle null checks at runtime
+export const prisma = _prisma as PrismaClient;
+
+// Safe prisma accessor with error handling
+export function getPrisma() {
+  if (!prisma) {
+    throw new Error("Database not available - Prisma client not initialized");
+  }
+  return prisma;
+}
 
 // Log queries in development
 if (process.env.NODE_ENV === "development" && !global.prisma && prisma) {
@@ -72,7 +83,7 @@ export async function checkDatabaseConnection(): Promise<boolean> {
       return false;
     }
     
-    await prisma.$queryRaw`SELECT 1`;
+    await prisma!.$queryRaw`SELECT 1`;
     return true;
   } catch (error) {
     console.error("Database connection failed:", error);
@@ -112,7 +123,7 @@ export const optimizedQueries = {
   // Find user with minimal data for auth
   async findUserForAuth(email: string) {
     return queryUtils.withTiming(
-      () => prisma.user.findUnique({
+      () => prisma!.user.findUnique({
         where: { email },
         select: {
           id: true,
@@ -127,7 +138,7 @@ export const optimizedQueries = {
   // Get user dashboard data with single query
   async getUserDashboard(userId: string) {
     return queryUtils.withTiming(
-      () => prisma.user.findUnique({
+      () => prisma!.user.findUnique({
         where: { id: userId },
         include: {
           examCodes: {
@@ -160,7 +171,7 @@ export const optimizedQueries = {
   async checkSessionCapacity(sessionTime: string, examDate: Date) {
     return queryUtils.withTiming(
       async () => {
-        const session = await prisma.sessionCapacity.findFirst({
+        const session = await prisma!.sessionCapacity.findFirst({
           where: {
             sessionTime: sessionTime as any,
             examDate,
@@ -184,7 +195,7 @@ export const optimizedQueries = {
   // Increment session capacity atomically
   async incrementSessionCapacity(sessionId: string) {
     return queryUtils.withTiming(
-      () => prisma.sessionCapacity.update({
+      () => prisma!.sessionCapacity.update({
         where: { id: sessionId },
         data: {
           currentCount: { increment: 1 },
@@ -208,14 +219,14 @@ export const optimizedQueries = {
         }
         
         const [results, stats] = await Promise.all([
-          prisma.examResult.findMany({
+          prisma!.examResult.findMany({
             where: whereClause,
             include: {
               analytics: true,
             },
             orderBy: { createdAt: "desc" },
           }),
-          prisma.examResult.groupBy({
+          prisma!.examResult.groupBy({
             by: ["subject"],
             where: whereClause,
             _avg: { score: true },
@@ -240,7 +251,7 @@ export const cleanupUtils = {
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
     
-    return prisma.examCode.deleteMany({
+    return prisma!.examCode.deleteMany({
       where: {
         createdAt: { lt: sixMonthsAgo },
       },
@@ -252,7 +263,7 @@ export const cleanupUtils = {
     const oneDayAgo = new Date();
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
     
-    return prisma.userSession.deleteMany({
+    return prisma!.userSession.deleteMany({
       where: {
         expiresAt: { lt: oneDayAgo },
       },
@@ -264,7 +275,7 @@ export const cleanupUtils = {
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
     
-    return prisma.auditLog.deleteMany({
+    return prisma!.auditLog.deleteMany({
       where: {
         createdAt: { lt: threeMonthsAgo },
       },

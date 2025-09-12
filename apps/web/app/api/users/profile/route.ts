@@ -20,7 +20,11 @@ export const GET = withRateLimit(async () => {
     }
 
     // Get user profile
-    const user = await prisma.user.findUnique({
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not available" }, { status: 503 });
+    }
+    
+    const user = await prisma!.user.findUnique({
       where: { email: session.user.email },
       select: {
         id: true,
@@ -85,7 +89,7 @@ export const PATCH = withRateLimit(async (req: NextRequest) => {
       }
 
       // Update user profile
-      const updatedUser = await prisma.user.update({
+      const updatedUser = await prisma!.user.update({
         where: { email: session.user.email },
         data: {
           ...data,
@@ -130,7 +134,7 @@ export const DELETE = withRateLimit(async () => {
     }
 
     // Get user to ensure they exist
-    const user = await prisma.user.findUnique({
+    const user = await prisma!.user.findUnique({
       where: { email: session.user.email },
     });
 
@@ -139,7 +143,7 @@ export const DELETE = withRateLimit(async () => {
     }
 
     // Soft delete by anonymizing data (PDPA compliance)
-    await prisma.user.update({
+    await prisma!.user.update({
       where: { id: user.id },
       data: {
         email: `deleted_${user.id}@deleted.local`,

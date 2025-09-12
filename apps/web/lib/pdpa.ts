@@ -82,6 +82,10 @@ export async function recordConsent(data: {
   userAgent?: string;
 }): Promise<void> {
   try {
+    if (!prisma) {
+      throw new Error("Database not available");
+    }
+    
     await prisma.pDPAConsent.create({
       data: {
         userId: data.userId,

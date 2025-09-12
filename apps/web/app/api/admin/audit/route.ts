@@ -31,6 +31,10 @@ export async function GET(req: NextRequest) {
     }
 
     // Verify admin role - check if user is an admin
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not available" }, { status: 503 });
+    }
+    
     const adminUser = await prisma.adminUser.findUnique({
       where: { email: session.user.email },
     });
@@ -180,6 +184,10 @@ export async function POST(req: NextRequest) {
       }
 
       // Verify admin role
+      if (!prisma) {
+        return NextResponse.json({ error: "Database not available" }, { status: 503 });
+      }
+      
       const adminUser = await prisma.adminUser.findUnique({
         where: { email: session.user.email },
       });
