@@ -58,6 +58,31 @@ Key TypeScript interfaces defined in `docs/architecture/section-4-data-models.md
 - **PDF Management**: `PDFSolution`, `PDFDownload`, `PDFNotification`
 - **Admin Operations**: `AdminUser`, `AuditLog`, `SupportTicket`
 
+### Capacity Management Algorithm
+
+**Event Constraints:**
+- **Total Capacity:** 300 seats (absolute maximum)
+- **Free Package Cap:** 150 seats (hard limit)
+- **Advanced Package:** Flexible, can use remaining capacity up to 300
+
+**Registration Logic:**
+- Free registrations: Allowed if current_free < 150 AND total < 300
+- Advanced registrations: Allowed if total < 300
+- Advanced can fill unused free slots
+- **UI Rule:** Never display capacity numbers to users
+- **UX Rule:** Show disabled/transparent states for full sessions
+
+**Algorithm Scenarios:**
+1. Free fills first: Advanced can still register until total = 300
+2. Mixed registration: Both packages respect their individual rules
+3. Capacity prioritization: Advanced gets remaining slots regardless of free cap
+
+**Exam Code Format:**
+- **Free Package:** `FREE-XXXX-SUBJECT` (SUBJECT = BIOLOGY|CHEMISTRY|PHYSICS)
+- **Advanced Package:** `ADV-XXXX`
+- **XXXX Format:** 4 characters, mixed numbers and uppercase English letters
+- **Generation:** Cryptographically random, validated for uniqueness
+
 ### Business Logic Constraints
 
 - **Free Package**: Single subject access, basic results

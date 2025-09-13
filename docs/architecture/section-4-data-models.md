@@ -37,7 +37,7 @@ interface UserSession {
 interface ExamCode {
   id: string;
   user_id: string; // Foreign key to User
-  code: string; // FREE-[8CHAR]-[SUBJECT] or ADV-[8CHAR]
+  code: string; // FREE-XXXX-[SUBJECT] or ADV-XXXX (XXXX = 4 chars: alphanumeric uppercase)
   package_type: "FREE" | "ADVANCED";
   subject: "BIOLOGY" | "CHEMISTRY" | "PHYSICS";
   session_time: "09:00-12:00" | "13:00-16:00";
@@ -52,6 +52,21 @@ interface SessionCapacity {
   current_count: number;
   max_capacity: number; // 300 exam participants per session (system serves 20 concurrent users)
   exam_date: Date; // 27 กันยายน 2568
+  created_at: Date;
+  updated_at: Date;
+}
+
+interface CapacityManagement {
+  id: string;
+  total_capacity: number; // 300 seats absolute maximum
+  free_capacity: number; // 150 seats hard cap
+  advanced_capacity: number; // Flexible up to remaining total
+  current_free_count: number;
+  current_advanced_count: number;
+  exam_date: Date; // 27 กันยายน 2568
+  is_full: boolean; // Computed: total >= 300
+  free_slots_available: boolean; // Computed: current_free < 150 && !is_full
+  advanced_slots_available: boolean; // Computed: !is_full
   created_at: Date;
   updated_at: Date;
 }
@@ -221,5 +236,13 @@ interface SupportTicket {
 - Advanced users: 3 ExamCodes (one per subject)
 - PDF access: Advanced package required
 - Data expiry: Enforced at application level with database triggers
+
+**Capacity Management Rules:**
+- **Total Capacity:** 300 participants maximum (absolute limit)
+- **Free Package:** Maximum 150 registrations (hard cap)
+- **Advanced Package:** Can fill any remaining slots up to total capacity
+- **Priority Logic:** Advanced can take unused free slots
+- **UI Display:** Never show capacity numbers to users
+- **UX Behavior:** Disable session selection when full, show as transparent/grayed out
 
 This data model supports the complete TBAT Mock Exam Platform functionality with enhanced PDF management, comprehensive admin capabilities, and robust data lifecycle management while maintaining high performance and data integrity for exam-critical operations.

@@ -188,7 +188,7 @@ interface ExamCodesResponse {
 
 interface ExamCode {
   id: string
-  code: string // FREE-[8CHAR]-[SUBJECT] or ADV-[8CHAR]
+  code: string // FREE-XXXX-[SUBJECT] or ADV-XXXX (XXXX = 4 chars: alphanumeric uppercase)
   package_type: "FREE" | "ADVANCED"
   subject: "BIOLOGY" | "CHEMISTRY" | "PHYSICS"
   session_time: "09:00-12:00" | "13:00-16:00"

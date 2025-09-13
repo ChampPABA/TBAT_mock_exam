@@ -49,7 +49,9 @@
       "mcp__playwright__playwright_fill",
       "mcp__playwright__playwright_select",
       "mcp__playwright__playwright_press_key",
-      "mcp__playwright__playwright_get_visible_text"
+      "mcp__playwright__playwright_get_visible_text",
+      "mcp__shadcn__get_project_registries",
+      "mcp__shadcn__get_add_command_for_items"
     ],
     "deny": [],
     "ask": []

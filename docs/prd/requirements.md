@@ -10,7 +10,7 @@
 
 **FR4:** The system shall provide session selection for two time slots (9:00-12:00 and 13:00-16:00) with maximum 300 students per session
 
-**FR5:** The system shall generate unique random exam codes using English letters + numbers following patterns: FREE-[8-CHAR-RANDOM]-[SUBJECT] and ADV-[8-CHAR-RANDOM] (no sequential numbering)
+**FR5:** The system shall generate unique random exam codes using English letters + numbers following patterns: FREE-[4-CHAR-RANDOM]-[SUBJECT] and ADV-[4-CHAR-RANDOM] where 4-CHAR = alphanumeric uppercase (no sequential numbering)
 
 **FR6:** The system shall integrate Stripe payment processing for both 690 THB Advanced Package purchases and 290 THB post-exam upgrade payments in Thai Baht
 

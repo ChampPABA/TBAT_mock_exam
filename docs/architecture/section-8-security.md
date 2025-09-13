@@ -352,7 +352,7 @@ interface IncidentResponse {
 interface ExamIntegrity {
   codeUniqueness: {
     algorithm: "cryptographically_secure_random";
-    pattern: "FREE-[8CHAR]-[SUBJECT] | ADV-[8CHAR]";
+    pattern: "FREE-XXXX-[SUBJECT] | ADV-XXXX"; // XXXX = 4 chars: alphanumeric uppercase
     collision_check: true;
     audit_trail: true;
   };

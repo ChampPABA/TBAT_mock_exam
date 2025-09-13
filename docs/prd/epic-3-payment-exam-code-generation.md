@@ -1,6 +1,6 @@
 # Epic 3: Payment & Exam Code Generation
 
-**Goal:** Implement Stripe payment processing for 690 THB Advanced packages and generate unique random exam codes (FREE-XXXXXXXX-SUBJECT / ADV-XXXXXXXX) with printable tickets.
+**Goal:** Implement Stripe payment processing for 690 THB Advanced packages and generate unique random exam codes (FREE-XXXX-SUBJECT / ADV-XXXX) with printable tickets where XXXX = 4 alphanumeric uppercase characters.
 
 ### Story 3.1: UI/UX Mockup Implementation
 
@@ -12,7 +12,7 @@ so that the payment experience is optimized for mobile Thai users and exam code 
 
 **AC1:** Payment modal mockup created with Stripe elements integration and Thai Baht (฿690) display
 
-**AC2:** Exam code display mockup showing FREE-A1B2C3D4-PHY and ADV-E5F6G7H8 format examples
+**AC2:** Exam code display mockup showing FREE-A1B2-PHY and ADV-C3D4 format examples (4 alphanumeric uppercase)
 
 **AC3:** Printable ticket mockup with QR code, exam details, and session information
 

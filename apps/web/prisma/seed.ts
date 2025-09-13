@@ -21,7 +21,6 @@ async function main() {
     prisma.capacityStatus.deleteMany(),
     prisma.sessionCapacity.deleteMany(),
     prisma.package.deleteMany(),
-    prisma.verificationToken.deleteMany(),
     prisma.account.deleteMany(),
     prisma.userSession.deleteMany(),
     prisma.adminUser.deleteMany(),

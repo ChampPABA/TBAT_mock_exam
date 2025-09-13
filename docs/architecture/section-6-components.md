@@ -122,8 +122,8 @@ interface DatabaseConnection {
 
 ```typescript
 interface ExamCodeGenerator {
-  generateFreeCode: (subject: Subject) => string; // FREE-[8CHAR]-[SUBJECT]
-  generateAdvancedCode: () => string; // ADV-[8CHAR]
+  generateFreeCode: (subject: Subject) => string; // FREE-XXXX-[SUBJECT] (XXXX = 4 chars: alphanumeric uppercase)
+  generateAdvancedCode: () => string; // ADV-XXXX (XXXX = 4 chars: alphanumeric uppercase)
   validateCode: (code: string) => ValidationResult;
   checkUniqueness: (code: string) => Promise<boolean>;
 }

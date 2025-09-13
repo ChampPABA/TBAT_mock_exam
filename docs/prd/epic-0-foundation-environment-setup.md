@@ -78,7 +78,7 @@ so that all features can handle exam codes, data protection, and user safety rel
 
 #### Acceptance Criteria
 
-**AC1:** Random exam code generation service implemented with collision prevention (FREE-[8-CHAR]-[SUBJECT], ADV-[8-CHAR])
+**AC1:** Random exam code generation service implemented with collision prevention (FREE-XXXX-[SUBJECT], ADV-XXXX) where XXXX = 4 chars: alphanumeric uppercase
 
 **AC2:** Password hashing service implemented with bcrypt and secure validation rules (8+ characters, letters + numbers)
 

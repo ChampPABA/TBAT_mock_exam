@@ -67,6 +67,13 @@ graph TB
 - **Stripe Thailand:** 3.65% + ฿11 per transaction
 - **Email Service:** Free tier (Resend: 3,000 emails/month)
 
+**Capacity Management Service:**
+- Real-time capacity tracking for Free/Advanced packages
+- Enforces 300 total / 150 free hard limits
+- Provides availability status without exposing numbers
+- Handles Advanced package priority logic
+- Integrates with registration flow validation
+
 **Total Monthly Cost:** ~฿710/month (20-user scale)
 **Cost per User:** ~฿36/month (highly efficient at small scale)
 
