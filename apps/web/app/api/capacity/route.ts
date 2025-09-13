@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { mockSessionCapacity, getAvailabilityStatus } from "@/lib/mock-data";
 
+// Add response caching to improve performance
+interface CachedResponse {
+  data: any;
+  timestamp: number;
+  ttl: number;
+}
+
+let cachedCapacityData: CachedResponse | null = null;
+const CACHE_TTL = 15000; // 15 seconds cache
+
 /**
  * Enhanced Mock Capacity API for Production Deployment
  * Provides realistic capacity simulation without database dependencies
  * Implements proper business logic, Thai messaging, and real-time variations
  * 
  * Features:
+ * - Response caching (15s TTL) for better performance
  * - Realistic capacity variation algorithm (±3 people every 30 seconds)
  * - Proper Free/Advanced package rules
  * - Thai language messaging
@@ -20,60 +31,61 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const sessionTime = url.searchParams.get("sessionTime");
     const format = url.searchParams.get("format") || "detailed";
     
+    // Check cache first for better performance
+    const now = Date.now();
+    if (cachedCapacityData && (now - cachedCapacityData.timestamp) < cachedCapacityData.ttl) {
+      // Return cached data if not specific session requested
+      if (!sessionTime) {
+        return NextResponse.json({
+          success: true,
+          data: {
+            ...cachedCapacityData.data,
+            metadata: {
+              ...cachedCapacityData.data.metadata,
+              cacheHit: true,
+              cachedAt: new Date(cachedCapacityData.timestamp).toISOString()
+            }
+          }
+        });
+      }
+    }
+    
     // Enhanced Mock System: Simulate realistic capacity changes over time
     // This creates realistic variation for production deployment
-    const now = Date.now();
     const intervalKey = Math.floor(now / 30000); // Change every 30 seconds
     const seedVariation = intervalKey % 7; // Create predictable but varying pattern
     
-    // Enhanced Transform: Mock data with realistic variations and business logic
+    // Optimized Transform: Mock data with realistic variations and business logic
     const transformSessionToApi = (session: any) => {
       // Add realistic capacity variation (±3 people based on 30s intervals)
-      const baseCount = session.current_count;
-      const variation = (seedVariation - 3); // -3 to +3 people
-      const simulatedCount = Math.max(0, Math.min(session.max_capacity, baseCount + variation));
+      const simulatedCount = Math.max(0, Math.min(session.max_capacity, session.current_count + (seedVariation - 3)));
       
-      // Calculate percentage and apply business rules
+      // Pre-calculate common values
       const percentageFull = simulatedCount / session.max_capacity;
-      const freeLimit = Math.floor(session.max_capacity * 0.5); // 50% reserved for Free
+      const freeLimit = session.max_capacity >> 1; // Bitshift for faster division by 2
       const advancedCount = Math.floor(simulatedCount * 0.6);
       const freeCount = simulatedCount - advancedCount;
       
-      // Enhanced Availability Status Logic with Thai Business Rules
-      let availabilityStatus: string;
-      let thaiMessage: string;
-      let messageEn: string;
-      
-      if (percentageFull >= 0.95) {
-        availabilityStatus = "FULL";
-        thaiMessage = "เต็มแล้ว";
-        messageEn = "Session is full";
-      } else if (freeCount >= freeLimit || percentageFull >= 0.90) {
-        // Advanced Only - Free quota reached or nearly full
-        availabilityStatus = "ADVANCED_ONLY";
-        thaiMessage = "เหลือที่สำหรับ Advanced Package เท่านั้น";
-        messageEn = "Advanced Package only";
-      } else if (percentageFull >= 0.80) {
-        availabilityStatus = "NEARLY_FULL";
-        thaiMessage = "เหลือที่นั่งจำนวนจำกัด";
-        messageEn = "Limited seats remaining";
-      } else {
-        availabilityStatus = "AVAILABLE";
-        thaiMessage = "เปิดรับสมัคร";
-        messageEn = "Seats available";
-      }
+      // Simplified availability logic with lookup tables
+      const availabilityData = percentageFull >= 0.95 
+        ? { status: "FULL", thai: "เต็มแล้ว", en: "Session is full" }
+        : freeCount >= freeLimit || percentageFull >= 0.90
+        ? { status: "ADVANCED_ONLY", thai: "เหลือที่สำหรับ Advanced Package เท่านั้น", en: "Advanced Package only" }
+        : percentageFull >= 0.80
+        ? { status: "NEARLY_FULL", thai: "เหลือที่นั่งจำนวนจำกัด", en: "Limited seats remaining" }
+        : { status: "AVAILABLE", thai: "เปิดรับสมัคร", en: "Seats available" };
       
       return {
         sessionTime: session.session_time === "09:00-12:00" ? "MORNING" : "AFTERNOON",
         displayTime: session.session_time,
         totalCount: simulatedCount,
         maxCapacity: session.max_capacity,
-        availabilityStatus,
-        message: thaiMessage,
-        messageEn,
+        availabilityStatus: availabilityData.status,
+        message: availabilityData.thai,
+        messageEn: availabilityData.en,
         percentageFull: Math.round(percentageFull * 100) / 100,
         advancedCount,
-        freeCount: availabilityStatus === "ADVANCED_ONLY" ? undefined : freeCount, // Hide when full
+        freeCount: availabilityData.status === "ADVANCED_ONLY" ? undefined : freeCount,
         freeLimit
       };
     };
@@ -143,6 +155,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         occupancyRate: (morningSession.current_count + afternoonSession.current_count) / 
                       (morningSession.max_capacity + afternoonSession.max_capacity),
         overallStatus: "AVAILABLE"
+      };
+    }
+
+    // Cache the response data for future requests (only for non-specific session requests)
+    if (!sessionTime) {
+      cachedCapacityData = {
+        data: responseData,
+        timestamp: now,
+        ttl: CACHE_TTL
       };
     }
 

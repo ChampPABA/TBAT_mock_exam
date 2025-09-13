@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useCapacity } from '@/hooks/useCapacity'; // TEMPORARILY DISABLED
-import { CapacityStatusSkeleton, CapacityUpdateIndicator, LoadingOverlay } from '@/components/ui/skeleton';
+// Capacity status removed as requested
 
 interface HeroSectionProps {
   onRegisterClick?: () => void;
@@ -36,19 +35,19 @@ export default function HeroSection({ onRegisterClick, onViewPackagesClick }: He
     setIsRefreshing(false);
   }, []);
 
-  // RE-ENABLED with circuit breaker pattern - Production ready
-  const { data: capacityData, loading: capacityLoading, error: capacityError, refetch } = useCapacity({
-    onSuccess: handleSuccess,
-    onError: handleError
-  });
+  // Capacity tracking temporarily disabled as requested
+  // const { data: capacityData, loading: capacityLoading, error: capacityError, refetch } = useCapacity({
+  //   onSuccess: handleSuccess,
+  //   onError: handleError
+  // });
   
 
-  // Track when capacity is updating (for smooth transitions)
-  useEffect(() => {
-    if (capacityLoading && capacityData) {
-      setIsRefreshing(true);
-    }
-  }, [capacityLoading, capacityData]);
+  // Track when capacity is updating (for smooth transitions) - DISABLED
+  // useEffect(() => {
+  //   if (capacityLoading && capacityData) {
+  //     setIsRefreshing(true);
+  //   }
+  // }, [capacityLoading, capacityData]);
 
   // Countdown timer hook
   useEffect(() => {
@@ -219,84 +218,6 @@ export default function HeroSection({ onRegisterClick, onViewPackagesClick }: He
             </div>
           </div>
 
-          {/* Capacity Status */}
-          {capacityLoading && !capacityData ? (
-            <CapacityStatusSkeleton />
-          ) : capacityError && !capacityData ? (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 max-w-2xl mx-auto mb-6">
-              <p className="text-yellow-700 text-sm text-center font-prompt">
-                {capacityError.message || 'ไม่สามารถโหลดข้อมูลจำนวนที่นั่งได้ กรุณาลองใหม่อีกครั้ง'}
-              </p>
-              <button 
-                onClick={() => refetch()}
-                className="mt-2 px-4 py-2 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 transition-colors font-prompt text-sm"
-              >
-                ลองใหม่
-              </button>
-            </div>
-          ) : capacityData && (
-            <div className="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto mb-6 animate-scale-in relative">
-              <LoadingOverlay isVisible={isRefreshing} message="อัปเดตข้อมูล..." />
-              <div className="text-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2 font-prompt">📊 สถานะที่นั่งปัจจุบัน</h3>
-                <CapacityUpdateIndicator isUpdating={isRefreshing} />
-                {lastUpdateTime && (
-                  <p className="text-xs text-gray-500 mb-3 font-prompt">
-                    อัปเดตล่าสุด: {lastUpdateTime.toLocaleTimeString('th-TH')}
-                  </p>
-                )}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {capacityData.map((session) => {
-                    const percentage = (session.current_count / session.max_capacity) * 100;
-                    const getStatusColor = () => {
-                      if (session.availability_status === 'FULL') return 'text-red-600 bg-red-50';
-                      if (session.availability_status === 'NEARLY_FULL') return 'text-orange-600 bg-orange-50';
-                      if (session.availability_status === 'ADVANCED_ONLY') return 'text-purple-600 bg-purple-50';
-                      return 'text-green-600 bg-green-50';
-                    };
-
-                    return (
-                      <div 
-                        key={session.session_time} 
-                        className={`p-4 rounded-lg border ${getStatusColor()} transition-all duration-300 hover:shadow-md`}
-                        role="region"
-                        aria-label={`สถานะที่นั่ง${session.session_time === 'MORNING' ? 'รอบเช้า' : 'รอบบ่าย'}`}
-                      >
-                        <h4 className="font-semibold mb-2 font-prompt">
-                          {session.session_time === 'MORNING' ? '🌅 รอบเช้า (09:00-12:00)' : '🌆 รอบบ่าย (13:00-16:00)'}
-                        </h4>
-                        <div className="space-y-2">
-                          <div className="text-sm font-prompt">
-                            สถานะ: <span className="font-semibold" aria-live="polite">{session.thai_message}</span>
-                          </div>
-                          {session.availability_status !== 'ADVANCED_ONLY' && (
-                            <div className="text-sm font-prompt">
-                              ผู้สมัคร: {session.current_count}/{session.max_capacity} คน ({percentage.toFixed(1)}%)
-                            </div>
-                          )}
-                          {/* Progress bar */}
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className={`h-2 rounded-full transition-all duration-300 ${
-                                session.availability_status === 'FULL' ? 'bg-red-500' :
-                                session.availability_status === 'NEARLY_FULL' ? 'bg-orange-500' :
-                                session.availability_status === 'ADVANCED_ONLY' ? 'bg-purple-500' :
-                                'bg-green-500'
-                              }`}
-                              style={{ width: `${Math.min(percentage, 100)}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                <p className="text-xs text-gray-500 mt-3 font-prompt">
-                  * ข้อมูลอัปเดตทุก 30 วินาที | การสมัครจะปิดเมื่อเต็มจำนวน
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* Exam Date Clarification */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto animate-fade-in-up">

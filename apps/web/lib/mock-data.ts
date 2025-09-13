@@ -86,7 +86,7 @@ export const mockPackages: PackageType[] = [
       { text: "ครบทั้ง 3 วิชา (ชีวะ เคมี ฟิสิกส์)", included: true, highlight: true },
       { text: "รายงานการวิเคราะห์แบบละเอียด", included: true },
       { text: "ดาวน์โหลด PDF เฉลยและคำอธิบาย", included: true },
-      { text: "เปรียบเทียบกับสถิติโรงเรียนดัง", included: true },
+      { text: "เปรียบเทียบสถิติกับผู้สอบทั้งหมด", included: true },
       { text: "แนะนำจุดที่ต้องปรับปรุง", included: true },
       { text: "การวิเคราะห์ผลการสอบ", included: true },
       { text: "เอาข้อสอบกลับบ้านได้", included: true },
@@ -101,17 +101,17 @@ export const mockPackages: PackageType[] = [
   }
 ];
 
-// Mock session capacity data
+// Mock session capacity data (updated for registration enhancement)
 export const mockSessionCapacity: SessionCapacity[] = [
   {
     session_time: "09:00-12:00",
-    current_count: 73,
+    current_count: 77,
     max_capacity: 150,
     availability: "available"
   },
   {
     session_time: "13:00-16:00", 
-    current_count: 74,
+    current_count: 76,
     max_capacity: 150,
     availability: "available"
   }
@@ -163,18 +163,23 @@ export const getAvailabilityStatus = (currentCount: number, maxCapacity: number)
   return "available";
 };
 
-// Registration form interfaces (for future use)
+// Registration form interfaces (enhanced for password and session selection)
 export interface RegistrationData {
   packageType: "FREE" | "ADVANCED";
   selectedSubject?: string; // For FREE package only
   sessionTime: "09:00-12:00" | "13:00-16:00";
   personalInfo: {
-    firstName: string;
-    lastName: string;
-    email: string;
+    fullname: string;
+    nickname?: string;
+    email: string; // Used as username
     phone: string;
+    lineid: string;
     school: string;
     grade: string;
+    parentName?: string;
+    parentPhone?: string;
+    password: string;
+    confirmPassword: string;
   };
   pdpaConsent: boolean;
 }

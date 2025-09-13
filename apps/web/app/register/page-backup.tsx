@@ -22,11 +22,10 @@ interface FormData {
     school: string;
     grade: string;
     parentName?: string;
-    password?: string;
-    confirmPassword?: string;
     parentPhone?: string;
+    password: string;
+    confirmPassword: string;
   };
-  packageType: "FREE" | "ADVANCED" | "";
   subject: string;
   sessionTime: string;
   terms: boolean;
@@ -35,7 +34,6 @@ interface FormData {
 export default function RegisterPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
-  const [currentSubStep, setCurrentSubStep] = useState(1); // For Step 2 sub-steps
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     personal: {
@@ -45,9 +43,10 @@ export default function RegisterPage() {
       phone: "",
       lineid: "",
       school: "",
-      grade: ""
+      grade: "",
+      password: "",
+      confirmPassword: ""
     },
-    packageType: "",
     subject: "",
     sessionTime: "",
     terms: false
@@ -55,6 +54,7 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [finalCode, setFinalCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Validation functions
   const validateEmail = (email: string) => {
@@ -66,6 +66,14 @@ export default function RegisterPage() {
     const cleanPhone = phone.replace(/[- ]/g, "");
     const re = /^[0-9]{10}$/;
     return re.test(cleanPhone);
+  };
+
+  const validatePassword = (password: string) => {
+    // 8+ characters, must contain letters and numbers
+    const minLength = password.length >= 8;
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    return minLength && hasLetter && hasNumber;
   };
 
   // Update progress bar
@@ -93,83 +101,42 @@ export default function RegisterPage() {
     if (!formData.personal.school) {
       newErrors.school = "กรุณาเลือกโรงเรียน";
     }
-    if (!formData.personal.password || formData.personal.password.length < 8) {
-      newErrors.password = "กรุณากรอกรหัสผ่านอย่างน้อย 8 ตัวอักษร";
-    } else if (!/(?=.*[A-Za-z])(?=.*\d)/.test(formData.personal.password)) {
-      newErrors.password = "รหัสผ่านต้องมีทั้งตัวอักษรและตัวเลข";
-    }
-    if (formData.personal.password !== formData.personal.confirmPassword) {
-      newErrors.confirmPassword = "รหัสผ่านไม่ตรงกัน";
-    }
     if (!formData.personal.grade) {
       newErrors.grade = "กรุณาเลือกระดับชั้น";
+    }
+    if (!formData.personal.password) {
+      newErrors.password = "กรุณากรอกรหัสผ่าน";
+    } else if (!validatePassword(formData.personal.password)) {
+      newErrors.password = "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร และมีทั้งตัวอักษรและตัวเลข";
+    }
+    if (!formData.personal.confirmPassword) {
+      newErrors.confirmPassword = "กรุณายืนยันรหัสผ่าน";
+    } else if (formData.personal.password !== formData.personal.confirmPassword) {
+      newErrors.confirmPassword = "รหัสผ่านไม่ตรงกัน";
     }
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       setCurrentStep(2);
-      setCurrentSubStep(1); // Reset to package selection
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
-  // Step 2 sub-step navigation
+  // Step 2 validation and submission
   const handleStep2Submit = (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
-    // Sub-step 1: Package Selection
-    if (currentSubStep === 1) {
-      if (!formData.packageType) {
-        newErrors.packageType = "กรุณาเลือกแพ็คเกจ";
-      } else {
-        setErrors({});
-        setCurrentSubStep(2); // Go to subject selection
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-      }
+    if (!formData.subject) {
+      newErrors.subject = "กรุณาเลือกวิชาที่ต้องการสอบ";
     }
-    // Sub-step 2: Subject Selection  
-    else if (currentSubStep === 2) {
-      if (formData.packageType === "FREE" && !formData.subject) {
-        newErrors.subject = "กรุณาเลือกวิชาที่ต้องการสอบ";
-      } else {
-        setErrors({});
-        setCurrentSubStep(3); // Go to session selection
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-      }
-    }
-    // Sub-step 3: Session Selection
-    else if (currentSubStep === 3) {
-      if (!formData.sessionTime) {
-        newErrors.sessionTime = "กรุณาเลือกเวลาสอบ";
-      } else {
-        setErrors({});
-        if (formData.packageType === "ADVANCED") {
-          // Redirect to Stripe payment
-          alert("เปลี่ยนเส้นทางไปหน้าชำระเงิน Stripe สำหรับ Advanced Package");
-          return;
-        } else {
-          // Go to Step 3 for FREE package
-          setCurrentStep(3);
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          return;
-        }
-      }
+    if (!formData.sessionTime) {
+      newErrors.sessionTime = "กรุณาเลือกเวลาสอบ";
     }
 
     setErrors(newErrors);
-  };
-
-  // Handle back navigation in Step 2
-  const handleStep2Back = () => {
-    if (currentSubStep > 1) {
-      setCurrentSubStep(currentSubStep - 1);
-      setErrors({});
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      setCurrentStep(1);
+    if (Object.keys(newErrors).length === 0) {
+      setCurrentStep(3);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
@@ -232,24 +199,6 @@ export default function RegisterPage() {
     biology: "Biology (ชีววิทยา)",
     chemistry: "Chemistry (เคมี)",
     physics: "Physics (ฟิสิกส์)"
-  };
-
-  // School names mapping (English to Thai)
-  const schoolNames = {
-    montfort: "มงฟอร์ตวิทยาลัย",
-    yupparaj: "ยุพราชวิทยาลัย", 
-    dara: "ดาราวิทยาลัย",
-    regina: "เรยีนาเชลีวิทยาลัย",
-    prince: "ปรินส์รอยแยลส์วิทยาลัย",
-    vachirawit: "วชิรวิทย์",
-    nawamintrachuthit: "นวมินทราชูทิศ",
-    other: "อื่นๆ"
-  };
-
-  // Mock session capacity data (for disable logic)
-  const sessionCapacity = {
-    "09:00-12:00": { current: 74, max: 150, isFull: false },
-    "13:00-16:00": { current: 73, max: 150, isFull: false }
   };
 
   return (
@@ -458,8 +407,7 @@ export default function RegisterPage() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="form-field">
                       <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                        อีเมล/ชื่อผู้ใช้ <span className="text-red-500">*</span>
-                        <span className="ml-1 text-xs text-gray-500">(ใช้สำหรับเข้าสู่ระบบ)</span>
+                        อีเมล <span className="text-red-500">*</span>
                       </label>
                       <Input
                         type="email"
@@ -521,35 +469,28 @@ export default function RegisterPage() {
                       <span className="text-xs text-red-500 mt-1">{errors.lineid}</span>
                     )}
                   </div>
-                </div>
 
-                {/* Education Information Section */}
-
-                {/* Password Section */}
-                <div className="space-y-4">
-                  <h3 className="text-base font-medium text-gray-800 border-l-4 border-tbat-primary pl-3">
-                    รหัสผ่าน
-                  </h3>
-                  
-                  {/* Password and Confirm Password */}
+                  {/* Password Fields */}
                   <div className="grid md:grid-cols-2 gap-4">
+                    {/* Password */}
                     <div className="form-field">
                       <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                         รหัสผ่าน <span className="text-red-500">*</span>
+                        <span className="ml-1 text-xs text-gray-500">(อย่างน้อย 8 ตัวอักษร มีทั้งตัวอักษรและตัวเลข)</span>
                       </label>
                       <div className="relative">
                         <Input
                           type={showPassword ? "text" : "password"}
                           id="password"
-                          value={formData.personal.password || ""}
+                          value={formData.personal.password}
                           onChange={(e) => setFormData(prev => ({
                             ...prev,
                             personal: { ...prev.personal, password: e.target.value }
                           }))}
-                          className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all ${
+                          className={`w-full px-4 py-3 pr-10 border rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all ${
                             errors.password ? 'border-red-500' : 'border-gray-300'
                           }`}
-                          placeholder="อย่างน้อย 8 ตัวอักษร ต้องมีตัวอักษรและตัวเลข"
+                          placeholder="รหัสผ่าน"
                         />
                         <button
                           type="button"
@@ -563,30 +504,32 @@ export default function RegisterPage() {
                         <span className="text-xs text-red-500 mt-1">{errors.password}</span>
                       )}
                     </div>
+
+                    {/* Confirm Password */}
                     <div className="form-field">
                       <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                         ยืนยันรหัสผ่าน <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
                         <Input
-                          type={showPassword ? "text" : "password"}
+                          type={showConfirmPassword ? "text" : "password"}
                           id="confirmPassword"
-                          value={formData.personal.confirmPassword || ""}
+                          value={formData.personal.confirmPassword}
                           onChange={(e) => setFormData(prev => ({
                             ...prev,
                             personal: { ...prev.personal, confirmPassword: e.target.value }
                           }))}
-                          className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all ${
+                          className={`w-full px-4 py-3 pr-10 border rounded-lg focus:ring-2 focus:ring-tbat-primary focus:border-transparent outline-none transition-all ${
                             errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
                           }`}
                           placeholder="ยืนยันรหัสผ่าน"
                         />
                         <button
                           type="button"
-                          onClick={() => setShowPassword(!showPassword)}
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                           className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                         >
-                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                         </button>
                       </div>
                       {errors.confirmPassword && (
@@ -602,7 +545,7 @@ export default function RegisterPage() {
                     ข้อมูลการศึกษา
                   </h3>
                   
-                  {/* School Selection */}
+                  {/* School */}
                   <div className="form-field">
                     <label htmlFor="school" className="block text-sm font-medium text-gray-700 mb-2">
                       โรงเรียน <span className="text-red-500">*</span>
@@ -730,159 +673,37 @@ export default function RegisterPage() {
             </div>
           )}
 
-          {/* Step 2: Package & Subject Selection */}
+          {/* Step 2: Subject Selection */}
           {currentStep === 2 && (
             <div className="step">
               <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-6 flex items-center">
                 <span className="w-8 h-8 bg-tbat-bg text-tbat-primary rounded-full flex items-center justify-center text-sm font-bold mr-3">
                   2
                 </span>
-                {currentSubStep === 1 && "เลือกแพ็คเกจ"}
-                {currentSubStep === 2 && "เลือกวิชาที่ต้องการทดลองสอบ"}
-                {currentSubStep === 3 && "เลือกเวลาสอบ"}
+                เลือกวิชาที่ต้องการทดลองสอบ
               </h2>
 
-              {/* Sub-step 1: Package Selection */}
-              {currentSubStep === 1 && (
-                <>
-                  <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p className="text-sm text-blue-800 text-center">
-                      เลือกแพ็คเกจที่เหมาะสำหรับคุณ
-                    </p>
-                  </div>
+              <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg animate-pulse-soft">
+                <p className="text-sm text-blue-800">
+                  <strong>สมาชิก FREE:</strong> สามารถเลือกทดลองสอบได้ 1 วิชา
+                </p>
+              </div>
 
-                  <form onSubmit={handleStep2Submit} className="space-y-6">
-                    <fieldset>
-                      <legend className="sr-only">เลือกแพ็คเกจ</legend>
-                      
-                      {/* FREE Package */}
-                      <label className={`block p-6 border-2 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group mb-4 ${
-                        formData.packageType === 'FREE' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
-                      }`}>
-                        <input
-                          type="radio"
-                          name="packageType"
-                          value="FREE"
-                          checked={formData.packageType === 'FREE'}
-                          onChange={(e) => setFormData(prev => ({ ...prev, packageType: e.target.value as "FREE" | "ADVANCED" }))}
-                          className="sr-only"
-                        />
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="text-xl font-bold text-gray-800 group-hover:text-tbat-primary transition-colors mb-2">
-                              FREE Package
-                            </h3>
-                            <p className="text-gray-600 mb-3">
-                              ✓ เลือกสอบได้ 1 วิชา<br/>
-                              ✓ ผลสอบพื้นฐาน<br/>
-                              ✓ คะแนนรวมและเปรียบเทียบ<br/>
-                              <span className="text-gray-400">– การวิเคราะห์แบบจำกัด</span><br/>
-                              <span className="text-gray-400">– PDF เฉลยและคำอธิบาย</span><br/>
-                              <span className="text-gray-400">– รายงานการวิเคราะห์ละเอียด</span><br/>
-                              <span className="text-gray-400">– เอาข้อสอบกลับบ้านไม่ได้</span>
-                            </p>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-3xl font-bold text-green-600 mb-1">ฟรี</div>
-                            <div className="text-sm text-gray-500">0 บาท</div>
-                          </div>
-                        </div>
-                      </label>
-
-                      {/* ADVANCED Package */}
-                      <label className={`block p-6 border-2 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group mb-4 ${
-                        formData.packageType === 'ADVANCED' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
-                      }`}>
-                        <input
-                          type="radio"
-                          name="packageType"
-                          value="ADVANCED"
-                          checked={formData.packageType === 'ADVANCED'}
-                          onChange={(e) => setFormData(prev => ({ ...prev, packageType: e.target.value as "FREE" | "ADVANCED" }))}
-                          className="sr-only"
-                        />
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="text-xl font-bold text-gray-800 group-hover:text-tbat-primary transition-colors mb-2">
-                              Advanced Package
-                            </h3>
-                            <p className="text-gray-600 mb-3">
-                              ✓ ครบทั้ง 3 วิชา (ชีวะ เคมี ฟิสิกส์)<br/>
-                              ✓ รายงานการวิเคราะห์แบบละเอียด<br/>
-                              ✓ ดาวน์โหลด PDF เฉลยและคำอธิบาย<br/>
-                              ✓ เปรียบเทียบสถิติกับผู้สอบทั้งหมด<br/>
-                              ✓ แนะนำจุดที่ต้องปรับปรุง<br/>
-                              ✓ การวิเคราะห์ผลการสอบ<br/>
-                              ✓ เอาข้อสอบกลับบ้านได้
-                            </p>
-                          </div>
-                          <div className="text-center">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-lg text-gray-500 line-through">฿990</span>
-                              <span className="text-3xl font-bold text-tbat-primary">฿690</span>
-                            </div>
-                            <div className="text-xs bg-red-500 text-white px-2 py-1 rounded-full">ประหยัด ฿300</div>
-                          </div>
-                        </div>
-                      </label>
-                    </fieldset>
-
-                    {errors.packageType && (
-                      <p className="text-red-500 text-sm">{errors.packageType}</p>
-                    )}
-
-                    <div className="flex flex-col sm:flex-row justify-between gap-3 pt-6">
-                      <button
-                        type="button"
-                        onClick={() => setCurrentStep(1)}
-                        className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all"
-                      >
-                        ย้อนกลับ
-                      </button>
-                      <button
-                        type="submit"
-                        className="px-8 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-all flex items-center justify-center group"
-                      >
-                        ถัดไป
-                        <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </button>
-                    </div>
-                  </form>
-                </>
-              )}
-
-              {/* Sub-step 2: Subject Selection */}
-              {currentSubStep === 2 && (
-                <>
-                  <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p className="text-sm text-blue-800">
-                      {formData.packageType === 'FREE' 
-                        ? <span><strong>FREE Package:</strong> เลือกได้ 1 วิชา</span> 
-                        : <span><strong>Advanced Package:</strong> รวมทั้ง 3 วิชา</span>
-                      }
-                    </p>
-                  </div>
-
-                  <form onSubmit={handleStep2Submit} className="space-y-4">
+              <form onSubmit={handleStep2Submit} className="space-y-4">
                 <fieldset>
                   <legend className="sr-only">เลือกวิชาที่ต้องการสอบ</legend>
 
                   {/* Biology */}
-                  <label className={`block p-4 sm:p-6 border-2 rounded-xl transition-all group mb-4 ${
-                    formData.packageType === 'ADVANCED' 
-                      ? 'border-tbat-primary bg-tbat-bg/10 cursor-default'
-                      : `cursor-pointer hover:border-tbat-primary hover:shadow-lg ${
-                          formData.subject === 'biology' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
-                        }`
+                  <label className={`block p-4 sm:p-6 border-2 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group mb-4 ${
+                    formData.subject === 'biology' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
                   }`}>
                     <div className="flex items-start">
                       <input
                         type="radio"
                         name="subject"
                         value="biology"
-                        checked={formData.packageType === 'ADVANCED' || formData.subject === 'biology'}
-                        onChange={(e) => formData.packageType === 'FREE' && setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                        disabled={formData.packageType === 'ADVANCED'}
+                        checked={formData.subject === 'biology'}
+                        onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
                         className="sr-only"
                       />
                       <div className="flex-1">
@@ -910,21 +731,16 @@ export default function RegisterPage() {
                   </label>
 
                   {/* Chemistry */}
-                  <label className={`block p-4 sm:p-6 border-2 rounded-xl transition-all group mb-4 ${
-                    formData.packageType === 'ADVANCED' 
-                      ? 'border-tbat-primary bg-tbat-bg/10 cursor-default'
-                      : `cursor-pointer hover:border-tbat-primary hover:shadow-lg ${
-                          formData.subject === 'chemistry' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
-                        }`
+                  <label className={`block p-4 sm:p-6 border-2 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group mb-4 ${
+                    formData.subject === 'chemistry' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
                   }`}>
                     <div className="flex items-start">
                       <input
                         type="radio"
                         name="subject"
                         value="chemistry"
-                        checked={formData.packageType === 'ADVANCED' || formData.subject === 'chemistry'}
-                        onChange={(e) => formData.packageType === 'FREE' && setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                        disabled={formData.packageType === 'ADVANCED'}
+                        checked={formData.subject === 'chemistry'}
+                        onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
                         className="sr-only"
                       />
                       <div className="flex-1">
@@ -954,21 +770,16 @@ export default function RegisterPage() {
                   </label>
 
                   {/* Physics */}
-                  <label className={`block p-4 sm:p-6 border-2 rounded-xl transition-all group mb-4 ${
-                    formData.packageType === 'ADVANCED' 
-                      ? 'border-tbat-primary bg-tbat-bg/10 cursor-default'
-                      : `cursor-pointer hover:border-tbat-primary hover:shadow-lg ${
-                          formData.subject === 'physics' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
-                        }`
+                  <label className={`block p-4 sm:p-6 border-2 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group mb-4 ${
+                    formData.subject === 'physics' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
                   }`}>
                     <div className="flex items-start">
                       <input
                         type="radio"
                         name="subject"
                         value="physics"
-                        checked={formData.packageType === 'ADVANCED' || formData.subject === 'physics'}
-                        onChange={(e) => formData.packageType === 'FREE' && setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                        disabled={formData.packageType === 'ADVANCED'}
+                        checked={formData.subject === 'physics'}
+                        onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
                         className="sr-only"
                       />
                       <div className="flex-1">
@@ -997,139 +808,129 @@ export default function RegisterPage() {
                   </label>
                 </fieldset>
 
-                    {/* Navigation for Sub-steps */}
-                    <div className="flex flex-col sm:flex-row justify-between gap-3 pt-6">
-                      <Button
-                        type="button"
-                        onClick={handleStep2Back}
-                        variant="outline"
-                        className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all text-center"
-                      >
-                        ย้อนกลับ
-                      </Button>
-                      <Button
-                        type="submit"
-                        className="px-8 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-all flex items-center justify-center group"
-                      >
-                        ถัดไป
-                        <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </div>
-                  </form>
-                </>
-              )}
-
-              {/* Sub-step 3: Session Selection */}
-              {currentSubStep === 3 && (
-                <>
-                  <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p className="text-sm text-blue-800 text-center">
-                      เลือกเวลาสอบที่เหมาะสำหรับคุณ
-                    </p>
-                  </div>
-
-                  <form onSubmit={handleStep2Submit} className="space-y-4">
-                    {/* Session Selection - Move from original location */}
-                    <div className="p-4 sm:p-6 bg-blue-50 border border-blue-200 rounded-xl">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                        <span className="mr-2">⏰</span>
-                        เลือกเวลาสอบ
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-4">
-                        เลือกช่วงเวลาที่ต้องการสอบในวันที่ 27 กันยายน 2568
-                      </p>
-                      
-                      <fieldset>
-                        <legend className="sr-only">เลือกเวลาสอบ</legend>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          {/* Morning Session */}
-                          <label className={`block p-4 border-2 rounded-xl transition-all group ${
-                            sessionCapacity["09:00-12:00"].isFull 
-                              ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50' 
-                              : `cursor-pointer hover:border-tbat-primary hover:shadow-lg ${formData.sessionTime === '09:00-12:00' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-300'}`
-                          }`}>
-                            <input
-                              type="radio"
-                              name="sessionTime"
-                              value="09:00-12:00"
-                              checked={formData.sessionTime === '09:00-12:00'}
-                              onChange={(e) => setFormData(prev => ({ ...prev, sessionTime: e.target.value }))}
-                              disabled={sessionCapacity["09:00-12:00"].isFull}
-                              className="sr-only"
-                            />
-                            <div className="text-center">
-                              <div className="text-2xl mb-2">🌅</div>
-                              <h4 className={`font-semibold transition-colors ${
-                                sessionCapacity["09:00-12:00"].isFull 
-                                  ? 'text-gray-400' 
-                                  : 'text-gray-800 group-hover:text-tbat-primary'
-                              }`}>
-                                เช้า 09:00-12:00
-                              </h4>
-                              {sessionCapacity["09:00-12:00"].isFull && (
-                                <p className="text-xs text-red-500 mt-1">เต็มแล้ว</p>
-                              )}
+                {/* Session Time Selection */}
+                <div className="mt-6 p-4 sm:p-6 bg-blue-50 border border-blue-200 rounded-xl">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">เลือกช่วงเวลาสอบ</h3>
+                  <p className="text-sm text-gray-600 mb-4">วันที่ 27 กันยายน 2568 | เลือกช่วงเวลาที่สะดวก</p>
+                  
+                  <fieldset>
+                    <legend className="sr-only">เลือกเวลาสอบ</legend>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {/* Morning Session */}
+                      <label className={`block p-4 border-2 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group ${
+                        formData.sessionTime === '09:00-12:00' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
+                      }`}>
+                        <div className="flex items-center">
+                          <input
+                            type="radio"
+                            name="sessionTime"
+                            value="09:00-12:00"
+                            checked={formData.sessionTime === '09:00-12:00'}
+                            onChange={(e) => setFormData(prev => ({ ...prev, sessionTime: e.target.value }))}
+                            className="sr-only"
+                          />
+                          <div className="flex-1 text-center">
+                            <h4 className="text-lg font-semibold text-gray-800 group-hover:text-tbat-primary transition-colors mb-1">
+                              🌅 เช้า
+                            </h4>
+                            <div className="text-xl font-bold text-tbat-primary mb-2">09:00 - 12:00 น.</div>
+                            <div className="text-sm text-gray-600">
+                              <div>ที่ว่าง: <span className="font-medium text-green-600">77/150</span></div>
+                              <div className="mt-1 text-xs">เหมาะสำหรับคนตื่นเช้า</div>
                             </div>
-                          </label>
-
-                          {/* Afternoon Session */}
-                          <label className={`block p-4 border-2 rounded-xl transition-all group ${
-                            sessionCapacity["13:00-16:00"].isFull 
-                              ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50' 
-                              : `cursor-pointer hover:border-tbat-primary hover:shadow-lg ${formData.sessionTime === '13:00-16:00' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-300'}`
-                          }`}>
-                            <input
-                              type="radio"
-                              name="sessionTime"
-                              value="13:00-16:00"
-                              checked={formData.sessionTime === '13:00-16:00'}
-                              onChange={(e) => setFormData(prev => ({ ...prev, sessionTime: e.target.value }))}
-                              disabled={sessionCapacity["13:00-16:00"].isFull}
-                              className="sr-only"
-                            />
-                            <div className="text-center">
-                              <div className="text-2xl mb-2">☀️</div>
-                              <h4 className={`font-semibold transition-colors ${
-                                sessionCapacity["13:00-16:00"].isFull 
-                                  ? 'text-gray-400' 
-                                  : 'text-gray-800 group-hover:text-tbat-primary'
-                              }`}>
-                                บ่าย 13:00-16:00
-                              </h4>
-                              {sessionCapacity["13:00-16:00"].isFull && (
-                                <p className="text-xs text-red-500 mt-1">เต็มแล้ว</p>
-                              )}
-                            </div>
-                          </label>
+                          </div>
                         </div>
-                      </fieldset>
-                      
-                      {errors.sessionTime && (
-                        <p className="text-red-500 text-sm mt-2">{errors.sessionTime}</p>
-                      )}
-                    </div>
+                      </label>
 
-                    {/* Navigation */}
-                    <div className="flex flex-col sm:flex-row justify-between gap-3 pt-6">
-                      <Button
-                        type="button"
-                        onClick={handleStep2Back}
-                        variant="outline"
-                        className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all text-center"
-                      >
-                        ย้อนกลับ
-                      </Button>
-                      <Button
-                        type="submit"
-                        className="px-8 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-all flex items-center justify-center group"
-                      >
-                        {formData.packageType === 'ADVANCED' ? 'ไปชำระเงิน' : 'ถัดไป'}
-                        <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Button>
+                      {/* Afternoon Session */}
+                      <label className={`block p-4 border-2 rounded-xl cursor-pointer hover:border-tbat-primary hover:shadow-lg transition-all group ${
+                        formData.sessionTime === '13:00-16:00' ? 'border-tbat-primary bg-tbat-bg/10' : 'border-gray-200'
+                      }`}>
+                        <div className="flex items-center">
+                          <input
+                            type="radio"
+                            name="sessionTime"
+                            value="13:00-16:00"
+                            checked={formData.sessionTime === '13:00-16:00'}
+                            onChange={(e) => setFormData(prev => ({ ...prev, sessionTime: e.target.value }))}
+                            className="sr-only"
+                          />
+                          <div className="flex-1 text-center">
+                            <h4 className="text-lg font-semibold text-gray-800 group-hover:text-tbat-primary transition-colors mb-1">
+                              ☀️ บ่าย
+                            </h4>
+                            <div className="text-xl font-bold text-tbat-primary mb-2">13:00 - 16:00 น.</div>
+                            <div className="text-sm text-gray-600">
+                              <div>ที่ว่าง: <span className="font-medium text-green-600">76/150</span></div>
+                              <div className="mt-1 text-xs">เหมาะสำหรับคนชอบสายๆ</div>
+                            </div>
+                          </div>
+                        </div>
+                      </label>
                     </div>
-                  </form>
-                </>
-              )}
+                  </fieldset>
+                  
+                  {errors.sessionTime && (
+                    <div className="mt-3 text-sm text-red-600 flex items-center">
+                      <span className="text-red-500 mr-2">⚠️</span>
+                      {errors.sessionTime}
+                    </div>
+                  )}
+                </div>
+
+                {/* Upgrade Option */}
+                <div className="mt-6 p-4 sm:p-6 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl transform hover:scale-105 transition-transform">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-center sm:text-left">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                        อยากสอบทั้ง 3 วิชา?
+                      </h3>
+                      <p className="text-gray-600 text-sm">
+                        Advanced Package เพื่อสอบครบทุกวิชา พร้อมวิเคราะห์ผลละเอียด
+                      </p>
+                      <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
+                        <span className="text-lg text-gray-500 line-through">฿990</span>
+                        <span className="text-xl font-bold text-green-600">฿690</span>
+                        <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-full">ประหยัด ฿300</span>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={() => {
+                        alert('กำลังเปลี่ยนเส้นทางไปหน้าชำระเงิน Advanced Package');
+                        // router.push('/payment?package=advanced');
+                      }}
+                      type="button"
+                      className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-lg hover:shadow-lg transition-all whitespace-nowrap animate-pulse-soft">
+                      <div className="flex flex-col items-center">
+                        <span className="text-sm">Advanced Package</span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs line-through opacity-75">฿990</span>
+                          <span className="font-bold">฿690</span>
+                        </div>
+                      </div>
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Navigation */}
+                <div className="flex flex-col sm:flex-row justify-between gap-3 pt-6">
+                  <Button
+                    type="button"
+                    onClick={() => setCurrentStep(1)}
+                    variant="outline"
+                    className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all text-center"
+                  >
+                    ย้อนกลับ
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="px-8 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-all flex items-center justify-center group"
+                  >
+                    ถัดไป
+                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              </form>
             </div>
           )}
 
@@ -1165,7 +966,7 @@ export default function RegisterPage() {
                   </div>
                   <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                     <span className="text-gray-600">โรงเรียน:</span>
-                    <span className="font-medium">{schoolNames[formData.personal.school as keyof typeof schoolNames] || formData.personal.school}</span>
+                    <span className="font-medium">{formData.personal.school}</span>
                   </div>
                   <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                     <span className="text-gray-600">ระดับชั้น:</span>
@@ -1174,25 +975,13 @@ export default function RegisterPage() {
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                    <span className="text-gray-600">แพ็คเกจ:</span>
-                    <span className="font-medium text-tbat-primary">
-                      {formData.packageType === 'FREE' ? 'FREE Package' : 'Advanced Package (฿690)'}
-                    </span>
-                  </div>
-                  <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                     <span className="text-gray-600">วิชาที่เลือก:</span>
-                    <span className="font-medium text-tbat-primary">
-                      {formData.packageType === 'ADVANCED' 
-                        ? 'ทั้ง 3 วิชา (Biology, Chemistry, Physics)'
-                        : subjectNames[formData.subject as keyof typeof subjectNames]
-                      }
-                    </span>
+                    <span className="font-medium text-tbat-primary">{subjectNames[formData.subject as keyof typeof subjectNames]}</span>
                   </div>
                   <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                     <span className="text-gray-600">เวลาสอบ:</span>
                     <span className="font-medium text-tbat-primary">
-                      {formData.sessionTime === '09:00-12:00' ? '🌅 เช้า 09:00-12:00' : 
-                       formData.sessionTime === '13:00-16:00' ? '☀️ บ่าย 13:00-16:00' : '-'}
+                      {formData.sessionTime === '09:00-12:00' ? '🌅 เช้า 09:00 - 12:00 น.' : '☀️ บ่าย 13:00 - 16:00 น.'}
                     </span>
                   </div>
                 </div>
@@ -1314,9 +1103,9 @@ export default function RegisterPage() {
               </div>
               
               <div className="flex flex-col sm:flex-row justify-center gap-3">
-                <Link href="/" className="px-6 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-all text-center">
-                  กลับหน้าแรก
-                </Link>
+                <Button className="px-6 py-3 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-all">
+                  ไปยัง Dashboard
+                </Button>
                 <Button
                   variant="outline"
                   onClick={() => window.print()}

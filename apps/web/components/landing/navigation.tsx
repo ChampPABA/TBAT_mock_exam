@@ -125,13 +125,13 @@ export default function Navigation({ onRegisterClick, onLoginClick }: Navigation
             >
               เข้าสู่ระบบ
             </button>
-            <Link 
-              href="/register"
+            <button
+              onClick={handleRegisterClick}
               data-testid="nav-register-button"
-              className="px-4 py-2 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-medium text-sm btn-hover-effect relative overflow-hidden inline-block text-center"
+              className="px-4 py-2 bg-tbat-primary text-white rounded-lg hover:bg-tbat-secondary transition-colors duration-200 font-medium text-sm btn-hover-effect relative overflow-hidden"
             >
               สมัครสมาชิก
-            </Link>
+            </button>
           </div>
         </div>
       </div>
