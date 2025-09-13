@@ -1,6 +1,15 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend with API key validation
+const resend = process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "fake_key_for_development"
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
+
+// Email service availability check
+export function isEmailServiceAvailable(): boolean {
+  // Allow fake email service for development
+  return !!(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
+}
 
 // Email templates
 export const emailTemplates = {
@@ -156,12 +165,34 @@ export async function sendEmail(
   data?: any
 ): Promise<{ success: boolean; data?: any; error?: any }> {
   try {
+    // Check if using fake email service for development
+    if (process.env.RESEND_API_KEY === "fake_key_for_development") {
+      console.log('📧 [FAKE EMAIL SERVICE] Email would be sent:');
+      console.log(`   To: ${typeof toOrParams === 'string' ? toOrParams : toOrParams.to}`);
+      console.log(`   Subject: ${template ? emailTemplates[template].subject : (toOrParams as any).subject}`);
+      console.log(`   From: ${process.env.EMAIL_FROM}`);
+      console.log('   ✅ Email sending simulated successfully');
+
+      return {
+        success: true,
+        data: { id: `fake-${Date.now()}`, message: 'Email sent via fake service' }
+      };
+    }
+
+    // Check if email service is available
+    if (!resend) {
+      console.warn("Email service not configured - RESEND_API_KEY missing");
+      return {
+        success: false,
+        error: "Email service not configured"
+      };
+    }
     let emailData: { from: string; to: string; subject: string; html: string };
     
     if (typeof toOrParams === 'object') {
       // Direct email sending
       emailData = {
-        from: process.env.EMAIL_FROM!,
+        from: process.env.EMAIL_FROM || "noreply@tbat-exam.com",
         to: toOrParams.to,
         subject: toOrParams.subject,
         html: toOrParams.html,
@@ -170,7 +201,7 @@ export async function sendEmail(
       // Template-based email sending
       const emailTemplate = emailTemplates[template];
       emailData = {
-        from: process.env.EMAIL_FROM!,
+        from: process.env.EMAIL_FROM || "noreply@tbat-exam.com",
         to: toOrParams,
         subject: emailTemplate.subject,
         html: emailTemplate.html(data),

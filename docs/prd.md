@@ -32,12 +32,14 @@ The TBAT Mock Exam Platform addresses this gap through a unique hybrid model com
 | 2025-09-11 | 1.3     | Clarified Story 1.3 AC2 capacity logic: 300 exam participants per session vs 20 concurrent system users   | PO Sarah  |
 | 2025-09-12 | 1.4     | Added epic dependency matrix and API contract documentation for development clarity                       | PO Sarah  |
 | 2025-09-12 | 1.5     | Epic 1 scope refinement: Frontend-first package selection experience, payment integration moved to Epic 2 | PO Sarah  |
+| 2025-09-13 | 1.6     | Epic 2 redefinition: Backend Integration focus after Story 1.2.1 completed full registration frontend     | PO Sarah  |
+| 2025-09-13 | 1.7     | Authentication flow clarification: Removed email verification requirement to align with FR1 simplified registration | PO Sarah  |
 
 ## Requirements
 
 ### Functional
 
-**FR1:** The system shall provide simple email/password user registration without OTP requirements, enforcing 8+ character passwords containing both numbers and letters
+**FR1:** The system shall provide simple email/password user registration without OTP or email verification requirements, enforcing 8+ character passwords containing both numbers and letters, with immediate welcome email containing exam codes upon successful registration
 
 **FR2:** The system shall display a landing page with credibility elements including testimonials, government support badges (STeP, Deepa, Startup Thailand), and organizational background
 
@@ -269,9 +271,9 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 
 **Goal:** Create conversion-optimized landing page with credibility elements and complete multi-step frontend package selection wizard using mock data, providing demo-ready user experience before authentication and payment integration in Epic 2.
 
-### **Epic 2: User Authentication & Registration System**
+### **Epic 2: Backend Integration & Database Schema**
 
-**Goal:** Enable secure user registration with email/password authentication, basic PDPA consent, and user profile management integrated with package selection flow.
+**Goal:** Create backend APIs and database integration for the completed registration frontend (Story 1.2.1), enabling secure data storage, authentication services, and full-stack functionality.
 
 ### **Epic 3: Payment & Exam Code Generation**
 
@@ -279,7 +281,7 @@ Full compliance with WCAG 2.1 AA standards including minimum 4.5:1 color contras
 
 ### **Epic 4: Session Booking & Capacity Management**
 
-**Goal:** Enable students to select exam sessions (morning/afternoon) with intelligent capacity management hiding exact numbers and dynamic Free/Advanced availability messaging.
+**Goal:** Implement backend session booking APIs and capacity management logic to support the completed session selection frontend (delivered in Story 1.2.1), enabling real-time availability tracking and intelligent capacity messaging.
 
 ### **Epic 5: Admin Management System**
 
@@ -496,109 +498,95 @@ so that users see accurate real-time information and can make informed package s
 
 **AC6:** End-to-end testing completed covering package selection flow from landing page to confirmation
 
-## Epic 2: User Authentication & Registration System
+## Epic 2: Backend Integration & Database Schema
 
-**Goal:** Enable secure user registration with email/password authentication, basic PDPA consent, and user profile management through dedicated registration page integrated with package selection flow.
+**Goal:** Create backend APIs and database integration for the completed registration frontend (Story 1.2.1), enabling secure data storage, authentication services, and full-stack functionality.
 
-### Story 2.1: UI/UX Mockup Implementation
+**Context:** Story 1.2.1 successfully delivered the complete registration frontend including email/password authentication, package selection, subject selection, session time selection, and PDPA consent. Epic 2 now focuses on backend integration to support this completed frontend experience.
 
-As a **UX Expert**,
-I want to create interactive mockups for registration and login pages,
-so that the authentication flow is optimized for mobile users and conversion.
+### ~~Story 2.1: UI/UX Mockup Implementation~~ **COMPLETED IN STORY 1.2.1**
 
-#### Acceptance Criteria
+**Status:** SKIPPED - Registration UI/UX completed in Story 1.2.1
 
-**AC1:** Registration modal mockup created with step-by-step flow (package → profile → consent → confirmation)
+**Delivered Components:**
+- ✅ Complete 3-step registration flow (Personal Info → Package Selection → Confirmation)
+- ✅ Password fields with validation and visibility toggles
+- ✅ Session time selection with capacity display
+- ✅ Thai language error messages and PDPA consent
+- ✅ Mobile-responsive design with TBAT branding
 
-**AC2:** Login modal mockup with email/password fields, "จำรหัสผ่าน" checkbox, and "ลืมรหัสผ่าน" link
+### ~~Story 2.2: Frontend Development with Mock Data~~ **COMPLETED IN STORY 1.2.1**
 
-**AC3:** Profile form mockup with Thai name fields, phone number, school, and subject selection for Free users
+**Status:** SKIPPED - Registration frontend completed in Story 1.2.1
 
-**AC4:** PDPA consent mockup with clear, simple Thai language explaining data usage
-
-**AC5:** Mobile-optimized modal designs tested for single-thumb operation and keyboard handling
-
-**AC6:** Error states and validation messaging designed for clear user guidance
-
-### Story 2.2: Frontend Development with Mock Data
-
-As a **Frontend Developer**,
-I want to build authentication components and modal flows using mock user data,
-so that the registration experience is complete and ready for backend integration.
-
-#### Acceptance Criteria
-
-**AC1:** Registration modal component built with multi-step form using React Hook Form and Zod validation
-
-**AC2:** Login modal component with email/password authentication and "remember me" functionality
-
-**AC3:** Profile form component with Thai name validation, phone number formatting, and school selection
-
-**AC4:** PDPA consent component with checkbox validation and clear terms display
-
-**AC5:** Form validation implemented with real-time feedback and Thai language error messages
-
-**AC6:** Modal state management implemented for seamless transitions between login/registration
+**Delivered Features:**
+- ✅ Complete registration page at `/register` route
+- ✅ React Hook Form integration with TypeScript validation
+- ✅ Password authentication with 8+ character and alphanumeric requirements
+- ✅ Package selection (FREE/ADVANCED) with subject selection
+- ✅ Session time selection (09:00-12:00 / 13:00-16:00) with capacity status
+- ✅ PDPA consent integration with form validation
+- ✅ Comprehensive unit test suite
 
 ### Story 2.3: Database Schema Creation
 
 As a **Backend Developer**,
-I want to create user authentication and profile tables with proper security measures,
-so that user data is stored safely and can support the registration workflow.
+I want to create comprehensive database schema supporting the completed registration frontend,
+so that user data from the registration flow can be stored securely with proper relationships.
 
 #### Acceptance Criteria
 
-**AC1:** User table created with id, email, password_hash, created_at, updated_at, is_active fields
+**AC1:** User table created supporting registration form data (id, email, password_hash, thai_name, phone, school, package_type, pdpa_consent, created_at, updated_at)
 
-**AC2:** User_Profile table created with thai_name, phone, school, birth_date, pdpa_consent fields
+**AC2:** ExamCode table created with registration integration (code, user_id, package_type, subject, session_time, is_used, created_at)
 
-**AC3:** User_Package table created linking users to selected packages with exam_code and session_id
+**AC3:** SessionCapacity table created for real-time capacity management (session_time, current_count, max_capacity, exam_date)
 
-**AC4:** Password_Reset table created for secure password recovery workflow
+**AC4:** User authentication tables (password_reset, email_verification) with proper security measures
 
-**AC5:** Email_Verification table created for email confirmation (if needed for security)
+**AC5:** Database indexes optimized for registration flow queries and session capacity lookups
 
-**AC6:** Proper indexes and constraints created for email uniqueness and referential integrity
+**AC6:** Foreign key constraints and data integrity rules matching registration form relationships
 
 ### Story 2.4: Backend API Implementation
 
 As a **Backend Developer**,
-I want to create secure authentication APIs with proper validation and security measures,
-so that user registration and login work reliably with exam-critical security.
+I want to create backend APIs supporting the completed registration frontend,
+so that registration data can be processed securely with proper authentication and session management.
 
 #### Acceptance Criteria
 
-**AC1:** POST /api/auth/register endpoint with email validation, password hashing, and duplicate prevention
+**AC1:** POST /api/auth/register endpoint processing complete registration form data (personal info, package, subject, session)
 
-**AC2:** POST /api/auth/login endpoint with secure password verification and JWT token generation
+**AC2:** POST /api/auth/login endpoint with JWT authentication and session management
 
-**AC3:** POST /api/auth/logout endpoint for secure session termination
+**AC3:** GET /api/session/capacity endpoint providing real-time session availability for frontend
 
-**AC4:** Password validation enforcing 8+ characters with letters and numbers requirement
+**AC4:** POST /api/examcode/generate endpoint creating unique codes based on package and subject selection
 
-**AC5:** Rate limiting implemented on authentication endpoints to prevent brute force attacks
+**AC5:** Rate limiting on all registration endpoints with proper error handling and validation
 
-**AC6:** PDPA consent logging with timestamp and IP address for compliance tracking
+**AC6:** PDPA consent logging and audit trail for compliance with user preference tracking
 
 ### Story 2.5: Frontend-Backend Integration
 
 As a **Full-Stack Developer**,
-I want to connect authentication frontend with secure backend APIs,
-so that users can register and login successfully with proper session management.
+I want to integrate the completed registration frontend with live backend APIs,
+so that the complete registration flow works end-to-end with real data storage and authentication.
 
 #### Acceptance Criteria
 
-**AC1:** Registration flow integrated end-to-end from package selection through profile completion
+**AC1:** Complete registration flow working with live data storage (personal info, package, subject, session, exam code generation)
 
-**AC2:** Login flow working with JWT token storage and automatic authentication state management
+**AC2:** Session capacity integration showing real-time availability from database
 
-**AC3:** Session persistence implemented with secure token refresh and timeout handling
+**AC3:** Authentication system working with JWT tokens and secure session management
 
-**AC4:** Form validation connected to backend with proper error message display
+**AC4:** Error handling integration providing user-friendly messages for all failure scenarios
 
-**AC5:** PDPA consent integrated with backend logging and user preference storage
+**AC5:** PDPA consent data properly stored with audit trail and compliance tracking
 
-**AC6:** Authentication state synchronized across all components with automatic redirect handling
+**AC6:** End-to-end testing covering complete registration workflow from frontend to database storage
 
 ## Epic 3: Payment & Exam Code Generation
 
@@ -706,53 +694,38 @@ so that users can successfully pay and receive valid exam codes immediately.
 
 ## Epic 4: Session Booking & Capacity Management
 
-**Goal:** Enable students to select exam sessions (morning/afternoon) with intelligent capacity management hiding exact numbers and dynamic Free/Advanced availability messaging.
+**Goal:** Implement backend session booking APIs and capacity management logic to support the completed session selection frontend (delivered in Story 1.2.1), enabling real-time availability tracking and intelligent capacity messaging.
 
-### Story 4.1: UI/UX Mockup Implementation
+**Context:** Session selection frontend completed in Story 1.2.1 with morning/afternoon time slots, capacity display, and Thai language UX. Epic 4 focuses on backend APIs and database integration to power this existing frontend.
 
-As a **UX Expert**,
-I want to create session selection mockups with capacity management messaging,
-so that users can choose sessions while capacity logic guides availability appropriately.
+### ~~Story 4.1: UI/UX Mockup Implementation~~ **COMPLETED IN STORY 1.2.1**
 
-#### Acceptance Criteria
+**Status:** SKIPPED - Session selection UI/UX completed in Story 1.2.1
 
-**AC1:** Session selection mockup showing morning (9:00-12:00) and afternoon (13:00-16:00) options
+**Delivered Components:**
+- ✅ Session time selection with radio buttons (09:00-12:00 / 13:00-16:00)
+- ✅ Session capacity display (77/150 morning, 76/150 afternoon)
+- ✅ Thai language session labels with emojis (🌅 เช้า / ☀️ บ่าย)
+- ✅ Mobile-optimized interface with accessibility features
+- ✅ Integration with registration confirmation flow
 
-**AC2:** Capacity messaging mockup with states: normal, "Free ใกล้เต็ม", "Free เต็มแล้ว - Advanced เท่านั้น"
+### ~~Story 4.2: Frontend Development with Mock Data~~ **COMPLETED IN STORY 1.2.1**
 
-**AC3:** Session confirmation mockup displaying selected time with exam code and location details
+**Status:** SKIPPED - Session selection frontend completed in Story 1.2.1
 
-**AC4:** Mobile-optimized session picker with large touch targets and clear time display
-
-**AC5:** Visual indicators for session availability without showing exact numbers
-
-**AC6:** Confirmation flow mockup integrating session selection with payment completion
-
-### Story 4.2: Frontend Development with Mock Data
-
-As a **Frontend Developer**,
-I want to build session selection components using mock capacity data,
-so that the booking experience is complete before backend capacity logic integration.
-
-#### Acceptance Criteria
-
-**AC1:** Session picker component with morning/afternoon options and capacity status simulation
-
-**AC2:** Dynamic messaging component showing appropriate availability text based on mock capacity
-
-**AC3:** Session confirmation component displaying selected session with exam details
-
-**AC4:** Capacity validation component preventing overbooking using simulated limits
-
-**AC5:** Mobile-responsive session selection with swipe-friendly interface
-
-**AC6:** Integration with payment flow components from Epic 3
+**Delivered Features:**
+- ✅ Session selection component integrated into Step 2 of registration wizard
+- ✅ Dynamic capacity messaging with real-time status display
+- ✅ Session confirmation showing selected time in confirmation step
+- ✅ Form validation requiring session selection before submission
+- ✅ Mock data integration with SessionCapacity interface
+- ✅ Mobile-responsive design with touch-friendly interactions
 
 ### Story 4.3: Database Schema Creation
 
 As a **Backend Developer**,
-I want to create session and capacity tracking tables,
-so that session bookings can be managed with real-time capacity monitoring.
+I want to create backend database tables supporting the completed session selection frontend,
+so that session bookings and capacity can be managed with real-time monitoring and proper data relationships.
 
 #### Acceptance Criteria
 

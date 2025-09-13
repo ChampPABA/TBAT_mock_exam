@@ -70,9 +70,6 @@ export const POST = withRateLimit(
       // Hash password
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      // Generate email verification token
-      const verificationToken = generateVerificationToken();
-      const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
       // Create user in database
       const user = await prisma!.user.create({
@@ -91,34 +88,6 @@ export const POST = withRateLimit(
         },
       });
 
-      // Send verification email
-      try {
-        await sendEmail({
-          to: user.email,
-          subject: "ยืนยันอีเมลของคุณ - TBAT Mock Exam",
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2>ยินดีต้อนรับสู่ TBAT Mock Exam Platform</h2>
-              <p>สวัสดีคุณ ${user.thaiName},</p>
-              <p>ขอบคุณที่ลงทะเบียนกับเรา กรุณายืนยันอีเมลของคุณโดยคลิกลิงก์ด้านล่าง:</p>
-              <a href="${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${verificationToken}" 
-                 style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
-                ยืนยันอีเมล
-              </a>
-              <p>ลิงก์นี้จะหมดอายุใน 24 ชั่วโมง</p>
-              <p>หากคุณไม่ได้ลงทะเบียน กรุณาเพิกเฉยอีเมลนี้</p>
-              <hr />
-              <p style="font-size: 12px; color: #666;">
-                TBAT Mock Exam Platform<br />
-                Chiang Mai, Thailand
-              </p>
-            </div>
-          `,
-        });
-      } catch (emailError) {
-        console.error("Failed to send verification email:", emailError);
-        // Continue with registration even if email fails
-      }
 
       // Log registration for security audit
       await prisma!.securityLog.create({
@@ -139,7 +108,7 @@ export const POST = withRateLimit(
       return NextResponse.json(
         {
           success: true,
-          message: "Registration successful. Please check your email to verify your account.",
+          message: "Registration successful. Welcome to TBAT Mock Exam!",
           user: {
             id: user.id,
             email: user.email,
@@ -156,13 +125,3 @@ export const POST = withRateLimit(
   rateLimitConfigs.register // Apply registration rate limiting
 );
 
-/**
- * Generate a secure random verification token
- */
-function generateVerificationToken(): string {
-  const bytes = new Uint8Array(32);
-  crypto.getRandomValues(bytes);
-  return Array.from(bytes)
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-}

@@ -1,3 +1,5 @@
+import path from 'path';
+
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
@@ -166,6 +168,7 @@ const nextConfig = {
 
   // Output configuration
   output: 'standalone',
+  outputFileTracingRoot: path.join(import.meta.dirname, '../../'),
   
   // Environment variables validation
   env: {

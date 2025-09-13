@@ -2,45 +2,25 @@
 
 **Goal:** Enable students to select exam sessions (morning/afternoon) with intelligent capacity management hiding exact numbers and dynamic Free/Advanced availability messaging.
 
-### Story 4.1: UI/UX Mockup Implementation
+### Story 4.1: UI/UX Mockup Implementation ✅ COMPLETED
+*(Completed in Story 1.2.1 - Registration Flow Enhancement)*
 
-As a **UX Expert**,
-I want to create session selection mockups with capacity management messaging,
-so that users can choose sessions while capacity logic guides availability appropriately.
+~~As a **UX Expert**,~~
+~~I want to create session selection mockups with capacity management messaging,~~
+~~so that users can choose sessions while capacity logic guides availability appropriately.~~
 
-#### Acceptance Criteria
+#### ✅ Completed Acceptance Criteria
+- **AC1-AC6:** All session selection mockups delivered in Story 1.2.1
 
-**AC1:** Session selection mockup showing morning (9:00-12:00) and afternoon (13:00-16:00) options
+### Story 4.2: Frontend Development with Mock Data ✅ COMPLETED
+*(Completed in Story 1.2.1 - Registration Flow Enhancement)*
 
-**AC2:** Capacity messaging mockup with states: normal, "Free ใกล้เต็ม", "Free เต็มแล้ว - Advanced เท่านั้น"
+~~As a **Frontend Developer**,~~
+~~I want to build session selection components using mock capacity data,~~
+~~so that the booking experience is complete before backend capacity logic integration.~~
 
-**AC3:** Session confirmation mockup displaying selected time with exam code and location details
-
-**AC4:** Mobile-optimized session picker with large touch targets and clear time display
-
-**AC5:** Visual indicators for session availability without showing exact numbers
-
-**AC6:** Confirmation flow mockup integrating session selection with payment completion
-
-### Story 4.2: Frontend Development with Mock Data
-
-As a **Frontend Developer**,
-I want to build session selection components using mock capacity data,
-so that the booking experience is complete before backend capacity logic integration.
-
-#### Acceptance Criteria
-
-**AC1:** Session picker component with morning/afternoon options and capacity status simulation
-
-**AC2:** Dynamic messaging component showing appropriate availability text based on mock capacity
-
-**AC3:** Session confirmation component displaying selected session with exam details
-
-**AC4:** Capacity validation component preventing overbooking using simulated limits
-
-**AC5:** Mobile-responsive session selection with swipe-friendly interface
-
-**AC6:** Integration with payment flow components from Epic 3
+#### ✅ Completed Acceptance Criteria
+- **AC1-AC6:** All session selection frontend components delivered in Story 1.2.1
 
 ### Story 4.3: Database Schema Creation
 

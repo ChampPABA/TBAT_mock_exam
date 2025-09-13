@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-// Capacity status removed as requested
+import { useCapacity } from '@/hooks/useCapacity';
 
 interface HeroSectionProps {
   onRegisterClick?: () => void;
@@ -35,19 +35,19 @@ export default function HeroSection({ onRegisterClick, onViewPackagesClick }: He
     setIsRefreshing(false);
   }, []);
 
-  // Capacity tracking temporarily disabled as requested
-  // const { data: capacityData, loading: capacityLoading, error: capacityError, refetch } = useCapacity({
-  //   onSuccess: handleSuccess,
-  //   onError: handleError
-  // });
+  // Re-enable capacity tracking for testing
+  const { data: capacityData, loading: capacityLoading, error: capacityError, refetch } = useCapacity({
+    onSuccess: handleSuccess,
+    onError: handleError
+  });
   
 
-  // Track when capacity is updating (for smooth transitions) - DISABLED
-  // useEffect(() => {
-  //   if (capacityLoading && capacityData) {
-  //     setIsRefreshing(true);
-  //   }
-  // }, [capacityLoading, capacityData]);
+  // Track when capacity is updating (for smooth transitions)
+  useEffect(() => {
+    if (capacityLoading && capacityData) {
+      setIsRefreshing(true);
+    }
+  }, [capacityLoading, capacityData]);
 
   // Countdown timer hook
   useEffect(() => {

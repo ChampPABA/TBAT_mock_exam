@@ -2,7 +2,7 @@
 
 ### Functional
 
-**FR1:** The system shall provide simple email/password user registration without OTP requirements, enforcing 8+ character passwords containing both numbers and letters
+**FR1:** The system shall provide simple email/password user registration without OTP or email verification requirements, enforcing 8+ character passwords containing both numbers and letters, with immediate welcome email containing exam codes upon successful registration
 
 **FR2:** The system shall display a landing page with credibility elements including testimonials, government support badges (STeP, Deepa, Startup Thailand), and organizational background
 

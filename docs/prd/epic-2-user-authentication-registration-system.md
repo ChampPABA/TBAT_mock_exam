@@ -1,46 +1,26 @@
-# Epic 2: User Authentication & Registration System
+# Epic 2: Backend Integration & Database Schema
 
-**Goal:** Enable secure user registration with email/password authentication, basic PDPA consent, and user profile management integrated seamlessly with package selection flow.
+**Goal:** Create backend APIs and database integration for the completed registration frontend, enabling secure data storage and authentication services.
 
-### Story 2.1: UI/UX Mockup Implementation
+### Story 2.1: UI/UX Mockup Implementation ✅ COMPLETED
+*(Completed in Story 1.2.1 - Registration Flow Enhancement)*
 
-As a **UX Expert**,
-I want to create interactive mockups for registration and login pages,
-so that the authentication flow is optimized for mobile users and conversion.
+~~As a **UX Expert**,~~
+~~I want to create interactive mockups for registration and login pages,~~
+~~so that the authentication flow is optimized for mobile users and conversion.~~
 
-#### Acceptance Criteria
+#### ✅ Completed Acceptance Criteria
+- **AC1-AC6:** All mockup requirements delivered in Story 1.2.1
 
-**AC1:** Registration page mockup created with step-by-step flow (package → profile → consent → confirmation)
+### Story 2.2: Frontend Development with Mock Data ✅ COMPLETED
+*(Completed in Story 1.2.1 - Registration Flow Enhancement)*
 
-**AC2:** Login page mockup with email/password fields, "จำรหัสผ่าน" checkbox, and "ลืมรหัสผ่าน" link
+~~As a **Frontend Developer**,~~
+~~I want to build authentication components and modal flows using mock user data,~~
+~~so that the registration experience is complete and ready for backend integration.~~
 
-**AC3:** Profile form mockup with Thai name fields, phone number, school, and subject selection for Free users
-
-**AC4:** PDPA consent mockup with clear, simple Thai language explaining data usage
-
-**AC5:** Mobile-optimized page designs tested for single-thumb operation and touch-friendly form navigation
-
-**AC6:** Error states and validation messaging designed for clear user guidance
-
-### Story 2.2: Frontend Development with Mock Data
-
-As a **Frontend Developer**,
-I want to build authentication components and modal flows using mock user data,
-so that the registration experience is complete and ready for backend integration.
-
-#### Acceptance Criteria
-
-**AC1:** Registration page component built with multi-step form using React Hook Form and Zod validation
-
-**AC2:** Login page component with email/password authentication and "remember me" functionality
-
-**AC3:** Profile form component with Thai name validation, phone number formatting, and school selection
-
-**AC4:** PDPA consent component with checkbox validation and clear terms display
-
-**AC5:** Form validation implemented with real-time feedback and Thai language error messages
-
-**AC6:** Page routing and state management implemented for seamless navigation between login/registration flows
+#### ✅ Completed Acceptance Criteria
+- **AC1-AC6:** All frontend components delivered in Story 1.2.1
 
 ### Story 2.3: Database Schema Creation
 
@@ -50,15 +30,15 @@ so that user data is stored safely and can support the registration workflow.
 
 #### Acceptance Criteria
 
-**AC1:** User table created with id, email, password_hash, created_at, updated_at, is_active fields
+**AC1:** User table created with comprehensive denormalized schema including id, email, password_hash, thai_name, phone, school, package_type, pdpa_consent, created_at, updated_at, is_active fields
 
-**AC2:** User_Profile table created with thai_name, phone, school, birth_date, pdpa_consent fields
+**AC2:** ~~User_Profile table created with thai_name, phone, school, birth_date, pdpa_consent fields~~ **REMOVED** - Consolidated into denormalized User table per Architecture section-4-data-models.md
 
-**AC3:** User_Package table created linking users to selected packages with exam_code and session_id
+**AC3:** ~~User_Package table created linking users to selected packages with exam_code and session_id~~ **REMOVED** - Package linking handled by ExamCode table per Architecture
 
 **AC4:** Password_Reset table created for secure password recovery workflow
 
-**AC5:** Email_Verification table created for email confirmation (if needed for security)
+**AC5:** ~~Email_Verification table created for email confirmation~~ **REMOVED** - Simple registration without email verification per FR1 requirements
 
 **AC6:** Proper indexes and constraints created for email uniqueness and referential integrity
 

@@ -6,6 +6,8 @@ The TBAT Mock Exam Platform implements comprehensive security measures to protec
 
 #### Authentication Strategy
 
+**Simple Registration Flow:** Registration → Welcome Email with Exam Codes → Complete (no email verification required per PRD FR1)
+
 ```typescript
 // NextAuth.js Configuration for Thai Market
 const authConfig = {
@@ -18,6 +20,7 @@ const authConfig = {
       },
       authorize: async (credentials) => {
         // Password requirements: 8+ chars, letters + numbers
+        // No email verification required - immediate access upon registration
         const user = await validateUserCredentials(credentials);
         return user
           ? {

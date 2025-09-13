@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBAT Mock Exam Platform - ER Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .diagram-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .info {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .legend {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .legend h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .legend ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏥 TBAT Mock Exam Platform Database Schema</h1>
+
+    <div class="info">
+        <strong>📋 Schema Overview:</strong> ระบบฐานข้อมูลสำหรับแพลตฟอร์ม TBAT Mock Exam รองรับการลงทะเบียน, การจัดการสอบ, การชำระเงิน และการวิเคราะห์ผลสอบ
+    </div>
+
+    <div class="diagram-container">
+        <h2>🔗 Entity Relationship Diagram</h2>
+        <div class="mermaid">
+erDiagram
+    User {
+        string id PK
+        string email UK
+        string password_hash
+        string thai_name
+        string nickname
+        string phone
+        string school
+        string grade
+        string line_id
+        string parent_name
+        string parent_phone
+        string package_type
+        boolean is_upgraded
+        boolean pdpa_consent
+        int failed_login_attempts
+        datetime locked_until
+        datetime password_changed_at
+        datetime last_login_at
+        boolean is_active
+        datetime deleted_at
+        json metadata
+        datetime created_at
+        datetime updated_at
+    }
+
+    UserSession {
+        string id PK
+        string user_id FK
+        string session_token UK
+        datetime expires_at
+        datetime created_at
+    }
+
+    PasswordReset {
+        string id PK
+        string user_id FK
+        string reset_token UK
+        datetime expires_at
+        boolean is_used
+        datetime created_at
+    }
+
+    PDPAConsent {
+        string id PK
+        string user_id FK
+        string consent_type
+        string status
+        datetime granted_at
+        datetime revoked_at
+        string ip_address
+        string user_agent
+        json metadata
+        datetime created_at
+    }
+
+    Package {
+        string id PK
+        string type UK
+        int price
+        string currency
+        string features
+        string description
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    UserPackage {
+        string id PK
+        string user_id FK
+        string package_type
+        string session_time
+        datetime registered_at
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    ExamCode {
+        string id PK
+        string user_id FK
+        string code UK
+        string package_type
+        string subject
+        string session_time
+        boolean is_used
+        datetime created_at
+        datetime used_at
+    }
+
+    SessionCapacity {
+        string id PK
+        string session_time
+        int current_count
+        int max_capacity
+        datetime exam_date
+        datetime created_at
+        datetime updated_at
+    }
+
+    CapacityStatus {
+        string id PK
+        string session_time
+        datetime exam_date
+        int total_count
+        int free_count
+        int advanced_count
+        int max_capacity
+        int free_limit
+        string availability_status
+        datetime last_updated
+        datetime created_at
+        datetime updated_at
+    }
+
+    ExamResult {
+        string id PK
+        string user_id FK
+        string exam_code_id FK
+        string subject
+        float score
+        int total_questions
+        float total_score
+        float biology_score
+        float chemistry_score
+        float physics_score
+        float percentile
+        int completion_time
+        datetime expires_at
+        boolean is_accessible
+        datetime created_at
+    }
+
+    Analytics {
+        string id PK
+        string result_id FK
+        string user_id FK
+        json subject_breakdowns
+        json recommendations
+        json comparison_data
+        datetime generated_at
+    }
+
+    Payment {
+        string id PK
+        string user_id FK
+        string stripe_payment_intent_id UK
+        int amount
+        string currency
+        string payment_type
+        string status
+        datetime completed_at
+        datetime created_at
+    }
+
+    PDFSolution {
+        string id PK
+        string subject
+        datetime exam_date
+        string file_url
+        int file_size
+        string description
+        string upload_admin_id FK
+        boolean is_active
+        datetime expires_at
+        datetime created_at
+    }
+
+    PDFDownload {
+        string id PK
+        string pdf_id FK
+        string user_id FK
+        string download_token UK
+        datetime downloaded_at
+        datetime expires_at
+    }
+
+    PDFNotification {
+        string id PK
+        string pdf_id FK
+        string sent_to_user_ids
+        int email_count
+        int failed_count
+        datetime sent_at
+    }
+
+    AdminUser {
+        string id PK
+        string email UK
+        string password_hash
+        string thai_name
+        string role
+        string permissions
+        datetime created_at
+        datetime updated_at
+    }
+
+    AuditLog {
+        string id PK
+        string admin_id FK
+        string action_type
+        string target_id
+        json original_data
+        json new_data
+        string reason
+        datetime created_at
+    }
+
+    SecurityLog {
+        string id PK
+        string event_type
+        string action
+        string user_id
+        string resource_id
+        string resource_type
+        json metadata
+        json details
+        string ip_address
+        string user_agent
+        datetime timestamp
+    }
+
+    SupportTicket {
+        string id PK
+        string user_id FK
+        string admin_id FK
+        string issue_type
+        string description
+        string resolution
+        string status
+        string priority
+        datetime created_at
+        datetime resolved_at
+    }
+
+    Account {
+        string id PK
+        string user_id FK
+        string type
+        string provider
+        string provider_account_id
+        string refresh_token
+        string access_token
+        int expires_at
+        string token_type
+        string scope
+        string id_token
+        string session_state
+    }
+
+    VerificationToken {
+        string identifier
+        string token UK
+        datetime expires
+    }
+
+    User ||--o{ UserSession : "has"
+    User ||--o{ PasswordReset : "requests"
+    User ||--o{ PDPAConsent : "grants"
+    User ||--o{ UserPackage : "subscribes"
+    User ||--o{ ExamCode : "receives"
+    User ||--o{ ExamResult : "achieves"
+    User ||--o{ Analytics : "gets"
+    User ||--o{ Payment : "makes"
+    User ||--o{ PDFDownload : "downloads"
+    User ||--o{ SupportTicket : "creates"
+    User ||--o{ Account : "links"
+
+    ExamCode ||--o{ ExamResult : "generates"
+    ExamResult ||--|| Analytics : "produces"
+
+    AdminUser ||--o{ PDFSolution : "uploads"
+    AdminUser ||--o{ AuditLog : "logs"
+    AdminUser ||--o{ SupportTicket : "handles"
+
+    PDFSolution ||--o{ PDFDownload : "tracks"
+    PDFSolution ||--o{ PDFNotification : "notifies"
+        </div>
+    </div>
+
+    <div class="legend">
+        <h3>🔤 Legend & Schema Notes</h3>
+        <ul>
+            <li><strong>PK:</strong> Primary Key (UUID)</li>
+            <li><strong>FK:</strong> Foreign Key</li>
+            <li><strong>UK:</strong> Unique Key</li>
+            <li><strong>Enums:</strong> PackageType (FREE/ADVANCED), Subject (BIOLOGY/CHEMISTRY/PHYSICS), SessionTime (09:00-12:00/13:00-16:00)</li>
+            <li><strong>Security:</strong> EmailVerification table removed per PRD FR1 simplified registration</li>
+            <li><strong>Thai Support:</strong> UTF-8 encoding for all text fields (thai_name, school, etc.)</li>
+            <li><strong>Cascade Deletes:</strong> User deletion cascades to related security and session data</li>
+            <li><strong>Capacity Management:</strong> Maximum 300 per session, 150 FREE package limit</li>
+            <li><strong>Data Lifecycle:</strong> 6-month expiry for exam results and analytics</li>
+        </ul>
+    </div>
+
+    <div class="info">
+        <strong>🏗️ Architecture Alignment:</strong> Schema follows denormalized User table approach from docs/architecture/section-4-data-models.md with proper security constraints and Thai language support for TBAT platform requirements.
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            er: {
+                useMaxWidth: true,
+                fontSize: 12,
+                fontFamily: 'Arial, sans-serif'
+            }
+        });
+    </script>
+</body>
+</html>

@@ -5,7 +5,7 @@
 ```mermaid
 graph TD
     E0[Epic 0: Foundation & Environment Setup] --> E1[Epic 1: Landing Page & Frontend Package Selection Experience]
-    E0 --> E2[Epic 2: User Authentication & Registration]
+    E0 --> E2[Epic 2: Backend Integration & Database Schema]
     E0 --> E3[Epic 3: Payment & Exam Code Generation]
 
     E1 --> E4[Epic 4: Session Booking & Capacity Management]
@@ -69,11 +69,12 @@ graph TD
 **Critical Path:** User acquisition and demo-ready frontend experience  
 **Scope:** Frontend-only with mock data, database foundation ready for Epic 2
 
-#### **Epic 2: User Authentication & Registration**
+#### **Epic 2: Backend Integration & Database Schema**
 
-**Dependencies:** Epic 0 (NextAuth.js, database)  
-**Enables:** Epic 4, Epic 5, Epic 6, Epic 8  
+**Dependencies:** Epic 0 (NextAuth.js, database), Story 1.2.1 (completed registration frontend)
+**Enables:** Epic 4, Epic 5, Epic 6, Epic 8
 **Critical Path:** Required for all authenticated features
+**Note:** Frontend registration completed in Story 1.2.1, Epic 2 focuses on backend integration
 
 #### **Epic 3: Payment & Exam Code Generation**
 
@@ -89,10 +90,10 @@ graph TD
 
 #### **Epic 4: Session Booking & Capacity Management**
 
-**Dependencies:** Epic 1 (frontend foundation), Epic 2 (authentication), Epic 3 (payment verification)  
-**Enables:** Epic 5  
-**Note:** Epic 1 provides frontend foundation and database readiness for Epic 2-3 integration  
-**Critical Path:** Exam logistics hub
+**Dependencies:** Epic 2 (backend authentication), Epic 3 (payment verification)
+**Enables:** Epic 5
+**Note:** Session selection frontend completed in Story 1.2.1, Epic 4 focuses on backend APIs
+**Critical Path:** Exam logistics backend hub
 
 #### **Epic 5: Admin Management System**
 
@@ -226,6 +227,11 @@ Core MVP + Epic 7 + Epic 8 + Epic 9
 
 ---
 
-**Last Updated:** 2025-09-12  
-**Version:** 1.0  
-**Author:** PO Sarah
+**Last Updated:** 2025-09-13
+**Version:** 1.2
+**Author:** SM Bob (Sprint Change Proposal Implementation)
+**Changes:**
+- Story 1.2.1 completed registration AND session selection frontends
+- Epic 2 redefined: "Backend Integration & Database Schema"
+- Epic 4 adjusted: Frontend components (4.1, 4.2) marked completed
+- Focus shifted to backend integration for both epics
